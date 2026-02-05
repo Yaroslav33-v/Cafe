@@ -10,7 +10,11 @@
     <Folder Include="Models\" />
     <Folder Include="wwwroot\CSS\" />
     <Folder Include="Views\" />
-    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
   </ItemGroup>
 
 </Project>
