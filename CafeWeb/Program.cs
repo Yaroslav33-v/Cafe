@@ -11,4 +11,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 
+app.MapControllerRoute(
+    name: default,
+    pattern: "{controller=Cafe}/{action=Index}");
 app.Run();

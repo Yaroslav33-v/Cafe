@@ -1,12 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CafeWeb.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CafeWeb.Controllers
 {
-    public class CafeController : Controller
+    public class CafeController : Controller // Контроллер для кафе 
     {
-        public IActionResult Index()
+        public IActionResult Index() 
         {
-            return View();
+            // Метод для отображения представления (название метода должно совпадать с названием представления)
+            ICollection<Food> pizzas = new List<Food>()
+            {
+                new Food{Name = "4 Творожка", Price = 1488},
+                new Food{Name = "Фа пепе шнейне", Price = 1337}
+            };
+            return View(pizzas);
         }
     }
 }
