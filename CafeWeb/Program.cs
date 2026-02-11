@@ -13,5 +13,5 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=Cafe}/{action=Index}");
+    pattern: "{controller=Payment}/{action=Index}");
 app.Run();

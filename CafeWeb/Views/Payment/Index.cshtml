@@ -1,0 +1,14 @@
+﻿@model CafeWeb.Models.PaymentModel
+<form method="post" action="/Payment/Pay">
+    <label>Введите номер карты:</label>
+    <input type="text" inputmode="numeric" maxlength="16" placeholder="XXXX-XXXX-XXXX-XXXX" name="CardNumber" value="@Model?.CardNumber" /> <br />
+
+    <label>ММ/ГГ</label>
+    <input maxlength="4" placeholder="ММ/ГГ" name="MonthYear" value="@Model?.MonthYear" />
+
+    <input maxlength="3" placeholder="CVV" name="CvvCode" value="@Model?.CvvCode"/>
+    <p>К оплате @ViewBag.Total</p>
+    <input hidden value="@ViewBag.Total" name="TotalAmount"/>
+
+    <button type="submit">Оплатить</button>
+</form>
