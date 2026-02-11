@@ -1,4 +1,4 @@
-using NLog.Extensions.Logging;
+п»їusing NLog.Extensions.Logging;
 using Npgsql;
 using PaymentApi.Dto;
 using PaymentApi.Services;
@@ -19,31 +19,31 @@ var app = builder.Build();
 
 app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService paymentService, ILogger<Program> logger) =>
 {
-    logger.LogInformation("Получена заявка на оплату в размере {Total} с карты {LastFour}", paymentDto.Total, paymentDto.LastFour);
+    logger.LogInformation("РџРѕР»СѓС‡РµРЅР° Р·Р°СЏРІРєР° РЅР° РѕРїР»Р°С‚Сѓ РІ СЂР°Р·РјРµСЂРµ {Total} СЃ РєР°СЂС‚С‹ {LastFour}", paymentDto.Total, paymentDto.LastFour);
     try
     {
         await paymentService.TryToPay(paymentDto);
 
-        logger.LogInformation("Оплата картой {LastFour} проведена успешно", paymentDto.LastFour);
+        logger.LogInformation("РћРїР»Р°С‚Р° РєР°СЂС‚РѕР№ {LastFour} РїСЂРѕРІРµРґРµРЅР° СѓСЃРїРµС€РЅРѕ", paymentDto.LastFour);
 
         return Results.Ok(new
         {
-            message = "Оплата проведена успешно!",
+            message = "РћРїР»Р°С‚Р° РїСЂРѕРІРµРґРµРЅР° СѓСЃРїРµС€РЅРѕ!",
             created_at = DateTime.Now
         });
     }
-    catch (Exception ex) when (ex.Message.Contains("Недостаточно средств"))
+    catch (Exception ex) when (ex.Message.Contains("РќРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃСЂРµРґСЃС‚РІ"))
     {
-        logger.LogInformation("На карте {LastFour} недостаточно средств", paymentDto.LastFour);
+        logger.LogInformation("РќР° РєР°СЂС‚Рµ {LastFour} РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ СЃСЂРµРґСЃС‚РІ", paymentDto.LastFour);
         return Results.BadRequest(new
         {
             message = ex.Message,
             created_at = DateTime.Now
         });
     }
-    catch (Exception ex) when (ex.Message.Contains("Карта не найдена"))
+    catch (Exception ex) when (ex.Message.Contains("РљР°СЂС‚Р° РЅРµ РЅР°Р№РґРµРЅР°"))
     {
-        logger.LogInformation("Карта {LastFour} не найдена", paymentDto.LastFour);
+        logger.LogInformation("РљР°СЂС‚Р° {LastFour} РЅРµ РЅР°Р№РґРµРЅР°", paymentDto.LastFour);
         return Results.BadRequest(new
         {
             message = ex.Message,
