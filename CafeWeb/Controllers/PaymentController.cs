@@ -1,21 +1,36 @@
 ﻿using CafeWeb.Models;
+using CafeWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CafeWeb.Controllers
 {
     public class PaymentController : Controller
     {
-        public IActionResult Index() 
+        private readonly IPaymentService _paymentService;
+        public PaymentController(IPaymentService paymentService)
         {
-            ViewBag.Total = 100.00;
+            _paymentService = paymentService ?? throw new ArgumentNullException(nameof(paymentService));
+        }
+
+        public IActionResult Index(decimal total) 
+        {
+            ViewBag.Total = 1.00; // = total
             return View(); 
         }
-        public IActionResult PaymentFailed(PaymentModel paymentModel) => View(paymentModel);
-        public IActionResult PaymentSucceeded() => View();
-        [HttpPost]
-        public IActionResult Pay([FromForm] PaymentModel paymentModel)
+        private ViewResult PaymentFailed(string message) 
         {
-            return RedirectToAction("PaymentFailed", paymentModel);
+            ViewBag.Message = message;
+            return View();
+        }
+        private ViewResult PaymentSucceeded() => View();
+        [HttpPost]
+        public async Task<IActionResult> Pay([FromForm] PaymentModel paymentModel)
+        {
+            (bool isPaid, string? msg) = await _paymentService.TryToPay(paymentModel);
+            if (isPaid)
+                return RedirectToAction("PaymentSucceeded");
+            else
+                return RedirectToAction("PaymentFailed");
         }
     }
 }

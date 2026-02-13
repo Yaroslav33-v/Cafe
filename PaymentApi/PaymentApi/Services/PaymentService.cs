@@ -15,7 +15,8 @@ namespace PaymentApi.Services
 
         public async Task TryToPay(PaymentDto paymentDto)
         {
-            const string sql = "CALL public.do_payment_attempt(@p_card_token, @p_last_four, @p_order_total, @p_description)";
+            const string sql = "CALL public.do_payment_attempt(@p_card_token, @p_last_four, " +
+                "@p_expiry_month::SMALLINT, @p_expiry_year::SMALLINT, @p_order_total, @p_description)";
 
             try
             {
@@ -23,6 +24,8 @@ namespace PaymentApi.Services
 
                 parameters.Add("@p_card_token", paymentDto.CardToken);
                 parameters.Add("@p_last_four", paymentDto.LastFour);
+                parameters.Add("@p_expiry_month", paymentDto.ExpMonth);
+                parameters.Add("@p_expiry_year", paymentDto.ExpYear);
                 parameters.Add("@p_order_total", paymentDto.Total);
                 parameters.Add("@p_description", paymentDto.Description);
 
@@ -32,9 +35,13 @@ namespace PaymentApi.Services
             {
                 throw new Exception("Недостаточно средств");
             }
-            catch (PostgresException ex) when (ex.MessageText.Contains("Карта с токеном"))
+            catch (PostgresException ex) when (ex.MessageText.Contains("не найдена"))
             {
                 throw new Exception("Карта не найдена");
+            }
+            catch (PostgresException ex) when (ex.MessageText.Contains("просрочена"))
+            {
+                throw new Exception("Карта просрочена");
             }
             catch (Exception)
             {

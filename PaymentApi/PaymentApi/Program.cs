@@ -5,7 +5,7 @@ using PaymentApi.Services;
 using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://localhost:7003");
+builder.WebHost.UseUrls("https://localhost:7003");
 
 builder.Services.AddScoped<IDbConnection>(provider =>
 {
@@ -44,6 +44,15 @@ app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService pa
     catch (Exception ex) when (ex.Message.Contains("Карта не найдена"))
     {
         logger.LogInformation("Карта {LastFour} не найдена", paymentDto.LastFour);
+        return Results.BadRequest(new
+        {
+            message = ex.Message,
+            created_at = DateTime.Now
+        });
+    }
+    catch (Exception ex) when (ex.Message.Contains("Карта просрочена"))
+    {
+        logger.LogInformation("Карта {LastFour} просрочена", paymentDto.LastFour);
         return Results.BadRequest(new
         {
             message = ex.Message,

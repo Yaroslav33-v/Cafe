@@ -1,9 +1,8 @@
 INSERT INTO public.cards (card_token, last_four, expiry_month, expiry_year, card_type) 
 VALUES 
-    ('tok_visa_1111', '1111', 12, 2026, 'Visa'),
-    ('tok_mc_2222', '2222', 11, 2026, 'MasterCard'),
-    ('tok_amex_3333', '3333', 10, 2027, 'American Express'),
-    ('tok_visa_4444', '4444', 9, 2027, 'Visa');
+    ('pm_4242424242424242_123', '4242', 9, 2026, 'Visa'),
+    ('pm_5555555555554444_001', '4444', 12, 2027, 'MasterCard'),
+    ('pm_4000000000009995_567', '9995', 12, 2028, 'American Express');
 
 -- Депозит на карту 1 (+1000 USD)
 INSERT INTO operations (card_id, operation_type, amount, description, status, posted_at)

@@ -10,7 +10,6 @@
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.1" />
     <PackageReference Include="Npgsql" Version="10.0.1" />
-    <PackageReference Include="Stripe.net" Version="50.3.0" />
   </ItemGroup>
 
 </Project>
