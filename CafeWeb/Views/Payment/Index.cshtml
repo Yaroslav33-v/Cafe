@@ -1,0 +1,19 @@
+﻿@model CafeWeb.Models.PaymentModel
+<form method="post" action="/Payment/Pay">
+    <label>Введите номер карты:</label>
+    <input id="card-number" type="text" inputmode="numeric" maxlength="19"
+           placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="cc-number" name="CardNumber" value="@Model?.CardNumber" />
+    <br />
+
+    <label>ММ/ГГ</label>
+    <input id="expiry" type="text" inputmode="numeric" maxlength="5"
+           placeholder="ММ/ГГ" autocomplete="cc-exp" name="MonthYear" value="@Model?.MonthYear" />
+
+    <input type="text" inputmode="numeric" maxlength="3"
+           placeholder="CVV" autocomplete="cc-csc" name="CvvCode" value="@Model?.CvvCode" />
+    <p>К оплате @ViewBag.Total</p>
+    <input hidden value="@ViewBag.Total" name="TotalAmount"/>
+
+    <button type="submit">Оплатить</button>
+</form>
+<script src="~/JS/PaymentScripts.js"></script>
