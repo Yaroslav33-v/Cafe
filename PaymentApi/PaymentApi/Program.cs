@@ -1,5 +1,8 @@
-﻿using NLog.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using NLog.Extensions.Logging;
 using Npgsql;
+using PaymentApi;
 using PaymentApi.Dto;
 using PaymentApi.Services;
 using System.Data;
@@ -7,15 +10,59 @@ using System.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("https://localhost:7003");
 
+var authOptions = new AuthOptions(builder.Configuration);
+builder.Services.AddSingleton(authOptions);
+
 builder.Services.AddScoped<IDbConnection>(provider =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     return new NpgsqlConnection(connectionString);
 });
 builder.Services.AddScoped<IPaymentService,PaymentService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = authOptions.Issuer,
+            ValidateAudience = true,
+            ValidAudience = authOptions.Audience,
+            ValidateLifetime = true,
+            IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true
+        };
+    });
+
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
 var app = builder.Build();
+
+app.MapGet("/login/{cardToken}", async (string cardToken, IAuthService authService, ILogger<Program> logger) =>
+{
+    logger.LogInformation("Получена заявка на авторизацию от {CardToken}", cardToken);
+    try
+    {
+        string jwt = await authService.Login(cardToken);
+
+        logger.LogInformation("Доступ для {CardToken} разрешен", cardToken);
+
+        return Results.Ok(new 
+        {
+            token = jwt,
+            createdAt = DateTime.Now,
+            expiresAt = DateTime.Now.AddMinutes(2)
+        });
+    }
+    catch
+    {
+        logger.LogInformation("Доступ для {CardToken} запрещен", cardToken);
+        return Results.Unauthorized();
+    }
+});
 
 app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService paymentService, ILogger<Program> logger) =>
 {
@@ -29,7 +76,7 @@ app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService pa
         return Results.Ok(new
         {
             message = "Оплата проведена успешно!",
-            created_at = DateTime.Now
+            createdAt = DateTime.Now
         });
     }
     catch (Exception ex) when (ex.Message.Contains("Недостаточно средств"))
@@ -38,7 +85,7 @@ app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService pa
         return Results.BadRequest(new
         {
             message = ex.Message,
-            created_at = DateTime.Now
+            createdAt = DateTime.Now
         });
     }
     catch (Exception ex) when (ex.Message.Contains("Карта не найдена"))
@@ -47,7 +94,7 @@ app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService pa
         return Results.BadRequest(new
         {
             message = ex.Message,
-            created_at = DateTime.Now
+            createdAt = DateTime.Now
         });
     }
     catch (Exception ex) when (ex.Message.Contains("Карта просрочена"))
@@ -56,7 +103,7 @@ app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService pa
         return Results.BadRequest(new
         {
             message = ex.Message,
-            created_at = DateTime.Now
+            createdAt = DateTime.Now
         });
     }
     catch (PostgresException ex)
@@ -69,6 +116,6 @@ app.MapPost("/payment_attempt", async (PaymentDto paymentDto, IPaymentService pa
         logger.LogError(ex.Message);
         return Results.StatusCode(500);
     }
-});
+}).RequireAuthorization();
 
 app.Run();

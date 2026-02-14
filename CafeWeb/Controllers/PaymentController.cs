@@ -14,15 +14,15 @@ namespace CafeWeb.Controllers
 
         public IActionResult Index(decimal total) 
         {
-            ViewBag.Total = 1.00; // = total
+            ViewBag.Total = total;
             return View(); 
         }
-        private ViewResult PaymentFailed(string message) 
+        public ViewResult PaymentFailed(string message) 
         {
             ViewBag.Message = message;
             return View();
         }
-        private ViewResult PaymentSucceeded() => View();
+        public ViewResult PaymentSucceeded() => View();
         [HttpPost]
         public async Task<IActionResult> Pay([FromForm] PaymentModel paymentModel)
         {
@@ -30,7 +30,7 @@ namespace CafeWeb.Controllers
             if (isPaid)
                 return RedirectToAction("PaymentSucceeded");
             else
-                return RedirectToAction("PaymentFailed");
+                return RedirectToAction("PaymentFailed", new { message = msg });
         }
     }
 }

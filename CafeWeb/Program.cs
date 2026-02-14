@@ -1,8 +1,11 @@
 using CafeWeb.Services;
+using NLog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
