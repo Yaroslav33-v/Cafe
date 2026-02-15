@@ -10,8 +10,8 @@ namespace CafeWeb.Controllers
             // Метод для отображения представления (название метода должно совпадать с названием представления)
             ICollection<Food> pizzas = new List<Food>()
             {
-                new Food{Name = "4 Творожка", Price = 1488},
-                new Food{Name = "Фа пепе шнейне", Price = 1337}
+                new Food{Name = "4 Творожка", Price = 1488, Description = "Та самая легендарная пиццы 4 Творожка"},
+                new Food{Name = "Фа пепе шнейне", Price = 1337, Description = "Это же пицца фа для всех пепе от шнейне"}
             };
             return View(pizzas);
         }
