@@ -20,7 +20,11 @@ CREATE TABLE public.offers(
 	description TEXT NOT NULL,
 	discount DECIMAL(3, 2) NOT NULL, -- Скидка в процентах
 	starts_at DATE NOT NULL DEFAULT CURRENT_DATE,
-	ends_at DATE NOT NULL DEFAULT CURRENT_DATE + 7
+	ends_at DATE NOT NULL DEFAULT CURRENT_DATE + 7,
+		
+	CONSTRAINT chk_starts_earlier_ends CHECK (
+		starts_at < ends_at
+	)
 );
 
 CREATE TABLE public.users(
@@ -39,7 +43,16 @@ CREATE TABLE public.orders(
 		'Готов'
 	)),
 	done_at DATE,
-	user_id INTEGER REFERENCES users(user_id)
+	user_id INTEGER REFERENCES users(user_id),
+	
+	CONSTRAINT chk_done_at_required CHECK (
+        (status = 'Готов' AND done_at IS NOT NULL) OR
+        (status != 'Готов' AND done_at IS NULL)
+    ),
+    
+    CONSTRAINT chk_done_at_valid CHECK (
+        done_at IS NULL OR done_at >= created_at
+    )
 );
 
 CREATE TABLE public.offers_food(
@@ -65,5 +78,10 @@ CREATE TABLE public.promocodes(
 	code VARCHAR(20) NOT NULL UNIQUE,
 	from_sum DECIMAL(7, 2) NOT NULL,
 	discount DECIMAL(7, 2) NOT NULL, -- Скидка( -100 рублей, -200 рублей и т.д.)
-	expires_at DATE NOT NULL DEFAULT CURRENT_DATE + 7
+	expires_at DATE NOT NULL DEFAULT CURRENT_DATE + 7,
+	is_notificated BOOLEAN DEFAULT false -- Для тг-бота
 );
+
+CREATE INDEX idx_offers_food ON offers_food(food_id, offer_id);
+CREATE INDEX idx_food_orders ON food_orders(food_id, order_id);
+CREATE INDEX idx_favourite_food ON favourite_food(user_id, food_id);
