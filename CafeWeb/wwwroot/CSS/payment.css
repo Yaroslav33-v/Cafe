@@ -1,0 +1,54 @@
+﻿body {
+    /*background-image: url("../IMG/WIN_20251016_11_59_38_Pro.jpg);*/
+    background-color: aquamarine;
+}
+
+.out-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+form {
+    background-color: white;
+    position: relative;
+
+    border: 5px inset black;
+    border-radius: 15px;
+    height: 400px;
+    width: 400px;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.under-pay {
+    align-items: end;
+    margin-top: 40%;
+}
+
+.in-form {
+    position: absolute;
+    top: 25%;
+}
+
+.btn-pay {
+    background-color: white;
+    width: 120px;
+    border-radius: 15px;
+}
+
+.payment-input {
+    font-size: 18px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+#expiry, #cvv {
+    width: 70px;
+    margin: 10px;
+}
+
+#promo {
+    width: 160px;
+}

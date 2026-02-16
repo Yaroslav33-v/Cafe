@@ -1,8 +1,17 @@
 using CafeWeb.Services;
 using NLog.Extensions.Logging;
+using Npgsql;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IDbConnection>(provider =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    return new NpgsqlConnection(connectionString);
+});
+
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
