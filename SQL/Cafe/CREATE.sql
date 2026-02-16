@@ -18,7 +18,7 @@ CREATE TABLE public.offers(
 	offer_id SERIAL PRIMARY KEY,
 	offer_name VARCHAR(100) NOT NULL,
 	description TEXT NOT NULL,
-	discount DECIMAL(1, 2) NOT NULL, -- Скидка в процентах
+	discount DECIMAL(3, 2) NOT NULL, -- Скидка в процентах
 	starts_at DATE NOT NULL DEFAULT CURRENT_DATE,
 	ends_at DATE NOT NULL DEFAULT CURRENT_DATE + 7
 );
