@@ -1,19 +1,30 @@
 ﻿@model CafeWeb.Models.PaymentModel
-<form method="post" action="/Payment/Pay">
-    <label>Введите номер карты:</label>
-    <input id="card-number" type="text" inputmode="numeric" maxlength="19"
-           placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="cc-number" name="CardNumber" value="@Model?.CardNumber" />
-    <br />
+<head>
+    <link href="~/CSS/payment.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="out-form">
+        <form method="post" action="/Payment/Pay">
+            <div class="in-form">
+                <label>Введите данные карты:</label> <br />
+                <input id="card-number" class="payment-input" type="text" inputmode="numeric" maxlength="19"
+                       placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="cc-number" name="CardNumber" value="@Model?.CardNumber" />
+                <br />
 
-    <label>ММ/ГГ</label>
-    <input id="expiry" type="text" inputmode="numeric" maxlength="5"
-           placeholder="ММ/ГГ" autocomplete="cc-exp" name="MonthYear" value="@Model?.MonthYear" />
+                <input id="expiry" class="payment-input" type="text" inputmode="numeric" maxlength="5"
+                       placeholder="ММ/ГГ" autocomplete="cc-exp" name="MonthYear" value="@Model?.MonthYear" />
 
-    <input type="text" inputmode="numeric" maxlength="3"
-           placeholder="CVV" autocomplete="cc-csc" name="CvvCode" value="@Model?.CvvCode" />
-    <p>К оплате @ViewBag.Total</p>
-    <input hidden value="@ViewBag.Total" name="TotalAmount"/>
-
-    <button type="submit">Оплатить</button>
-</form>
-<script src="~/JS/PaymentScripts.js"></script>
+                <input id="cvv" class="payment-input" type="text" inputmode="numeric" maxlength="3"
+                       placeholder="CVV" autocomplete="cc-csc" name="CvvCode" value="@Model?.CvvCode" />
+                <div class="under-pay">
+                    <b>К оплате @ViewBag.Total руб.</b>
+                    <input hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
+                    <input id="promo" class="payment-input" type="text" placeholder="Введите промокод" maxlength="20" />
+                
+                    <br /><button class="btn-pay" type="submit">Оплатить</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="~/JS/PaymentScripts.js"></script>
+</body>
