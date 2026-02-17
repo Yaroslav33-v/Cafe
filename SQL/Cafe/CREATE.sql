@@ -21,6 +21,7 @@ CREATE TABLE public.offers(
 	discount DECIMAL(3, 2) NOT NULL, -- Скидка в процентах
 	starts_at DATE NOT NULL DEFAULT CURRENT_DATE,
 	ends_at DATE NOT NULL DEFAULT CURRENT_DATE + 7,
+	is_notificated BOOLEAN DEFAULT false -- Для тг-бота 
 		
 	CONSTRAINT chk_starts_earlier_ends CHECK (
 		starts_at < ends_at
@@ -78,8 +79,7 @@ CREATE TABLE public.promocodes(
 	code VARCHAR(20) NOT NULL UNIQUE,
 	from_sum DECIMAL(7, 2) NOT NULL,
 	discount DECIMAL(7, 2) NOT NULL, -- Скидка( -100 рублей, -200 рублей и т.д.)
-	expires_at DATE NOT NULL DEFAULT CURRENT_DATE + 7,
-	is_notificated BOOLEAN DEFAULT false -- Для тг-бота
+	expires_at DATE NOT NULL DEFAULT CURRENT_DATE + 7
 );
 
 CREATE INDEX idx_offers_food ON offers_food(food_id, offer_id);
