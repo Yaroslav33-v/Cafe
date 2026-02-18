@@ -5,10 +5,9 @@ using TelegramBot.Core;
 
 namespace TelegramBot.Commands
 {
-    internal class StartCommand : ITelegramCommand
+    internal class HelpCommand : ITelegramCommand
     {
-        public string CommandName => "/start";
-
+        public string CommandName => "/help";
         public async Task Execute(Message message, ITelegramBotClient botClient, DatabaseProcessor processor, CancellationToken ct)
         {
             await botClient.SendMessage(

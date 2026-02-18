@@ -82,6 +82,13 @@ CREATE TABLE public.promocodes(
 	expires_at DATE NOT NULL DEFAULT CURRENT_DATE + 7
 );
 
+CREATE TABLE public.telegram_chats(
+	id SERIAL PRIMARY KEY,
+    chat_id BIGINT NOT NULL UNIQUE, 
+    is_active BOOLEAN DEFAULT true
+);
+
+CREATE INDEX idx_telegram_chats_chat_id ON public.telegram_chats(chat_id);
 CREATE INDEX idx_offers_food ON offers_food(food_id, offer_id);
 CREATE INDEX idx_food_orders ON food_orders(food_id, order_id);
 CREATE INDEX idx_favourite_food ON favourite_food(user_id, food_id);

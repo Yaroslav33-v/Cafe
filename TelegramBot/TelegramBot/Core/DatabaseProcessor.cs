@@ -6,16 +6,18 @@ namespace TelegramBot.Core
 {
     internal class DatabaseProcessor
     {
-        private readonly NpgsqlConnection _connection = null!;
+        private readonly string _connectionString = null!;
 
         public DatabaseProcessor(string connectionString)
         {
-            _connection = new NpgsqlConnection(connectionString);
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
         public async Task<Promocode?> GetPromocode()
         {
-            Promocode? promocode = await _connection.QueryFirstOrDefaultAsync<Promocode>("SELECT " +
+            using NpgsqlConnection connection = new(_connectionString);
+
+            Promocode? promocode = await connection.QueryFirstOrDefaultAsync<Promocode>("SELECT " +
                 "promocode_id as Id, " +
                 "code as Code, " +
                 "from_sum as FromSum, " +
@@ -31,7 +33,9 @@ namespace TelegramBot.Core
 
         public async Task<List<Offer>> GetOffers()
         {
-            IEnumerable<Offer> offers = await _connection.QueryAsync<Offer>("SELECT " +
+            using NpgsqlConnection connection = new(_connectionString);
+
+            IEnumerable<Offer> offers = await connection.QueryAsync<Offer>("SELECT " +
                 "offer_id AS Id, " +
                 "offer_name AS Name, " +
                 "description AS Description, " +
