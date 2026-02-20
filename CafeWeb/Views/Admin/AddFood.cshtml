@@ -11,22 +11,22 @@
     </select> <br />
 
     <label>Название: </label> <br />
-    <input type="text" name="Food.Name" value="@Model?.Food?.Name" /> <br />
+    <input type="text" name="Food.Name" value="@Model?.Food?.Name" maxlength="100" required /> <br />
 
     <label>Цена: </label> <br />
-    <input type="number" name="Food.Price" value="@Model?.Food?.Price" /> <br />
+    <input type="number" name="Food.Price" value="@Model?.Food?.Price" max="99999.99" min="0" required /> <br />
 
     <label>Калории: </label> <br />
-    <input type="number" name="Food.Calories" value="@Model?.Food?.Calories" /> <br />
+    <input type="number" name="Food.Calories" value="@Model?.Food?.Calories" max="99999.99" min="0" required /> <br />
 
     <label>Вес: </label> <br />
-    <input type="number" name="Food.Weight" value="@Model?.Food?.Weight" /> <br />
+    <input type="number" name="Food.Weight" value="@Model?.Food?.Weight" max="99999.99" min="0" required /> <br />
 
     <label>Ингредиенты:</label> <br />
-    <textarea name="Food.Ingredients" value="@Model?.Food?.Ingredients"></textarea> <br />
+    <textarea name="Food.Ingredients" value="@Model?.Food?.Ingredients" required></textarea> <br />
 
     <label>Фото: </label> <br />
-    <input type="file" name="Photo" id="fileInput" accept="image/*" value="@Model?.Photo"/> <br />
+    <input type="file" name="Photo" id="fileInput" accept="image/*" value="@Model?.Photo" required /> <br />
 
     <button type="submit">Добавить</button>
 </form>

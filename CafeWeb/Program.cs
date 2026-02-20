@@ -29,5 +29,5 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=Admin}/{action=AddFood}");
+    pattern: "{controller=Admin}/{action=NewOffer}");
 app.Run();

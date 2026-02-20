@@ -1,7 +1,6 @@
 ﻿using CafeWeb.Models;
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CafeWeb.Controllers
 {
@@ -13,8 +12,9 @@ namespace CafeWeb.Controllers
         {
             _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
         }
-        public async Task<ViewResult> AddFood()
+        public async Task<ViewResult> AddFood(string? errorMsg = null)
         {
+            ViewBag.Problem = errorMsg;
             var adminFoodModel = new AdminFoodModel
             {
                 Categories = await _adminService.GetCategoryNames()
@@ -22,7 +22,14 @@ namespace CafeWeb.Controllers
 
             return View(adminFoodModel);
         }
-        public ViewResult NewOffer() => View();
+        public async Task<ViewResult> NewOffer()
+        {
+            var adminOfferModel = new AdminOfferModel
+            {
+                Foods = await _adminService.GetAllFood()
+            };
+            return View(adminOfferModel);
+        }
         public ViewResult NewPromo(string? errorMsg = null)
         {
             ViewBag.Problem = errorMsg;
@@ -32,14 +39,17 @@ namespace CafeWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFood([FromForm] AdminFoodModel adminFoodModel)
         {
-            await _adminService.InsertFood(adminFoodModel);
-            return RedirectToAction("Index", "Cafe");
+            (bool isAdded, string? msg) = await _adminService.InsertFood(adminFoodModel);
+            if(isAdded) 
+                return RedirectToAction("Index", "Cafe");
+
+            return RedirectToAction();
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewOffer([FromForm] Offer offer)
+        public async Task<IActionResult> NewOffer([FromForm] AdminOfferModel adminOfferModel)
         {
-            await _adminService.InsertOffer(offer);
+            await _adminService.InsertOffer(adminOfferModel);
             return RedirectToAction("Index", "Cafe");
         }
 
