@@ -1,1 +1,20 @@
 ﻿<!-- Страница для добавления новых акций -->
+@model CafeWeb.Models.Offer
+<form method="post" action="/Admin/NewOffer">
+    <label> Название акции: </label> <br />
+    <input type="text" name="Name" value="@Model?.Name" /> <br />
+
+    <label>Описание акции: </label> <br />
+    <textarea name="Description" value="@Model?.Description"></textarea> <br />
+
+    <label>Скидка (в процентах): </label> <br />
+    <input type="number" min="1" max="100" name="Discount" value="@Model?.Discount" /> <br />
+
+    <label>Дата начала акции: </label> <br />
+    <input type="date" name="StartsAt" value="@Model?.StartsAt" /> <br />
+
+    <label>Дата начала акции: </label> <br />
+    <input type="date" name="EndsAt" value="@Model?.EndsAt" /><br />
+
+    <button type="submit">Добавить</button>
+</form>

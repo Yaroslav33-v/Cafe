@@ -1,2 +1,32 @@
 ﻿<!-- Страница для добавления новой еды -->
-NLVINLVNLVNV
+@model CafeWeb.Models.AdminFoodModel
+
+<form method="post" action="/Admin/AddFood" enctype="multipart/form-data">
+    <label>Категория: </label>
+    <select name="SelectedCategory">
+    @foreach(var category in Model.Categories)
+    {
+        <option value="@category">@category</option>
+    }
+    </select> <br />
+
+    <label>Название: </label> <br />
+    <input type="text" name="Food.Name" value="@Model?.Food?.Name" /> <br />
+
+    <label>Цена: </label> <br />
+    <input type="number" name="Food.Price" value="@Model?.Food?.Price" /> <br />
+
+    <label>Калории: </label> <br />
+    <input type="number" name="Food.Calories" value="@Model?.Food?.Calories" /> <br />
+
+    <label>Вес: </label> <br />
+    <input type="number" name="Food.Weight" value="@Model?.Food?.Weight" /> <br />
+
+    <label>Ингредиенты:</label> <br />
+    <textarea name="Food.Ingredients" value="@Model?.Food?.Ingredients"></textarea> <br />
+
+    <label>Фото: </label> <br />
+    <input type="file" name="Photo" id="fileInput" accept="image/*" value="@Model?.Photo"/> <br />
+
+    <button type="submit">Добавить</button>
+</form>
