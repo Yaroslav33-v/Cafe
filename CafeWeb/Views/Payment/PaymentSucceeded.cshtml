@@ -1,3 +1,32 @@
-﻿<div>
-    <p>Оплата проведена успешно</p>
-</div>
+﻿<head>
+    <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+    <link href="~/CSS/payment Succeeded.css" rel="stylesheet" />
+    <title> Оплата не прошла </title>
+</head>
+
+<body>
+    <div class= "out">  
+
+        <div class= "in">
+            <img id = "logo" src="~/IMG/logo-cafe.png" width="155" height="155">
+
+            <div class="text">
+                <label><br />
+                     Отлично! Оплата прошла успешно. 
+                    <p>Заказывайте у нас еще!</p>
+                </label>
+            </div>
+
+            <br />
+            <button class="btn-ok" onclick="goToOrderPage()">Ок</button>
+
+        </div>
+    
+    </div>
+    <script>
+        function goToOrderPage() {
+            document.location.replace("/Order/MyOrder")
+        }
+    </script>
+        
+</body>
