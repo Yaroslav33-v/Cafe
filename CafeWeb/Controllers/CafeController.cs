@@ -15,5 +15,10 @@ namespace CafeWeb.Controllers
             };
             return View(pizzas);
         }
+        public IActionResult Cart()
+        {
+
+            return View();
+        }
     }
 }

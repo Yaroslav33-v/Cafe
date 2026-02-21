@@ -29,5 +29,5 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=Admin}/{action=NewOffer}");
+    pattern: "{controller=Cafe}/{action=Index}");
 app.Run();
