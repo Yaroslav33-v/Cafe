@@ -13,6 +13,7 @@ builder.Services.AddScoped<IDbConnection>(provider =>
 });
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
@@ -28,5 +29,5 @@ app.UseRouting();
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=Payment}/{action=Index}");
+    pattern: "{controller=Admin}/{action=NewOffer}");
 app.Run();
