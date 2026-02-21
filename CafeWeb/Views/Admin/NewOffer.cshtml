@@ -1,6 +1,10 @@
 ﻿<!-- Страница для добавления новых акций -->
 @model CafeWeb.Models.AdminOfferModel
+@{
+    string tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+}
 <form method="post" action="/Admin/NewOffer">
+    <p>@ViewBag.Problem</p> <br/>
     @if (Model.Foods != null && Model.Foods.Any())
     {
         <select multiple name="FoodIds">
@@ -12,22 +16,22 @@
     }
     else
     {
-        <p>Не удалось получить блюда</p> <br />
+        <p>Не удалось получить список блюд</p> <br />
     }
     <label> Название акции: </label> <br />
-    <input type="text" name="Name" value="@Model?.Offer?.Name" /> <br />
+    <input type="text" name="Offer.Name" value="@Model?.Offer?.Name" maxlength="100" required /> <br />
 
     <label>Описание акции: </label> <br />
-    <textarea name="Description" value="@Model?.Offer?.Description"></textarea> <br />
+    <textarea name="Offer.Description" value="@Model?.Offer?.Description" required ></textarea> <br />
 
     <label>Скидка (в процентах): </label> <br />
-    <input type="number" min="0" max="100" name="Discount" value="@Model?.Offer?.Discount" /> <br />
+    <input type="number" min="0" max="100" name="Offer.Discount" value="@Model?.Offer?.Discount" required /> <br />
 
     <label>Дата начала акции: </label> <br />
-    <input type="date" name="StartsAt" value="@Model?.Offer?.StartsAt" /> <br />
+    <input type="date" name="Offer.StartsAt" value="@Model?.Offer?.StartsAt" required /> <br />
 
     <label>Дата начала акции: </label> <br />
-    <input type="date" name="EndsAt" value="@Model?.Offer?.EndsAt" /> <br />
+    <input type="date" name="Offer.EndsAt" value="@Model?.Offer?.EndsAt" min="@tomorrow" required /> <br />
 
     <button type="submit">Добавить</button>
 </form>

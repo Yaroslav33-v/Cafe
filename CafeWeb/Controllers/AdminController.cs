@@ -22,8 +22,9 @@ namespace CafeWeb.Controllers
 
             return View(adminFoodModel);
         }
-        public async Task<ViewResult> NewOffer()
+        public async Task<ViewResult> NewOffer(string? errorMsg = null)
         {
+            ViewBag.Problem = errorMsg;
             var adminOfferModel = new AdminOfferModel
             {
                 Foods = await _adminService.GetAllFood()
@@ -43,14 +44,17 @@ namespace CafeWeb.Controllers
             if(isAdded) 
                 return RedirectToAction("Index", "Cafe");
 
-            return RedirectToAction();
+            return RedirectToAction("AddFood", new { errorMsg = msg });
         }
 
         [HttpPost]
         public async Task<IActionResult> NewOffer([FromForm] AdminOfferModel adminOfferModel)
         {
-            await _adminService.InsertOffer(adminOfferModel);
-            return RedirectToAction("Index", "Cafe");
+            (bool isAdded, string? msg) = await _adminService.InsertOffer(adminOfferModel);
+            if(isAdded)
+                return RedirectToAction("Index", "Cafe");
+
+            return RedirectToAction("NewOffer", new { errorMsg = msg });
         }
 
         [HttpPost]

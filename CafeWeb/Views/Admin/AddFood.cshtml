@@ -2,13 +2,21 @@
 @model CafeWeb.Models.AdminFoodModel
 
 <form method="post" action="/Admin/AddFood" enctype="multipart/form-data">
-    <label>Категория: </label>
-    <select name="SelectedCategory">
-    @foreach(var category in Model.Categories)
+    <p>@ViewBag.Problem</p> <br/>
+    @if (Model.Categories != null && Model.Categories.Any())
     {
-        <option value="@category">@category</option>
+        <label>Категория: </label>
+        <select name="SelectedCategory">
+        @foreach(var category in Model.Categories)
+        {
+            <option value="@category">@category</option>
+        }
+        </select> <br />
     }
-    </select> <br />
+    else
+    {
+         <p>Не удалось получить список категорий</p> <br />
+    }
 
     <label>Название: </label> <br />
     <input type="text" name="Food.Name" value="@Model?.Food?.Name" maxlength="100" required /> <br />
