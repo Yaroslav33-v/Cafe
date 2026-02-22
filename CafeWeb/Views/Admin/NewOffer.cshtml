@@ -4,7 +4,7 @@
     string tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 }
 <form method="post" action="/Admin/NewOffer">
-    <p>@ViewBag.Problem</p> <br/>
+    <p>@ViewBag.Problem</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
     @if (Model.Foods != null && Model.Foods.Any())
     {
         <select multiple name="FoodIds">
@@ -19,19 +19,19 @@
         <p>Не удалось получить список блюд</p> <br />
     }
     <label> Название акции: </label> <br />
-    <input type="text" name="Offer.Name" value="@Model?.Offer?.Name" maxlength="100" required /> <br />
+    <input type="text" name="Offer.Name" maxlength="100" required /> <br />
 
     <label>Описание акции: </label> <br />
-    <textarea name="Offer.Description" value="@Model?.Offer?.Description" required ></textarea> <br />
+    <textarea name="Offer.Description" required ></textarea> <br />
 
     <label>Скидка (в процентах): </label> <br />
-    <input type="number" min="0" max="100" name="Offer.Discount" value="@Model?.Offer?.Discount" required /> <br />
+    <input type="number" min="0" max="100" name="Offer.Discount" required /> <br />
 
     <label>Дата начала акции: </label> <br />
-    <input type="date" name="Offer.StartsAt" value="@Model?.Offer?.StartsAt" required /> <br />
+    <input type="date" name="Offer.StartsAt" required /> <br />
 
     <label>Дата начала акции: </label> <br />
-    <input type="date" name="Offer.EndsAt" value="@Model?.Offer?.EndsAt" min="@tomorrow" required /> <br />
+    <input type="date" name="Offer.EndsAt" min="@tomorrow" required /> <br />
 
     <button type="submit">Добавить</button>
 </form>

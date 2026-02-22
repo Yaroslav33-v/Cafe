@@ -54,7 +54,8 @@ namespace TelegramBot
             }
             catch (Exception ex)
             {
-                AppLogger.LogError("Критическая ошибка при запуске", ex);
+                AppLogger.LogError("Критическая ошибка при запуске ", ex);
+                Console.WriteLine("Критическая ошибка при запуске ", ex);
                 Console.ReadLine();
             }
         }

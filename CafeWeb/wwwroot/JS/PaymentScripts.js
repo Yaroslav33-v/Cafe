@@ -16,10 +16,8 @@ document.getElementById('card-number').addEventListener('input', function (e) {
 
     if (number.length === 16) {
         if (luhnAlgorithm(number)) {
-            console.log('✅ Карта валидна');
             e.target.style.borderColor = 'green';
         } else {
-            console.log('❌ Неправильный номер карты');
             e.target.style.borderColor = 'red';
         }
     } else {

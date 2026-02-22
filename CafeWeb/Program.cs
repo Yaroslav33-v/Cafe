@@ -1,4 +1,5 @@
 using CafeWeb.Services;
+using Microsoft.Extensions.FileProviders;
 using NLog.Extensions.Logging;
 using Npgsql;
 using System.Data;
@@ -23,6 +24,17 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
+app.UseStaticFiles(new StaticFileOptions
+{ 
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "IMG")),
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers.Append(
+            "Cache-Control", "public, max-age=3600");
+    }
+}); // Кэширование изображений
 
 app.UseStaticFiles();
 app.UseRouting();
