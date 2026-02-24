@@ -1,4 +1,5 @@
 using CafeWeb.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
 using NLog.Extensions.Logging;
@@ -16,23 +17,23 @@ builder.Services.AddScoped<IDbConnection>(provider =>
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddSingleton<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/User/Login";
-        options.AccessDeniedPath = "/User/AccessDenied";
+        options.LoginPath = "/User/SignIn";
+        options.AccessDeniedPath = "/access-denied";
         options.Cookie.Name = "CafeCookie";
         options.Cookie.HttpOnly = true; 
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
-});
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
@@ -40,9 +41,6 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.UseStaticFiles(new StaticFileOptions
 { 
@@ -57,6 +55,8 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/access-denied", (HttpContext context) =>
 {
@@ -76,12 +76,31 @@ app.MapGet("/faq", (HttpContext context) =>
     return Results.File(filePath, "text/html");
 });// ѕуть к faq.html
 
-app.MapPost("/login", (string? returnUrl, HttpContext context) =>
+app.MapGet("/check-login/{login}", async (IUserService userService, string login) =>
 {
+    try
+    {
+        if(await userService.IsNewLogin(login))
+            return Results.Ok();
 
-});
+        return Results.BadRequest(new
+        {
+            message = "ѕользователь с таким логином уже существует"
+        });
+    }
+    catch
+    {
+        return Results.StatusCode(500);
+    }
+}); // endpoint дл€ проверки существовани€ логина
+
+app.MapGet("/signout", async (HttpContext context) =>
+{
+    await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    return Results.Redirect("/User/SignIn");
+}); // endpoint дл€ выхода из аккаунта
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=Admin}/{action=NewOffer}");
+    pattern: "{controller=User}/{action=SignIn}");
 app.Run();

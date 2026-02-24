@@ -8,6 +8,7 @@
         public decimal Calories { get; set; }
         public decimal Weight { get; set; }
         public string Ingredients { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public string ImageAddress { get; set; } = null!;
     }
 }

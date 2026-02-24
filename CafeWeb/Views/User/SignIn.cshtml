@@ -1,0 +1,16 @@
+﻿@model CafeWeb.Models.User
+@{
+    string? returnUrl = Context.Request.Query["ReturnUrl"].ToString();
+}
+<form method="post" action="/User/SignIn">
+    <label> Введите логин: </label>
+    <input type="text" name="Login"/>
+
+    <label>Введите пароль: </label>
+    <input type="text" name="Password" />
+
+    <input name="returnUrl" value="@returnUrl" hidden/>
+    <button type="submit">Войти</button>
+</form>
+
+<p>Нет аккаунта? <a href="/User/SignUp"> Создать </a></p>

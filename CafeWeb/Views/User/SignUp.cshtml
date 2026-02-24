@@ -1,6 +1,12 @@
-﻿@model CafeWeb.Models.User
+﻿<!-- Страница для регистрации -->
+@model CafeWeb.Models.User
 
-<form method="post" action="/login">
+<form method="post" action="/User/SignUp">
     <label>Введите логин: </label>
-    <input type="text"/>
+    <input type="text" name="Login"/>
+
+    <label>Введите пароль: </label>
+    <input type="text" name="Password"/>
+
+    <button type="submit">Создать аккаунт</button>
 </form>

@@ -1,17 +1,19 @@
 ﻿using CafeWeb.Models;
 using CafeWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CafeWeb.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
-
         public AdminController(IAdminService adminService)
         {
             _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
         }
+        public ViewResult Index() => View();
         public async Task<ViewResult> AddFood(string? errorMsg = null)
         {
             ViewBag.Problem = errorMsg;
@@ -36,6 +38,8 @@ namespace CafeWeb.Controllers
             ViewBag.Problem = errorMsg;
             return View();
         }
+
+        //public ViewResult NewAdmin(
 
         [HttpPost]
         public async Task<IActionResult> AddFood([FromForm] AdminFoodModel adminFoodModel)
