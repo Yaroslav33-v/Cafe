@@ -4,6 +4,6 @@ namespace CafeWeb.Services
 {
     public interface IPaymentService
     {
-        Task<(bool, string?)> TryToPay(PaymentModel paymentModel);
+        Task TryToPay(PaymentModel paymentModel);
     }
 }

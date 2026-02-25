@@ -1,10 +1,12 @@
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders;
 using NLog.Extensions.Logging;
 using Npgsql;
 using System.Data;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -99,6 +101,18 @@ app.MapGet("/signout", async (HttpContext context) =>
     await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/User/SignIn");
 }); // endpoint для выхода из аккаунта
+
+app.MapGet("/me", (HttpContext context) =>
+{
+    var name = context.User.FindFirst(ClaimTypes.Name)?.Value;
+    var role = context.User.FindFirst(ClaimTypes.Role)?.Value;
+
+    return Results.Ok(new
+    {
+        name,
+        role
+    });
+}).RequireAuthorization(); // endpoint для получения данных о пользователе
 
 app.MapControllerRoute(
     name: default,

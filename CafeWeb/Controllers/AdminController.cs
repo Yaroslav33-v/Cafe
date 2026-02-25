@@ -44,31 +44,43 @@ namespace CafeWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFood([FromForm] AdminFoodModel adminFoodModel)
         {
-            (bool isAdded, string? msg) = await _adminService.InsertFood(adminFoodModel);
-            if(isAdded) 
+            try
+            {
+                await _adminService.InsertFood(adminFoodModel);
                 return RedirectToAction("Index", "Cafe");
-
-            return RedirectToAction("AddFood", new { errorMsg = msg });
+            }
+            catch (Exception ex) 
+            {
+                return RedirectToAction("AddFood", new { errorMsg = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> NewOffer([FromForm] AdminOfferModel adminOfferModel)
         {
-            (bool isAdded, string? msg) = await _adminService.InsertOffer(adminOfferModel);
-            if(isAdded)
+            try
+            {
+                await _adminService.InsertOffer(adminOfferModel);
                 return RedirectToAction("Index", "Cafe");
-
-            return RedirectToAction("NewOffer", new { errorMsg = msg });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("NewOffer", new { errorMsg = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> NewPromo([FromForm] Promocode promocode)
         {
-            (bool isAdded, string? msg) = await _adminService.InsertPromocode(promocode);
-            if (isAdded) 
+            try
+            {
+                await _adminService.InsertPromocode(promocode);
                 return RedirectToAction("Index", "Cafe");
-
-            return RedirectToAction("NewPromo", new { errorMsg = msg });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("NewPromo", new { errorMsg = ex.Message });
+            }
         }
     }
 }
