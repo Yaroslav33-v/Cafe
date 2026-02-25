@@ -39,7 +39,11 @@ namespace CafeWeb.Controllers
             return View();
         }
 
-        //public ViewResult NewAdmin(
+        public ViewResult NewAdmin(string? errorMsg = null)
+        {
+            ViewBag.Problem = errorMsg;
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddFood([FromForm] AdminFoodModel adminFoodModel)
@@ -80,6 +84,20 @@ namespace CafeWeb.Controllers
             catch (Exception ex)
             {
                 return RedirectToAction("NewPromo", new { errorMsg = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewAdmin([FromForm] User user)
+        {
+            try
+            {
+                await _adminService.InsertAdmin(user);
+                return RedirectToAction("Index", "Cafe");
+            }
+            catch(Exception ex) 
+            {
+                return RedirectToAction("NewAdmin", new { errorMsg = ex.Message });
             }
         }
     }

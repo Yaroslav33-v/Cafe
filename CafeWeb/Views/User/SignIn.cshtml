@@ -1,16 +1,22 @@
-﻿@model CafeWeb.Models.User
+﻿<!-- Страница для входа в аккаунт -->
+@model CafeWeb.Models.User
 @{
     string? returnUrl = Context.Request.Query["ReturnUrl"].ToString();
 }
 <form method="post" action="/User/SignIn">
     <label> Введите логин: </label>
-    <input type="text" name="Login"/>
+    <input type="text" name="Login" maxlength="25" required />
 
     <label>Введите пароль: </label>
-    <input type="text" name="Password" />
+    <input id="password-input" type="password" name="Password" maxlength="20" required />
+    <label>
+        <input type="checkbox" id="show-password"> Показать пароль
+    </label>
 
     <input name="returnUrl" value="@returnUrl" hidden/>
     <button type="submit">Войти</button>
 </form>
 
 <p>Нет аккаунта? <a href="/User/SignUp"> Создать </a></p>
+
+<script src="~/JS/ShowPassword.js"></script>

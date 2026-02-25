@@ -1,12 +1,33 @@
 ﻿<!-- Страница для регистрации -->
 @model CafeWeb.Models.User
 
-<form method="post" action="/User/SignUp">
-    <label>Введите логин: </label>
-    <input type="text" name="Login"/>
+<head>
+    <style>
+        .available {
+            color: green;
+        }
+        .taken {
+            color: red;
+        }
+        .checking {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="/User/SignUp">
+        <label>Введите логин: </label>
+        <input id="username" type="text" name="Login" maxlength="25" required />
+        <span id="status"></span> <!-- для проверки логина -->
 
-    <label>Введите пароль: </label>
-    <input type="text" name="Password"/>
+        <label>Введите пароль: </label>
+        <input id="password-input" type="password" name="Password" maxlength="20" required />
+        <label>
+            <input type="checkbox" id="show-password"> Показать пароль
+        </label>
 
-    <button type="submit">Создать аккаунт</button>
-</form>
+        <button type="submit">Создать аккаунт</button>
+    </form>
+    <script src="~/JS/ShowPassword.js"></script>
+    <script src="~/JS/UserScripts.js"></script>
+</body>

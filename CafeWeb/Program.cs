@@ -1,7 +1,6 @@
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders;
 using NLog.Extensions.Logging;
 using Npgsql;
@@ -82,12 +81,12 @@ app.MapGet("/check-login/{login}", async (IUserService userService, string login
 {
     try
     {
-        if(await userService.IsNewLogin(login))
-            return Results.Ok();
+        bool isAvailable = await userService.IsNewLogin(login);
 
-        return Results.BadRequest(new
+        return Results.Ok(new
         {
-            message = "Пользователь с таким логином уже существует"
+            available = isAvailable,
+            message = isAvailable ? "Логин свободен" : "Пользователь с таким логином уже существует"
         });
     }
     catch

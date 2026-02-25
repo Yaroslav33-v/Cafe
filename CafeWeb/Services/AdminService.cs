@@ -9,11 +9,13 @@ namespace CafeWeb.Services
     {
         private readonly IDbConnection _connection; 
         private readonly ILogger<AdminService> _logger;
+        private readonly IPasswordService _passwordService;
 
-        public AdminService(IDbConnection connection, ILogger<AdminService> logger)
+        public AdminService(IDbConnection connection, ILogger<AdminService> logger, IPasswordService passwordService)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
         }
          
         public async Task<Dictionary<int, string>> GetAllFood()
@@ -31,9 +33,38 @@ namespace CafeWeb.Services
             return categoryNames.ToList();
         }
 
-        public Task InsertAdmin(User user)
+        public async Task InsertAdmin(User user)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation("Получена заявка на регистрацию нового админа: " + user.Login);
+            try
+            {
+                string hashedPassword = _passwordService.HashPassword(user.Password);
+                await _connection.ExecuteAsync(@"INSERT INTO public.users (login, password, is_admin) VALUES
+                    (@Login, @Password, @IsAdmin)",
+                    new
+                    {
+                        user.Login,
+                        Password = hashedPassword,
+                        IsAdmin = true
+                    });
+
+                _logger.LogInformation("Новый админ {Login} добавлен в БД", user.Login);
+            }
+            catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
+            {
+                _logger.LogInformation("Логин '{Login}' уже существует", user.Login);
+                throw new ArgumentException("Такое блюдо уже существует");
+            }
+            catch (PostgresException ex)
+            {
+                _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
+                throw new Exception("Внутренняя ошибка в базе данных");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                throw new Exception("Непридвиденная внутренняя ошибка");
+            }
         }
 
         public async Task InsertFood(AdminFoodModel food)
