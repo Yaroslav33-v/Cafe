@@ -10,6 +10,7 @@ CREATE TABLE public.food(
 	calories DECIMAL(7, 2) NOT NULL,
 	weight DECIMAL(7, 2) NOT NULL,
 	ingredients TEXT NOT NULL,
+	description TEXT NOT NULL,
 	image_address VARCHAR(255) NOT NULL, -- Адрес изображения в файловой системе программы
 	category_id INTEGER REFERENCES public.categories(category_id)
 );

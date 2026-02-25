@@ -26,11 +26,16 @@ namespace CafeWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Pay([FromForm] PaymentModel paymentModel)
         {
-            (bool isPaid, string? msg) = await _paymentService.TryToPay(paymentModel);
-            if (isPaid)
+
+            try
+            {
+                await _paymentService.TryToPay(paymentModel);
                 return RedirectToAction("PaymentSucceeded");
-            else
-                return RedirectToAction("PaymentFailed", new { message = msg });
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("PaymentFailed", new { message = ex.Message });
+            }  
         }
     }
 }

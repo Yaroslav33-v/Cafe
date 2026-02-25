@@ -9,11 +9,13 @@ namespace CafeWeb.Services
     {
         private readonly IDbConnection _connection; 
         private readonly ILogger<AdminService> _logger;
+        private readonly IPasswordService _passwordService;
 
-        public AdminService(IDbConnection connection, ILogger<AdminService> logger)
+        public AdminService(IDbConnection connection, ILogger<AdminService> logger, IPasswordService passwordService)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
         }
          
         public async Task<Dictionary<int, string>> GetAllFood()
@@ -31,7 +33,41 @@ namespace CafeWeb.Services
             return categoryNames.ToList();
         }
 
-        public async Task<(bool, string?)> InsertFood(AdminFoodModel food)
+        public async Task InsertAdmin(User user)
+        {
+            _logger.LogInformation("Получена заявка на регистрацию нового админа: " + user.Login);
+            try
+            {
+                string hashedPassword = _passwordService.HashPassword(user.Password);
+                await _connection.ExecuteAsync(@"INSERT INTO public.users (login, password, is_admin) VALUES
+                    (@Login, @Password, @IsAdmin)",
+                    new
+                    {
+                        user.Login,
+                        Password = hashedPassword,
+                        IsAdmin = true
+                    });
+
+                _logger.LogInformation("Новый админ {Login} добавлен в БД", user.Login);
+            }
+            catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
+            {
+                _logger.LogInformation("Логин '{Login}' уже существует", user.Login);
+                throw new ArgumentException("Такое блюдо уже существует");
+            }
+            catch (PostgresException ex)
+            {
+                _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
+                throw new Exception("Внутренняя ошибка в базе данных");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                throw new Exception("Непридвиденная внутренняя ошибка");
+            }
+        }
+
+        public async Task InsertFood(AdminFoodModel food)
         {
             _logger.LogInformation("Получена заявка на добавление нового блюда - '{Name}'", food.Food.Name);
             try
@@ -65,30 +101,29 @@ namespace CafeWeb.Services
                         });
 
                     _logger.LogInformation("Блюдо '{Name}' добавлено в базу данных", food.Food.Name);
-                    return (true, null);
                 }
 
                 _logger.LogInformation("Ошибка при получении изображения для блюда '{Name}'", food.Food.Name);
-                return (false, "Ошибка при получении изображения");
+                throw new ArgumentNullException("Ошибка при получении изображения");
             }
             catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
             {
                 _logger.LogInformation("Блюдо '{Name}' уже существует", food.Food.Name);
-                return (false, "Такое блюдо уже существует");
+                throw new ArgumentException("Такое блюдо уже существует");
             }
             catch (PostgresException ex)
             {
                 _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
-                return (false, "Внутренняя ошибка в базе данных");
+                throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
-                return (false, "Непридвиденная внутренняя ошибка");
+                throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }
 
-        public async Task<(bool, string?)> InsertOffer(AdminOfferModel offer)
+        public async Task InsertOffer(AdminOfferModel offer)
         {
             _logger.LogInformation("Получена заявка на создание новой акции - '{Name}'", offer.Offer.Name);
             string sqlInsertOffer = @"INSERT INTO public.offers (offer_name, description, discount, starts_at, ends_at) 
@@ -128,22 +163,20 @@ namespace CafeWeb.Services
                     await _connection.ExecuteAsync(sqlOfferFood, parameters);
                 }
                 _logger.LogInformation("Блюда для акции '{Name}' добавлены в базу данных", offer.Offer.Name);
-
-                return (true, null);
             }
             catch (PostgresException ex)
             {
                 _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
-                return (false, "Внутренняя ошибка в базе данных");
+                throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
-                return (false, "Непридвиденная внутренняя ошибка");
+                throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }
 
-        public async Task<(bool, string?)> InsertPromocode(Promocode promocode)
+        public async Task InsertPromocode(Promocode promocode)
         {
             _logger.LogInformation("Получена заявка на добавление промокода '{Code}'", promocode.Code);
 
@@ -160,22 +193,21 @@ namespace CafeWeb.Services
                 });
 
                 _logger.LogInformation("Промокод '{Code}' добавлен в базу данных", promocode.Code);
-                return (true, null);
             }
             catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
             {
                 _logger.LogInformation("Промокод '{Code}' уже существует в базе данных", promocode.Code);
-                return (false, "Такой промокод уже существует");
+                throw new ArgumentException("Такой промокод уже существует");
             }
             catch (PostgresException ex)
             {
                 _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
-                return (false, "Внутренняя ошибка в базе данных");
+                throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
                 _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
-                return (false, "Непридвиденная внутренняя ошибка");
+                throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }
     }

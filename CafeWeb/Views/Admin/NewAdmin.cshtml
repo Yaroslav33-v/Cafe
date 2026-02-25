@@ -1,0 +1,33 @@
+﻿@model CafeWeb.Models.User
+<head>
+    <style>
+        .available {
+            color: green;
+        }
+        .taken {
+            color: red;
+        }
+        .checking {
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <p>@ViewBag.Problem</p>
+    <form method="post" action="/Admin/NewAdmin">
+        <label> Введите логин: </label>
+        <input id="username" type="text" name="Login" maxlength="25" required />
+        <span id="status"></span> <!-- для проверки логина -->
+
+        <label>Введите пароль: </label>
+        <input id="password-input" type="password" name="Password" maxlength="20" required />
+        <label>
+            <input type="checkbox" id="show-password"> Показать пароль
+        </label>
+        <button type="button" id="rand-password">Случайный пароль</button>
+
+        <button type="submit"> Создать </button>
+    </form>
+    <script src="~/JS/ShowPassword.js"></script>
+    <script src="~/JS/UserScripts.js"></script>
+</body>
