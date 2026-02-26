@@ -26,7 +26,7 @@ builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/User/SignIn";
+        options.LoginPath = "/user/signin";
         options.AccessDeniedPath = "/access-denied";
         options.Cookie.Name = "CafeCookie";
         options.Cookie.HttpOnly = true; 
@@ -98,7 +98,7 @@ app.MapGet("/check-login/{login}", async (IUserService userService, string login
 app.MapGet("/signout", async (HttpContext context) =>
 {
     await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return Results.Redirect("/User/SignIn");
+    return Results.Redirect("/user/signin");
 }); // endpoint для выхода из аккаунта
 
 app.MapGet("/me", (HttpContext context) =>
@@ -115,5 +115,5 @@ app.MapGet("/me", (HttpContext context) =>
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=User}/{action=SignIn}");
+    pattern: "{controller=Cafe}/{action=Index}");
 app.Run();
