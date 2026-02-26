@@ -3,7 +3,7 @@
 @{
     string? returnUrl = Context.Request.Query["ReturnUrl"].ToString();
 }
-<form method="post" action="/User/SignIn">
+<form method="post" action="/user/signin">
     <label> Введите логин: </label>
     <input type="text" name="Login" maxlength="25" required />
 
@@ -17,6 +17,6 @@
     <button type="submit">Войти</button>
 </form>
 
-<p>Нет аккаунта? <a href="/User/SignUp"> Создать </a></p>
+<p>Нет аккаунта? <a href="/user/signup"> Создать </a></p>
 
 <script src="~/JS/ShowPassword.js"></script>

@@ -1,7 +1,7 @@
 ﻿<!-- Страница для добавления новой еды -->
 @model CafeWeb.Models.AdminFoodModel
 
-<form method="post" action="/Admin/AddFood" enctype="multipart/form-data">
+<form method="post" action="/admin/addfood" enctype="multipart/form-data">
     <p>@ViewBag.Problem</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
     @if (Model.Categories != null && Model.Categories.Any())
     {

@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace CafeWeb.Controllers
 {
+    [Route("/user/[action]")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;

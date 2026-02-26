@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CafeWeb.Controllers
 {
+    [Route("/admin/[action]")]
     [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {

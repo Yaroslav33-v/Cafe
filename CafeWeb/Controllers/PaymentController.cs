@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CafeWeb.Controllers
 {
+    [Route("/payment/[action]")]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
