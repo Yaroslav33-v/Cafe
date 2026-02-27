@@ -15,6 +15,7 @@
     </style>
 </head>
 <body>
+    <p>@ViewBag.Problem</p>
     <form method="post" action="/user/signup">
         <label>Введите логин: </label>
         <input id="username" type="text" name="Login" maxlength="25" required />
@@ -26,6 +27,7 @@
             <input type="checkbox" id="show-password"> Показать пароль
         </label>
 
+        <input name="referer" value="@ViewBag.Referer" hidden/>
         <button type="submit">Создать аккаунт</button>
     </form>
     <script src="~/JS/ShowPassword.js"></script>

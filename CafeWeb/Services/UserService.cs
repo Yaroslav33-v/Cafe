@@ -28,9 +28,6 @@ namespace CafeWeb.Services
                     FROM public.users
                     WHERE login = @Login", new { user.Login });
 
-                if (hash is null)
-                    throw new UnauthorizedAccessException("Aккаунта с такими данными не существует!");
-
                 if (!_passwordService.VerifyPassword(user.Password.Trim(), hash.Trim()))
                     throw new UnauthorizedAccessException("Неправильный логин или пароль");
 
@@ -43,10 +40,18 @@ namespace CafeWeb.Services
 
                 return new ClaimsIdentity(claims, "Cookies");
             }
+            catch (UnauthorizedAccessException)
+            {
+                throw;
+            }
+            catch(InvalidOperationException)
+            {
+                throw new UnauthorizedAccessException("Aккаунта с такими данными не существует!");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new UnauthorizedAccessException("Проблема при входе в аккаунт");
+                _logger.LogError("Ошибка при входе в аккаунт: " + ex.Message);
+                throw new Exception("Проблема при входе в аккаунт");
             }
         }
 
@@ -63,7 +68,8 @@ namespace CafeWeb.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError("Ошибка при создании аккаунта: " + ex.Message);
+                throw new Exception("Ошибка при создании аккаунта. Попробуйте позже");
             }
         }
 
@@ -78,8 +84,9 @@ namespace CafeWeb.Services
 
                 return !loginFinded;
             }
-            catch
+            catch(Exception ex) 
             {
+                _logger.LogError("Ошибка при получении данных о логине: " + ex.Message);
                 throw;
             }
         }
