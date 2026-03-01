@@ -15,14 +15,35 @@ namespace CafeWeb.Controllers
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
-        public IActionResult SignUp() => View();
-        public IActionResult SignIn() => View();
+        public IActionResult SignUp(string? referer = null, string? problem = null) 
+        {
+            ViewBag.Referer = referer ?? Request.Headers.Referer.ToString();
+            ViewBag.Problem = problem;
+            return View();
+        }
+        public IActionResult SignIn(string? problem = null)
+        {
+            ViewBag.Problem = problem;
+            return View();
+        }
 
         [HttpPost]
-        public async Task<IActionResult> SignUp([FromForm] User user)
+        public async Task<IActionResult> SignUp([FromForm]string? referer, [FromForm] User user)
         {
-            await _userService.SignUp(user);
-            return RedirectToAction("Index", "Cafe");
+            try
+            {
+                await _userService.SignUp(user);
+
+                if (!string.IsNullOrEmpty(referer))
+                {
+                    return Redirect(referer);
+                }
+                return RedirectToAction("SignIn");
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction("SignIn", new { referer, problem = ex.Message });
+            }
         }
 
         [HttpPost]
@@ -38,8 +59,7 @@ namespace CafeWeb.Controllers
             }
             catch(Exception ex) 
             {
-                Console.WriteLine(ex.Message);
-                return Redirect("/access-denied");
+                return RedirectToAction("SignIn", new { problem = ex.Message });
             }
         }
     }

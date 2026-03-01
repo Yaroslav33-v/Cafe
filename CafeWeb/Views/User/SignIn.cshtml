@@ -3,6 +3,7 @@
 @{
     string? returnUrl = Context.Request.Query["ReturnUrl"].ToString();
 }
+<p>@ViewBag.Problem</p>
 <form method="post" action="/user/signin">
     <label> Введите логин: </label>
     <input type="text" name="Login" maxlength="25" required />
