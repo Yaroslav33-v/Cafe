@@ -1,4 +1,4 @@
-using CafeWeb.Services;
+п»їusing CafeWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
@@ -52,7 +52,7 @@ app.UseStaticFiles(new StaticFileOptions
         ctx.Context.Response.Headers.Append(
             "Cache-Control", "public, max-age=3600");
     }
-}); // Кэширование изображений
+}); // РљСЌС€РёСЂРѕРІР°РЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёР№
 
 app.UseStaticFiles();
 app.UseRouting();
@@ -63,19 +63,19 @@ app.MapGet("/access-denied", (HttpContext context) =>
 {
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "access-denied.html");
     return Results.File(filePath, "text/html");
-});// Путь к access-denied.html
+});// РџСѓС‚СЊ Рє access-denied.html
 
 app.MapGet("/about", (HttpContext context) =>
 {
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "about.html");
     return Results.File(filePath, "text/html");
-});// Путь к about.html
+});// РџСѓС‚СЊ Рє about.html
 
 app.MapGet("/faq", (HttpContext context) =>
 {
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "faq.html");
     return Results.File(filePath, "text/html");
-});// Путь к faq.html
+});// РџСѓС‚СЊ Рє faq.html
 
 app.MapGet("/check-login/{login}", async (IUserService userService, string login) =>
 {
@@ -86,20 +86,20 @@ app.MapGet("/check-login/{login}", async (IUserService userService, string login
         return Results.Ok(new
         {
             available = isAvailable,
-            message = isAvailable ? "Логин свободен" : "Пользователь с таким логином уже существует"
+            message = isAvailable ? "Р›РѕРіРёРЅ СЃРІРѕР±РѕРґРµРЅ" : "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃ С‚Р°РєРёРј Р»РѕРіРёРЅРѕРј СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚"
         });
     }
     catch
     {
         return Results.StatusCode(500);
     }
-}); // endpoint для проверки существования логина
+}); // endpoint РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёСЏ Р»РѕРіРёРЅР°
 
 app.MapGet("/signout", async (HttpContext context) =>
 {
     await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/user/signin");
-}); // endpoint для выхода из аккаунта
+}); // endpoint РґР»СЏ РІС‹С…РѕРґР° РёР· Р°РєРєР°СѓРЅС‚Р°
 
 app.MapGet("/me", (HttpContext context) =>
 {
@@ -111,7 +111,7 @@ app.MapGet("/me", (HttpContext context) =>
         name,
         role
     });
-}).RequireAuthorization(); // endpoint для получения данных о пользователе
+}).RequireAuthorization(); // endpoint РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С… Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ
 
 app.MapControllerRoute(
     name: default,
