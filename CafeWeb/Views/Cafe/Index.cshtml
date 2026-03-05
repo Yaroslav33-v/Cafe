@@ -1,12 +1,17 @@
 ﻿@{
     Layout = "_Layout"; // Использование шаблона
 }
-@model List<CafeWeb.Models.Food> // Подключение модели к представлению
+@model List<CafeWeb.Models.Category> // Подключение модели к представлению
 <h1>Пиццы</h1>
-@foreach(var pizza in Model) // Model - обращение к переданной модели, знак @ используется для работы с C# кодом
+@foreach(var category in Model)
 {
-    <p>@pizza.Name</p>
-    <p>@pizza.Price</p>
+    <p>@category.Name</p>
+    foreach(var food in category.Foods) // Model - обращение к переданной модели, знак @ используется для работы с C# кодом
+    {
+        <p>@food.Name</p>
+        <p>@food.Price</p>
+        <p>@food.Calories</p>
+    }
 }
 <!-- Название папки, где лежит представление должно иметь название аналогичное названию контроллера для неё, но без Controller -->
 <!-- То есть представления для CafeController лежт в папке Views/Cafe -->

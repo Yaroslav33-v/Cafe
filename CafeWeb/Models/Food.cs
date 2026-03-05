@@ -9,5 +9,8 @@
         public decimal Weight { get; set; }
         public string Ingredients { get; set; } = null!;
         public string ImageAddress { get; set; } = null!;
+        public int CategoryId { get; set; }
+        public string Description { get; set; } = null!;
+
     }
 }
