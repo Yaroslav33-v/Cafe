@@ -6,7 +6,7 @@
     @if (Model.Categories != null && Model.Categories.Any())
     {
         <label>Категория: </label>
-        <select name="SelectedCategory">
+        <select name="SelectedCategory" required>
         @foreach(var category in Model.Categories)
         {
             <option value="@category">@category</option>

@@ -115,5 +115,5 @@ app.MapGet("/me", (HttpContext context) =>
 
 app.MapControllerRoute(
     name: default,
-    pattern: "{controller=Cafe}/{action=Index}");
+    pattern: "{controller=cafe}/{action=Index}");
 app.Run();

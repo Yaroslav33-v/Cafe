@@ -7,7 +7,7 @@
     <p>@ViewBag.Problem</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
     @if (Model.Foods != null && Model.Foods.Any())
     {
-        <select multiple name="FoodIds">
+        <select multiple name="FoodIds" required>
             @foreach (var kvp in Model.Foods)
             {
                 <option value="@kvp.Key">@kvp.Value</option>
