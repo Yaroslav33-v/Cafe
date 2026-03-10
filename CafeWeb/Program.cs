@@ -20,6 +20,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPromocodeService, PromocodeService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
@@ -112,6 +113,32 @@ app.MapGet("/me", (HttpContext context) =>
         role
     });
 }).RequireAuthorization(); // endpoint для получения данных о пользователе
+
+app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService promocodeService) => {
+    try
+    {
+        var promocode = await promocodeService.GetPromocodeInfo(promo);
+
+        if (promocode is null)
+            return Results.Ok(new
+            {
+                available = false,
+                message = "Промокод не существует",
+            });
+
+        return Results.Ok(new
+        {
+            available = true,
+            message = "Промокод существует",
+            fromSum = promocode.FromSum,
+            discount = promocode.Discount
+        });
+    }
+    catch
+    {
+        return Results.StatusCode(500);
+    }
+}); // endpoint для проверки существования промокода
 
 app.MapControllerRoute(
     name: default,
