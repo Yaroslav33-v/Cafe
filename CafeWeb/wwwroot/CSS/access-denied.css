@@ -20,6 +20,8 @@
     flex-direction: column; 
     align-items: center;
     gap: 30px;
+    position: relative;
+    margin-top: 140px;
 }
 .container-row {
     display: flex;
@@ -91,6 +93,21 @@ video {
     box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
-
+#logo {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: -110px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
 
 
