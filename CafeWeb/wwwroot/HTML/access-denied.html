@@ -3,16 +3,36 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="icon" href="../IMG/logo-cafe.png" type="image/png">
     <title>403 Forbidden</title>
+    <link href="../CSS/access-denied.css" rel="stylesheet" />
 </head>
 <body>
-    <h1>4</h1>
-    <div class="video-circle">
-        <video muted>
-            <source src="file.mp4" type="video/mp4" />
+    <div class="container">
+        <div class="container-row">
+            <h1>4</h1>
+
+            <video muted autoplay loop>
+                <source src="../VIDEO/toxis.mp4" type="video/mp4" />
+
+            </video>
+
+            <h1>3</h1>
+        </div>
             
-        </video>
+        <div class="under">
+
+            <button class="btn" onclick="goToMainPage()">На главную</button>
+
+        </div>
     </div>
-    <h1>3</h1>
+   
+    <script>
+      
+        function goToMainPage() {
+            document.location.replace("/Cafe/Index")
+        }
+    </script>
+  
 </body>
 </html>

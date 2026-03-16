@@ -1,14 +1,45 @@
-﻿@{
-    Layout = "_Layout"; // Использование шаблона
-}
+﻿
 @model List<CafeWeb.Models.Food> // Подключение модели к представлению
-<h1>Пиццы</h1>
-@foreach(var pizza in Model) // Model - обращение к переданной модели, знак @ используется для работы с C# кодом
-{
-    <p>@pizza.Name</p>
-    <p>@pizza.Price</p>
-}
-<!-- Название папки, где лежит представление должно иметь название аналогичное названию контроллера для неё, но без Controller -->
-<!-- То есть представления для CafeController лежт в папке Views/Cafe -->
 
-<a href="/Admin/AddFood"> Создать новое блюдо </a>
+<html>
+<head>
+    <title>Кафе "4 Творожка"</title>
+    <link href="~/CSS/main.css" rel="stylesheet" />
+</head>
+<body>
+    
+    <h1 class="desserts">Десерты</h1>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Четыре творожка</h4>
+                    <p>Кафе честной еды. Готовим с душой с 2020 года. От сырников до бургеров — каждый найдёт своё.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
+                        <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
+                        <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
+                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mai.ru</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Мы в соцсетях</h4>
+                    <ul>
+                        <li><a href="https://vk.com/club236358484"><i class="fab fa-vk"></i> ВКонтакте</a></li>
+                        <li><a href="https://t.me/FourTvorojka"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Четыре творожка. Все права защищены.</p>
+                <a href="C:\Users\Георгий\Source\Repos\Cafe\CafeWeb\Views\Admin\Index.cshtml"><img src="~/IMG/crybady.jpg" /> </a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
+
