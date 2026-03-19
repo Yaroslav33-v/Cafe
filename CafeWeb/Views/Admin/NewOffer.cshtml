@@ -4,7 +4,7 @@
     string tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 }
 <form method="post" action="/admin/newoffer">
-    <p>@ViewBag.Problem</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
+    <p>@ViewBag.Message</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
     @if (Model.Foods != null && Model.Foods.Any())
     {
         <select multiple name="FoodIds">

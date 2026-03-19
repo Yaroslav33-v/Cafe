@@ -15,9 +15,9 @@ namespace CafeWeb.Controllers
             _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
         }
         public ViewResult Index() => View();
-        public async Task<ViewResult> AddFood(string? errorMsg = null)
+        public async Task<ViewResult> AddFood(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
             var adminFoodModel = new AdminFoodModel
             {
                 Categories = await _adminService.GetCategoryNames()
@@ -25,24 +25,24 @@ namespace CafeWeb.Controllers
 
             return View(adminFoodModel);
         }
-        public async Task<ViewResult> NewOffer(string? errorMsg = null)
+        public async Task<ViewResult> NewOffer(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
             var adminOfferModel = new AdminOfferModel
             {
                 Foods = await _adminService.GetAllFood()
             };
             return View(adminOfferModel);
         }
-        public ViewResult NewPromo(string? errorMsg = null)
+        public ViewResult NewPromo(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
             return View();
         }
 
-        public ViewResult NewAdmin(string? errorMsg = null)
+        public ViewResult NewAdmin(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
             return View();
         }
 
@@ -52,11 +52,11 @@ namespace CafeWeb.Controllers
             try
             {
                 await _adminService.InsertFood(adminFoodModel);
-                return RedirectToAction("Index", "Cafe");
+                return RedirectToAction("AddFood", new { message = "Позиция успешно добавлена!"});
             }
             catch (Exception ex) 
             {
-                return RedirectToAction("AddFood", new { errorMsg = ex.Message });
+                return RedirectToAction("AddFood", new { message = ex.Message });
             }
         }
 
@@ -66,11 +66,11 @@ namespace CafeWeb.Controllers
             try
             {
                 await _adminService.InsertOffer(adminOfferModel);
-                return RedirectToAction("Index", "Cafe");
+                return RedirectToAction("NewOffer", new { message = "Акция успешно добавлена!" });
             }
             catch (Exception ex)
             {
-                return RedirectToAction("NewOffer", new { errorMsg = ex.Message });
+                return RedirectToAction("NewOffer", new { message = ex.Message });
             }
         }
 
@@ -80,11 +80,11 @@ namespace CafeWeb.Controllers
             try
             {
                 await _adminService.InsertPromocode(promocode);
-                return RedirectToAction("Index", "Cafe");
+                return RedirectToAction("NewPromo", new { message = "Промокод успешно добавлен!" });
             }
             catch (Exception ex)
             {
-                return RedirectToAction("NewPromo", new { errorMsg = ex.Message });
+                return RedirectToAction("NewPromo", new { message = ex.Message });
             }
         }
 
@@ -94,11 +94,11 @@ namespace CafeWeb.Controllers
             try
             {
                 await _adminService.InsertAdmin(user);
-                return RedirectToAction("Index", "Cafe");
+                return RedirectToAction("NewAdmin", new { message = "Админ успешно добавлен!" });
             }
             catch(Exception ex) 
             {
-                return RedirectToAction("NewAdmin", new { errorMsg = ex.Message });
+                return RedirectToAction("NewAdmin", new { message = ex.Message });
             }
         }
     }

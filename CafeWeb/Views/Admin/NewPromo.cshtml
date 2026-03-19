@@ -4,7 +4,7 @@
     string tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 }
 
-<p>@ViewBag.Problem</p>
+<p>@ViewBag.Message</p>
 <br /> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
 
 <form method="post" action="/admin/newpromo">
@@ -13,10 +13,10 @@
     <button id="rand-promo" type="button">Случайный промокод</button><br />
 
     <label>На сумму: </label> <br />
-    <input type="number" name="Discount" max="99999.99" min="0" required /> <br />
+    <input type="number" name="Discount" max="99999.99" min="0" step="0.01" required /> <br />
 
     <label>Действует с суммы: </label> <br />
-    <input type="number" name="FromSum" max="99999.99" min="0" required /> <br />
+    <input type="number" name="FromSum" max="99999.99" min="0" step="0.01" required /> <br />
 
     <label>Действует до:</label> <br />
     <input type="date" name="ExpiresAt" min="@tomorrow" required />

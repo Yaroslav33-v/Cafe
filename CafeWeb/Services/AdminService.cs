@@ -87,8 +87,8 @@ namespace CafeWeb.Services
                     WHERE name = @Name", new { Name = food.SelectedCategory });
 
                     await _connection.ExecuteAsync(@"INSERT INTO public.food 
-                    (food_name, price, calories, weight, ingredients, image_address, category_id)
-                    VALUES (@Name, @Price, @Calories, @Weight, @Ingredients, @ImageAddress, @CategoryId);",
+                    (food_name, price, calories, weight, ingredients, image_address, category_id, description)
+                    VALUES (@Name, @Price, @Calories, @Weight, @Ingredients, @ImageAddress, @CategoryId, @Description);",
                         new
                         {
                             food.Food.Name,
@@ -97,14 +97,17 @@ namespace CafeWeb.Services
                             food.Food.Weight,
                             food.Food.Ingredients,
                             food.Food.ImageAddress,
-                            categoryId
+                            categoryId,
+                            food.Food.Description
                         });
 
                     _logger.LogInformation("Блюдо '{Name}' добавлено в базу данных", food.Food.Name);
                 }
-
-                _logger.LogInformation("Ошибка при получении изображения для блюда '{Name}'", food.Food.Name);
-                throw new ArgumentNullException("Ошибка при получении изображения");
+                else
+                {
+                    _logger.LogInformation("Ошибка при получении изображения для блюда '{Name}'", food.Food.Name);
+                    throw new ArgumentNullException("Ошибка при получении изображения");
+                }
             }
             catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
             {
