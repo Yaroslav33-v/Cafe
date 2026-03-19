@@ -9,6 +9,6 @@ namespace CafeWeb.Services
         Task InsertPromocode(Promocode promocode);
         Task InsertAdmin(User user);
         Task<List<string>> GetCategoryNames();
-        Task<Dictionary<int, string>> GetAllFood();
+        Task<Dictionary<int, FoodShortModel>> GetAllFood();
     }
 }

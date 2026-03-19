@@ -18,12 +18,20 @@ namespace CafeWeb.Services
             _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
         }
          
-        public async Task<Dictionary<int, string>> GetAllFood()
+        public async Task<Dictionary<int, FoodShortModel>> GetAllFood()
         {
-            IEnumerable<(int id, string name)> foods = await _connection
-                .QueryAsync<(int, string)>("SELECT food_id AS Id, food_name AS Name FROM public.food");
+            var results = await _connection.QueryAsync(@"
+                SELECT food_id, food_name AS Name, image_address AS ImageAddress 
+                FROM public.food");
 
-            return foods.ToDictionary();
+            return results.ToDictionary(
+                key => (int)key.food_id,
+                value => new FoodShortModel
+                {
+                    Name = value.name,
+                    ImageAddress = value.imageaddress
+                }
+            );
         }
 
         public async Task<List<string>> GetCategoryNames()

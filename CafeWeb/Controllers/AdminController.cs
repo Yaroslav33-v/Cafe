@@ -20,7 +20,8 @@ namespace CafeWeb.Controllers
             ViewBag.Message = message;
             var adminFoodModel = new AdminFoodModel
             {
-                Categories = await _adminService.GetCategoryNames()
+                Categories = await _adminService.GetCategoryNames(),
+                ExistingFood = await _adminService.GetAllFood()
             };
 
             return View(adminFoodModel);
