@@ -285,3 +285,6 @@ i, .icon {
 .icon-disconnect:before           { content: "\F534"; }
 .icon-graph:before                { content: "\F535"; }
 .icon-new_user:before             { content: "\F536"; }
+.pizza:before {
+    content: "\F537";
+}

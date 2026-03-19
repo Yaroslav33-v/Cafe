@@ -3,9 +3,96 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>FAQ</title>
+    <link rel="icon" href="../IMG/logo-cafe.png" type="image/png">
+    <link href="../CSS/faq.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="faq-wrapper">
+        <img id="logo" src="../IMG/logo-cafe.png" />
+        <h1>Часто задаваемые вопросы </h1>
 
+        <div class="faq-tabs">
+            <button class="tab-btn active" data-tab="general">
+                <i class="fas fa-circle-info"></i> Общее
+            </button>
+            <button class="tab-btn" data-tab="ordering">
+                <i class="fas fa-cart-shopping"></i> Заказ
+            </button>
+            <button class="tab-btn" data-tab="payment">
+                <i class="fas fa-credit-card"></i> Оплата
+            </button>
+            <button class="tab-btn" data-tab="delivery">
+                <i class="fas fa-truck"></i> Доставка
+            </button>
+        </div>
+
+        <div class="tab-content active" id="general">
+            <div class="faq-list-modern">
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <h3>Что такое ваш сервис?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p>Мы - онлайн-платформа для заказа еды с доставкой. Сотрудничаем с лучшими ресторанами города и доставляем любимые блюда прямо к вашей двери.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <h3>Как начать работу?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p>Просто зарегистрируйтесь на сайте или в приложении, выберите ресторан и блюда, оформите заказ. Первый заказ - скидка 20%!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="ordering">
+            <div class="faq-list-modern">
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <h3>Как оформить заказ?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p>Выберите блюда, добавьте в корзину, укажите адрес и способ оплаты. Подтвердите заказ - и мы сразу начнем его готовить!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="payment">
+            <div class="faq-list-modern">
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <h3>Какие способы оплаты?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p>Карты Visa/Mastercard/Mир, Apple Pay, Google Pay, наличные курьеру, SberPay, бонусные баллы.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="delivery">
+            <div class="faq-list-modern">
+                <div class="faq-item-modern">
+                    <div class="faq-question-modern">
+                        <h3>Сколько идет доставка?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer-modern">
+                        <p>Среднее время доставки - 40-50 минут. В отдаленные районы - до 70 минут. Следить за курьером можно в приложении.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../JS/faq.js"></script>
 </body>
 </html>

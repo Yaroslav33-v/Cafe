@@ -6,7 +6,7 @@ window.onload = function() {
 		el.innerHTML = '<span style="font-family: \'ElegantIcons\'">' + entity + '</span>' + html;
 	}
 	var icons = {
-			'arrow_up' : '&#x21;',
+			'pizza' : '&#x21;',
 			'arrow_down' : '&#x22;',
 			'arrow_left' : '&#x23;',
 			'arrow_right' : '&#x24;',
