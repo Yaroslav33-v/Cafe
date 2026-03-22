@@ -1,4 +1,4 @@
-using CafeWeb.Services;
+Ôªøusing CafeWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.FileProviders;
@@ -10,6 +10,15 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".BankSystem.Session";
+    options.Cookie.SameSite = SameSiteMode.Strict;
+}); // –°–µ—Å—Å–∏–∏
+
 builder.Services.AddScoped<IDbConnection>(provider =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -20,6 +29,7 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPromocodeService, PromocodeService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
@@ -39,7 +49,7 @@ builder.Services.AddAuthorizationBuilder()
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/error");
     app.UseHsts();
 }
 
@@ -52,10 +62,11 @@ app.UseStaticFiles(new StaticFileOptions
         ctx.Context.Response.Headers.Append(
             "Cache-Control", "public, max-age=3600");
     }
-}); //  ˝¯ËÓ‚‡ÌËÂ ËÁÓ·‡ÊÂÌËÈ
+}); // –ö—ç—à–∏—Ä–æ–≤–∞–Ω–∏–µ –∏–∑–æ–±—Ä–∞–∂–µ–Ω–∏–π
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -63,19 +74,25 @@ app.MapGet("/access-denied", (HttpContext context) =>
 {
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "access-denied.html");
     return Results.File(filePath, "text/html");
-});// œÛÚ¸ Í access-denied.html
+});// –ü—É—Ç—å –∫ access-denied.html
 
 app.MapGet("/about", (HttpContext context) =>
 {
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "about.html");
     return Results.File(filePath, "text/html");
-});// œÛÚ¸ Í about.html
+});// –ü—É—Ç—å –∫ about.html
 
 app.MapGet("/faq", (HttpContext context) =>
 {
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "faq.html");
     return Results.File(filePath, "text/html");
-});// œÛÚ¸ Í faq.html
+});// –ü—É—Ç—å –∫ faq.html
+
+app.MapGet("/error", (HttpContext context) =>
+{
+    var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "error.html");
+    return Results.File(filePath, "text/html");
+});// –ü—É—Ç—å –∫ error.html
 
 app.MapGet("/check-login/{login}", async (IUserService userService, string login) =>
 {
@@ -86,20 +103,20 @@ app.MapGet("/check-login/{login}", async (IUserService userService, string login
         return Results.Ok(new
         {
             available = isAvailable,
-            message = isAvailable ? "ÀÓ„ËÌ Ò‚Ó·Ó‰ÂÌ" : "œÓÎ¸ÁÓ‚‡ÚÂÎ¸ Ò Ú‡ÍËÏ ÎÓ„ËÌÓÏ ÛÊÂ ÒÛ˘ÂÒÚ‚ÛÂÚ"
+            message = isAvailable ? "–õ–æ–≥–∏–Ω —Å–≤–æ–±–æ–¥–µ–Ω" : "–ü–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª—å —Å —Ç–∞–∫–∏–º –ª–æ–≥–∏–Ω–æ–º —É–∂–µ —Å—É—â–µ—Å—Ç–≤—É–µ—Ç"
         });
     }
     catch
     {
         return Results.StatusCode(500);
     }
-}); // endpoint ‰Îˇ ÔÓ‚ÂÍË ÒÛ˘ÂÒÚ‚Ó‚‡ÌËˇ ÎÓ„ËÌ‡
+}); // endpoint –¥–ª—è –ø—Ä–æ–≤–µ—Ä–∫–∏ —Å—É—â–µ—Å—Ç–≤–æ–≤–∞–Ω–∏—è –ª–æ–≥–∏–Ω–∞
 
 app.MapGet("/signout", async (HttpContext context) =>
 {
     await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Redirect("/user/signin");
-}); // endpoint ‰Îˇ ‚˚ıÓ‰‡ ËÁ ‡ÍÍ‡ÛÌÚ‡
+}); // endpoint –¥–ª—è –≤—ã—Ö–æ–¥–∞ –∏–∑ –∞–∫–∫–∞—É–Ω—Ç–∞
 
 app.MapGet("/me", (HttpContext context) =>
 {
@@ -111,7 +128,33 @@ app.MapGet("/me", (HttpContext context) =>
         name,
         role
     });
-}).RequireAuthorization(); // endpoint ‰Îˇ ÔÓÎÛ˜ÂÌËˇ ‰‡ÌÌ˚ı Ó ÔÓÎ¸ÁÓ‚‡ÚÂÎÂ
+}).RequireAuthorization(); // endpoint –¥–ª—è –ø–æ–ª—É—á–µ–Ω–∏—è –¥–∞–Ω–Ω—ã—Ö –æ –ø–æ–ª—å–∑–æ–≤–∞—Ç–µ–ª–µ
+
+app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService promocodeService) => {
+    try
+    {
+        var promocode = await promocodeService.GetPromocodeInfo(promo);
+
+        if (promocode is null)
+            return Results.Ok(new
+            {
+                available = false,
+                message = "–ü—Ä–æ–º–æ–∫–æ–¥ –Ω–µ —Å—É—â–µ—Å—Ç–≤—É–µ—Ç",
+            });
+
+        return Results.Ok(new
+        {
+            available = true,
+            message = "–ü—Ä–æ–º–æ–∫–æ–¥ —Å—É—â–µ—Å—Ç–≤—É–µ—Ç",
+            fromSum = promocode.FromSum,
+            discount = promocode.Discount
+        });
+    }
+    catch
+    {
+        return Results.StatusCode(500);
+    }
+}); // endpoint –¥–ª—è –ø—Ä–æ–≤–µ—Ä–∫–∏ —Å—É—â–µ—Å—Ç–≤–æ–≤–∞–Ω–∏—è –ø—Ä–æ–º–æ–∫–æ–¥–∞
 
 app.MapControllerRoute(
     name: default,

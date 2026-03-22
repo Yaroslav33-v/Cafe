@@ -2,6 +2,19 @@
 <head>
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link href="~/CSS/payment.css" rel="stylesheet" />
+    <style>
+        .available {
+            color: green;
+        }
+
+        .no-available {
+            color: red;
+        }
+
+        .checking {
+            color: gray;
+        }
+    </style>
     <title> Страница оплаты </title>
 </head>
 <body>
@@ -20,10 +33,10 @@
                 <input id="cvv" class="payment-input" type="text" inputmode="numeric" maxlength="3"
                        placeholder="CVV" autocomplete="cc-csc" name="CvvCode" required />
                 <div class="under-pay">
-                    <b>К оплате @ViewBag.Total руб.</b>
-                    <input hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
+                    <b>К оплате <span id="total-price">@ViewBag.Total</span> руб.</b>
+                    <input id="total-input" hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
                     <input id="promo" class="payment-input" type="text" placeholder="Введите промокод" maxlength="20" />
-                
+                    <div id="fetch-response"></div>
                     <br /><button class="btn-pay" type="submit">Оплатить</button>
                 </div>
             </div>

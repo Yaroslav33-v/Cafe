@@ -18,12 +18,20 @@ namespace CafeWeb.Services
             _passwordService = passwordService ?? throw new ArgumentNullException(nameof(passwordService));
         }
          
-        public async Task<Dictionary<int, string>> GetAllFood()
+        public async Task<Dictionary<int, FoodShortModel>> GetAllFood()
         {
-            IEnumerable<(int id, string name)> foods = await _connection
-                .QueryAsync<(int, string)>("SELECT food_id AS Id, food_name AS Name FROM public.food");
+            var results = await _connection.QueryAsync(@"
+                SELECT food_id, food_name AS Name, image_address AS ImageAddress 
+                FROM public.food");
 
-            return foods.ToDictionary();
+            return results.ToDictionary(
+                key => (int)key.food_id,
+                value => new FoodShortModel
+                {
+                    Name = value.name,
+                    ImageAddress = value.imageaddress
+                }
+            );
         }
 
         public async Task<List<string>> GetCategoryNames()
@@ -87,8 +95,8 @@ namespace CafeWeb.Services
                     WHERE name = @Name", new { Name = food.SelectedCategory });
 
                     await _connection.ExecuteAsync(@"INSERT INTO public.food 
-                    (food_name, price, calories, weight, ingredients, image_address, category_id)
-                    VALUES (@Name, @Price, @Calories, @Weight, @Ingredients, @ImageAddress, @CategoryId);",
+                    (food_name, price, calories, weight, ingredients, image_address, category_id, description)
+                    VALUES (@Name, @Price, @Calories, @Weight, @Ingredients, @ImageAddress, @CategoryId, @Description);",
                         new
                         {
                             food.Food.Name,
@@ -97,14 +105,17 @@ namespace CafeWeb.Services
                             food.Food.Weight,
                             food.Food.Ingredients,
                             food.Food.ImageAddress,
-                            categoryId
+                            categoryId,
+                            food.Food.Description
                         });
 
                     _logger.LogInformation("Блюдо '{Name}' добавлено в базу данных", food.Food.Name);
                 }
-
-                _logger.LogInformation("Ошибка при получении изображения для блюда '{Name}'", food.Food.Name);
-                throw new ArgumentNullException("Ошибка при получении изображения");
+                else
+                {
+                    _logger.LogInformation("Ошибка при получении изображения для блюда '{Name}'", food.Food.Name);
+                    throw new ArgumentNullException("Ошибка при получении изображения");
+                }
             }
             catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
             {
