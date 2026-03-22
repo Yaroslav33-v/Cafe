@@ -10,6 +10,15 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = ".BankSystem.Session";
+    options.Cookie.SameSite = SameSiteMode.Strict;
+}); // Сессии
+
 builder.Services.AddScoped<IDbConnection>(provider =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -40,7 +49,7 @@ builder.Services.AddAuthorizationBuilder()
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/error");
     app.UseHsts();
 }
 
@@ -57,6 +66,7 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -77,6 +87,12 @@ app.MapGet("/faq", (HttpContext context) =>
     var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "faq.html");
     return Results.File(filePath, "text/html");
 });// Путь к faq.html
+
+app.MapGet("/error", (HttpContext context) =>
+{
+    var filePath = Path.Combine(app.Environment.WebRootPath, "HTML", "error.html");
+    return Results.File(filePath, "text/html");
+});// Путь к error.html
 
 app.MapGet("/check-login/{login}", async (IUserService userService, string login) =>
 {

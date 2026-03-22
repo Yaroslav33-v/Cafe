@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace CafeWeb.Attributes
+namespace CafeWeb.Static
 {
     public class RedirectOnlyAttribute : ActionFilterAttribute
     {

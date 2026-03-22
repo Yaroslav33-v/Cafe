@@ -1,4 +1,4 @@
-﻿using CafeWeb.Attributes;
+﻿using CafeWeb.Static;
 using CafeWeb.Models;
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Mvc;
