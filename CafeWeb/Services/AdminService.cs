@@ -21,7 +21,7 @@ namespace CafeWeb.Services
         public async Task<Dictionary<int, FoodShortModel>> GetAllFood()
         {
             var results = await _connection.QueryAsync(@"
-                SELECT food_id, food_name AS Name, image_address AS ImageAddress 
+                SELECT food_id, food_name AS Name, front_image_address AS FrontImageAddress, back_image_address AS BackImageAddress
                 FROM public.food");
 
             return results.ToDictionary(
@@ -29,7 +29,8 @@ namespace CafeWeb.Services
                 value => new FoodShortModel
                 {
                     Name = value.name,
-                    ImageAddress = value.imageaddress
+                    FrontImageAddress = value.frontimageaddress,
+                    BackImageAddress = value.backimageaddress
                 }
             );
         }
@@ -80,23 +81,33 @@ namespace CafeWeb.Services
             _logger.LogInformation("Получена заявка на добавление нового блюда - '{Name}'", food.Food.Name);
             try
             {
-                if (food.Photo is { Length: > 0 } photo)
+                if ((food.FrontPhoto is { Length: > 0 } frontPhoto) && (food.BackPhoto is { Length: > 0 } backPhoto))
                 {
-                    string extension = Path.GetExtension(photo.FileName);
-                    string fileName = food.Food.Name.Replace(" ", "_") + extension;
-                    var path = Path.Combine("wwwroot/IMG", fileName);
+                    // Получение пути для front-изображения
+                    string frontExtension = Path.GetExtension(frontPhoto.FileName);
+                    string frontFileName = (food.Food.Name + "_front").Replace(" ", "_") + frontExtension;
+                    var frontPath = Path.Combine("wwwroot/IMG/Food", frontFileName);
 
-                    food.Food.ImageAddress = "/IMG/" + fileName;
+                    // Получение пути для back-изображения
+                    string backExtension = Path.GetExtension(backPhoto.FileName);
+                    string backFileName = (food.Food.Name + "_back").Replace(" ", "_") + backExtension;
+                    var backPath = Path.Combine("wwwroot/IMG/Food", backFileName);
 
-                    using var stream = new FileStream(path, FileMode.Create);
-                    await photo.CopyToAsync(stream);
+                    food.Food.FrontImageAddress = "/IMG/Food/" + frontFileName;
+                    food.Food.BackImageAddress = "/IMG/Food/" + backFileName;
+
+                    using var fStream = new FileStream(frontPath, FileMode.Create);
+                    await frontPhoto.CopyToAsync(fStream);
+
+                    using var bStream = new FileStream(backPath, FileMode.Create);
+                    await backPhoto.CopyToAsync(bStream);
 
                     int categoryId = await _connection.QueryFirstAsync<int>(@"SELECT category_id FROM public.categories
                     WHERE name = @Name", new { Name = food.SelectedCategory });
 
                     await _connection.ExecuteAsync(@"INSERT INTO public.food 
-                    (food_name, price, calories, weight, ingredients, image_address, category_id, description)
-                    VALUES (@Name, @Price, @Calories, @Weight, @Ingredients, @ImageAddress, @CategoryId, @Description);",
+                    (food_name, price, calories, weight, ingredients, front_image_address, back_image_address, category_id, description)
+                    VALUES (@Name, @Price, @Calories, @Weight, @Ingredients, @FrontImageAddress, @BackImageAddress, @CategoryId, @Description);",
                         new
                         {
                             food.Food.Name,
@@ -104,7 +115,8 @@ namespace CafeWeb.Services
                             food.Food.Calories,
                             food.Food.Weight,
                             food.Food.Ingredients,
-                            food.Food.ImageAddress,
+                            food.Food.FrontImageAddress,
+                            food.Food.BackImageAddress,
                             categoryId,
                             food.Food.Description
                         });

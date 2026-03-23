@@ -11,7 +11,8 @@
             @foreach (var kvp in Model.ExistingFood)
             {
                 <div>
-                    <img src="@Url.Content($"~{kvp.Value.ImageAddress}")" alt="@kvp.Value.Name" />
+                    <img src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" />
+                    <img src="@Url.Content($"~{kvp.Value.BackImageAddress}")" alt="@kvp.Value.Name" />
                     <span>@kvp.Value.Name</span>
                 </div>
             }
@@ -42,8 +43,11 @@
         <label>Описание:</label> <br />
         <textarea name="Food.Description" required></textarea> <br />
 
-        <label>Фото: </label> <br />
-        <input type="file" name="Photo" id="fileInput" accept="image/*" required /> <br />
+        <label>Переднее фото: </label> <br />
+        <input type="file" name="FrontPhoto" id="fileInput" accept="image/*" required /> <br />
+
+        <label>Заднее фото: </label> <br />
+        <input type="file" name="BackPhoto" id="fileInput" accept="image/*" required /> <br />
 
         <button type="submit">Добавить</button>
     }
