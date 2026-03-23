@@ -50,7 +50,7 @@
         {
             <div class="custom-option" onclick="toggleOption(this)" data-value="@kvp.Key">
                 <input type="checkbox" name="FoodIds" value="@kvp.Key" style="display: none;" />
-                <img src="@Url.Content($"~{kvp.Value.ImageAddress}")" alt="@kvp.Value.Name" />
+                <img src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" />
                 <span>@kvp.Value.Name</span>
             </div>
         }

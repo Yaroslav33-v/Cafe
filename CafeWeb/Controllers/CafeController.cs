@@ -13,7 +13,7 @@ namespace CafeWeb.Controllers
                 new Food{Name = "4 Творожка", Price = 1488},
                 new Food{Name = "Фа пепе шнейне", Price = 1337}
             };
-            return View(pizzas);
+            return View();
         }
     }
 }
