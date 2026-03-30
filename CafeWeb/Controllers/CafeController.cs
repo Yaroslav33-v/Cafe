@@ -2,6 +2,8 @@
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CafeWeb.Controllers
@@ -16,9 +18,26 @@ namespace CafeWeb.Controllers
 
         public async Task<IActionResult> Index() 
         {
-            // Метод для отображения представления (название метода должно совпадать с названием представления)
-            var categories = await _cafeService.GetFoods(); 
-            return View(categories);
+            try
+            {
+                var categories = await _cafeService.GetFoods();
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId is not null)
+                {
+                    int id = int.Parse(userId); 
+                    var favourite = await _cafeService.GetFavourites(id);
+                    
+                    if(favourite is not null && favourite.Foods.Any())
+                        categories.Insert(0, favourite);
+                }
+
+                return View(categories);
+            }
+            catch
+            {
+                return Redirect("/error");
+            }
         }
         public IActionResult Cart()
         {

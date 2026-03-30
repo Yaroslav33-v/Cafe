@@ -11,5 +11,6 @@
         public string Description { get; set; } = null!;
         public string FrontImageAddress { get; set; } = null!;
         public string BackImageAddress { get; set; } = null!;
+        public int CategoryId { get; set; }
     }
 }

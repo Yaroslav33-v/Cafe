@@ -21,8 +21,9 @@ namespace CafeWeb.Services
         {
             try
             {
-                (string hash, bool isAdmin)= await _connection.QuerySingleAsync<(string, bool)>(
+                (int id, string hash, bool isAdmin)= await _connection.QuerySingleAsync<(int, string, bool)>(
                     @"SELECT 
+                    user_id AS id,
                     password,
                     is_admin AS isAdmin
                     FROM public.users
@@ -31,9 +32,10 @@ namespace CafeWeb.Services
                 if (!_passwordService.VerifyPassword(user.Password.Trim(), hash.Trim()))
                     throw new UnauthorizedAccessException("Неправильный логин или пароль");
 
-                string role = isAdmin ? "admin" : "user"; 
+                string role = isAdmin ? "admin" : "user";
                 var claims = new List<Claim>
                 {
+                    new(ClaimTypes.NameIdentifier, id.ToString()),
                     new(ClaimTypes.Name, user.Login),
                     new(ClaimTypes.Role, role)
                 };

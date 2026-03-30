@@ -18,6 +18,48 @@ namespace CafeWeb.Services
 
         }
 
+        public async Task<Category?> GetFavourites(int userId)
+        {
+            try
+            {
+                // Получаем блюда из избранного
+                var favFoods = await _connection
+                    .QueryAsync<Food>(@"
+                        SELECT 
+                            f.food_id AS Id,
+                            f.food_name AS Name,
+                            f.price,
+                            f.calories,
+                            f.weight,
+                            f.ingredients,
+                            f.description,
+                            f.front_image_address AS FrontImageAddress,
+                            f.back_image_address AS BackImageAddress
+                        FROM public.favourite_food ff
+                        JOIN public.food f ON ff.food_id = f.food_id
+                        LEFT JOIN public.categories c ON f.category_id = c.category_id
+                        WHERE ff.user_id = @userId",
+                        new
+                        {
+                            userId
+                        });
+
+                if (!favFoods.Any())
+                    throw new Exception();
+
+                // Возвращаем избранное как категорию
+                return new Category
+                {
+                    Name = "Избранное",
+                    Foods = favFoods.ToList()
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task<List<Category>> GetFoods()
         {
             try
@@ -30,16 +72,17 @@ namespace CafeWeb.Services
                 // Получаем все блюда
                 var foods = (await _connection
                     .QueryAsync<Food>(@"
-            SELECT 
-                food_id AS Id, 
-                food_name AS Name, 
-                price AS Price,
-                calories AS Calories,
-                weight AS Weight,
-                ingredients AS Ingredients,
-                image_address AS ImageAddress,
-                category_id AS CategoryId
-            FROM public.food"))
+                        SELECT 
+                            food_id AS Id, 
+                            food_name AS Name, 
+                            price AS Price,
+                            calories AS Calories,
+                            weight AS Weight,
+                            ingredients AS Ingredients,
+                            front_image_address AS FrontImageAddress,
+                            back_image_address AS BackImageAddress,
+                            category_id AS CategoryId
+                        FROM public.food"))
                     .ToList();
 
                 // Группируем блюда по категориям
