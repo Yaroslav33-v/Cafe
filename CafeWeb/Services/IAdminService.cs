@@ -4,10 +4,11 @@ namespace CafeWeb.Services
 {
     public interface IAdminService
     {
-        Task<(bool, string?)> InsertFood(AdminFoodModel food);
-        Task<(bool, string?)> InsertOffer(AdminOfferModel offer);
-        Task<(bool, string?)> InsertPromocode(Promocode promocode);
+        Task InsertFood(AdminFoodModel food);
+        Task InsertOffer(AdminOfferModel offer);
+        Task InsertPromocode(Promocode promocode);
+        Task InsertAdmin(User user);
         Task<List<string>> GetCategoryNames();
-        Task<Dictionary<int, string>> GetAllFood();
+        Task<Dictionary<int, FoodShortModel>> GetAllFood();
     }
 }

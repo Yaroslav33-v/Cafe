@@ -1,0 +1,39 @@
+﻿<!-- На эту страницу будет перекидывать при отказе в доступе-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="../IMG/logo-cafe.png" type="image/png">
+    <title>403 Forbidden</title>
+    <link href="../CSS/access-denied.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <img id="logo" src="../IMG/logo-cafe.png" />
+        <div class="container-row">
+            <h1>4</h1>
+
+            <video muted autoplay loop>
+                <source src="../VIDEO/toxis.mp4" type="video/mp4" />
+
+            </video>
+
+            <h1>3</h1>
+        </div>
+
+        <div class="under">
+
+            <button class="btn" onclick="goToMainPage()">На главную</button>
+
+        </div>
+    </div>
+   
+    <script>
+      
+        function goToMainPage() {
+            document.location.replace("/Cafe/Index")
+        }
+    </script>
+  
+</body>
+</html>

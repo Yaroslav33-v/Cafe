@@ -3,35 +3,91 @@
 @{
     string tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 }
-<form method="post" action="/Admin/NewOffer">
-    <p>@ViewBag.Problem</p> <br/>
+<style>
+.custom-select {
+        width: 1000px;
+        height: 500px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    
+    .custom-option {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .custom-option:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .custom-option.selected {
+        background-color: #e3f2fd;
+    }
+    
+    .custom-option img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 5px;
+    }
+    
+    .custom-option input {
+        margin-right: 10px;
+    }
+</style>
+<form method="post" action="/admin/newoffer">
+    <p>@ViewBag.Message</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
     @if (Model.Foods != null && Model.Foods.Any())
     {
-        <select multiple name="FoodIds">
-            @foreach (var kvp in Model.Foods)
-            {
-                <option value="@kvp.Key">@kvp.Value</option>
-            }
-        </select> <br />
+        <div class="custom-select" id="foodSelect">
+        @foreach (var kvp in Model.Foods)
+        {
+            <div class="custom-option" onclick="toggleOption(this)" data-value="@kvp.Key">
+                <input type="checkbox" name="FoodIds" value="@kvp.Key" style="display: none;" />
+                <img src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" />
+                <span>@kvp.Value.Name</span>
+            </div>
+        }
+    </div>
+        <label> Название акции: </label> <br />
+        <input type="text" name="Offer.Name" maxlength="100" required /> <br />
+
+        <label>Описание акции: </label> <br />
+        <textarea name="Offer.Description" required ></textarea> <br />
+
+        <label>Скидка (в процентах): </label> <br />
+        <input type="number" min="0" max="100" name="Offer.Discount" required /> <br />
+
+        <label>Дата начала акции: </label> <br />
+        <input type="date" name="Offer.StartsAt" required /> <br />
+
+        <label>Дата начала акции: </label> <br />
+        <input type="date" name="Offer.EndsAt" min="@tomorrow" required /> <br />
+
+        <button type="submit">Добавить</button>
     }
     else
     {
         <p>Не удалось получить список блюд</p> <br />
     }
-    <label> Название акции: </label> <br />
-    <input type="text" name="Offer.Name" value="@Model?.Offer?.Name" maxlength="100" required /> <br />
-
-    <label>Описание акции: </label> <br />
-    <textarea name="Offer.Description" value="@Model?.Offer?.Description" required ></textarea> <br />
-
-    <label>Скидка (в процентах): </label> <br />
-    <input type="number" min="0" max="100" name="Offer.Discount" value="@Model?.Offer?.Discount" required /> <br />
-
-    <label>Дата начала акции: </label> <br />
-    <input type="date" name="Offer.StartsAt" value="@Model?.Offer?.StartsAt" required /> <br />
-
-    <label>Дата начала акции: </label> <br />
-    <input type="date" name="Offer.EndsAt" value="@Model?.Offer?.EndsAt" min="@tomorrow" required /> <br />
-
-    <button type="submit">Добавить</button>
 </form>
+<script>
+    function toggleOption(element) {
+        element.classList.toggle('selected');
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+    }
+    
+    // При отправке формы
+    document.querySelector('form').addEventListener('submit', function() {
+        document.querySelectorAll('.custom-option input').forEach(cb => {
+            cb.disabled = false;
+        });
+    });
+</script>

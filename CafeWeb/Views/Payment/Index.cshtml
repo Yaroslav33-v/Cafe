@@ -2,28 +2,41 @@
 <head>
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link href="~/CSS/payment.css" rel="stylesheet" />
+    <style>
+        .available {
+            color: green;
+        }
+
+        .no-available {
+            color: red;
+        }
+
+        .checking {
+            color: gray;
+        }
+    </style>
     <title> Страница оплаты </title>
 </head>
 <body>
     <div class="out-form">
-        <form method="post" action="/Payment/Pay">
+        <form method="post" action="/payment/pay">
             <div class="in-form">
-                <img id = "logo" src="~/IMG/logo-cafe.png" width="155" height="155">
+                <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155">
                 <label>Введите данные карты:</label> <br />
                 <input id="card-number" class="payment-input" type="text" inputmode="numeric" maxlength="19"
-                       placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="cc-number" name="CardNumber" value="@Model?.CardNumber" />
+                       placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="cc-number" name="CardNumber" required />
                 <br />
 
                 <input id="expiry" class="payment-input" type="text" inputmode="numeric" maxlength="5"
-                       placeholder="ММ/ГГ" autocomplete="cc-exp" name="MonthYear" value="@Model?.MonthYear" />
+                       placeholder="ММ/ГГ" autocomplete="cc-exp" name="MonthYear" required />
 
                 <input id="cvv" class="payment-input" type="text" inputmode="numeric" maxlength="3"
-                       placeholder="CVV" autocomplete="cc-csc" name="CvvCode" value="@Model?.CvvCode" />
+                       placeholder="CVV" autocomplete="cc-csc" name="CvvCode" required />
                 <div class="under-pay">
-                    <b>К оплате @ViewBag.Total руб.</b>
-                    <input hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
+                    <b>К оплате <span id="total-price">@ViewBag.Total</span> руб.</b>
+                    <input id="total-input" hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
                     <input id="promo" class="payment-input" type="text" placeholder="Введите промокод" maxlength="20" />
-                
+                    <div id="fetch-response"></div>
                     <br /><button class="btn-pay" type="submit">Оплатить</button>
                 </div>
             </div>

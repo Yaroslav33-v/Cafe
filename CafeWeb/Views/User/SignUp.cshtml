@@ -1,0 +1,46 @@
+﻿<!-- Страница для регистрации -->
+@model CafeWeb.Models.User
+
+<head>
+    <style>
+        .available {
+            color: green;
+        }
+        .taken {
+            color: red;
+        }
+        .checking {
+            color: gray;
+        }
+    </style>
+    <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+    <link href="~/CSS/Sign.css" rel="stylesheet" />
+    <title> Регистрация </title>
+</head>
+<body>
+    <div class="out-form">
+        
+         
+   
+        <form method="post" action="/user/signup">
+            <div class="in-form">
+                <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155">
+                <label>Введите логин: </label>
+                <input id="username"  type="text" name="Login" maxlength="25" required />
+                <span id="status"></span> 
+                <p id="error">@ViewBag.Problem</p>
+                <label>Введите пароль: </label>
+                <input id="password-input" type="password" name="Password" maxlength="20" required />
+                <label>
+                    <input type="checkbox" id="show-password"> Показать пароль
+                </label>
+                <div class="under-sing">
+                    <input name="referer" value="@ViewBag.Referer" hidden/>
+                    <button class="btn-create" type="submit">Создать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="~/JS/ShowPassword.js"></script>
+    <script src="~/JS/UserScripts.js"></script>
+</body>

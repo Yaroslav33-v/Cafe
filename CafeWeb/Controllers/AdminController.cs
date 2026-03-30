@@ -1,70 +1,106 @@
 ﻿using CafeWeb.Models;
 using CafeWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CafeWeb.Controllers
 {
+    [Route("/admin/[action]")]
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
-
         public AdminController(IAdminService adminService)
         {
             _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
         }
-        public async Task<ViewResult> AddFood(string? errorMsg = null)
+        public ViewResult Index() => View();
+        public async Task<ViewResult> AddFood(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
             var adminFoodModel = new AdminFoodModel
             {
-                Categories = await _adminService.GetCategoryNames()
+                Categories = await _adminService.GetCategoryNames(),
+                ExistingFood = await _adminService.GetAllFood()
             };
 
             return View(adminFoodModel);
         }
-        public async Task<ViewResult> NewOffer(string? errorMsg = null)
+        public async Task<ViewResult> NewOffer(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
             var adminOfferModel = new AdminOfferModel
             {
                 Foods = await _adminService.GetAllFood()
             };
             return View(adminOfferModel);
         }
-        public ViewResult NewPromo(string? errorMsg = null)
+        public ViewResult NewPromo(string? message = null)
         {
-            ViewBag.Problem = errorMsg;
+            ViewBag.Message = message;
+            return View();
+        }
+
+        public ViewResult NewAdmin(string? message = null)
+        {
+            ViewBag.Message = message;
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddFood([FromForm] AdminFoodModel adminFoodModel)
         {
-            (bool isAdded, string? msg) = await _adminService.InsertFood(adminFoodModel);
-            if(isAdded) 
-                return RedirectToAction("Index", "Cafe");
-
-            return RedirectToAction("AddFood", new { errorMsg = msg });
+            try
+            {
+                await _adminService.InsertFood(adminFoodModel);
+                return RedirectToAction("AddFood", new { message = "Позиция успешно добавлена!"});
+            }
+            catch (Exception ex) 
+            {
+                return RedirectToAction("AddFood", new { message = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> NewOffer([FromForm] AdminOfferModel adminOfferModel)
         {
-            (bool isAdded, string? msg) = await _adminService.InsertOffer(adminOfferModel);
-            if(isAdded)
-                return RedirectToAction("Index", "Cafe");
-
-            return RedirectToAction("NewOffer", new { errorMsg = msg });
+            try
+            {
+                await _adminService.InsertOffer(adminOfferModel);
+                return RedirectToAction("NewOffer", new { message = "Акция успешно добавлена!" });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("NewOffer", new { message = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> NewPromo([FromForm] Promocode promocode)
         {
-            (bool isAdded, string? msg) = await _adminService.InsertPromocode(promocode);
-            if (isAdded) 
-                return RedirectToAction("Index", "Cafe");
+            try
+            {
+                await _adminService.InsertPromocode(promocode);
+                return RedirectToAction("NewPromo", new { message = "Промокод успешно добавлен!" });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("NewPromo", new { message = ex.Message });
+            }
+        }
 
-            return RedirectToAction("NewPromo", new { errorMsg = msg });
+        [HttpPost]
+        public async Task<IActionResult> NewAdmin([FromForm] User user)
+        {
+            try
+            {
+                await _adminService.InsertAdmin(user);
+                return RedirectToAction("NewAdmin", new { message = "Админ успешно добавлен!" });
+            }
+            catch(Exception ex) 
+            {
+                return RedirectToAction("NewAdmin", new { message = ex.Message });
+            }
         }
     }
 }

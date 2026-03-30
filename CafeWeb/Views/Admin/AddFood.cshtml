@@ -1,10 +1,23 @@
 ﻿<!-- Страница для добавления новой еды -->
 @model CafeWeb.Models.AdminFoodModel
 
-<form method="post" action="/Admin/AddFood" enctype="multipart/form-data">
-    <p>@ViewBag.Problem</p> <br/>
+<form method="post" action="/admin/addfood" enctype="multipart/form-data">
+    <p>@ViewBag.Message</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
     @if (Model.Categories != null && Model.Categories.Any())
     {
+        <!-- Блок существующих позиций -->
+        <div>
+            <p>Позиции, которые уже существуют: </p>
+            @foreach (var kvp in Model.ExistingFood)
+            {
+                <div>
+                    <img src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" />
+                    <img src="@Url.Content($"~{kvp.Value.BackImageAddress}")" alt="@kvp.Value.Name" />
+                    <span>@kvp.Value.Name</span>
+                </div>
+            }
+        </div>
+
         <label>Категория: </label>
         <select name="SelectedCategory">
         @foreach(var category in Model.Categories)
@@ -12,29 +25,34 @@
             <option value="@category">@category</option>
         }
         </select> <br />
+        <label>Название: </label> <br />
+        <input type="text" name="Food.Name" maxlength="100" required /> <br />
+
+        <label>Цена: </label> <br />
+        <input type="number" name="Food.Price" max="99999.99" step="0.01" min="0" required /> <br />
+
+        <label>Калории: </label> <br />
+        <input type="number" name="Food.Calories" max="99999.99" step="0.01" min="0" required /> <br />
+
+        <label>Вес: </label> <br />
+        <input type="number" name="Food.Weight" max="99999.99" step="0.01" min="0" required /> <br />
+
+        <label>Ингредиенты:</label> <br />
+        <textarea name="Food.Ingredients" required></textarea> <br />
+
+        <label>Описание:</label> <br />
+        <textarea name="Food.Description" required></textarea> <br />
+
+        <label>Переднее фото: </label> <br />
+        <input type="file" name="FrontPhoto" id="fileInput" accept="image/*" required /> <br />
+
+        <label>Заднее фото: </label> <br />
+        <input type="file" name="BackPhoto" id="fileInput" accept="image/*" required /> <br />
+
+        <button type="submit">Добавить</button>
     }
     else
     {
          <p>Не удалось получить список категорий</p> <br />
     }
-
-    <label>Название: </label> <br />
-    <input type="text" name="Food.Name" value="@Model?.Food?.Name" maxlength="100" required /> <br />
-
-    <label>Цена: </label> <br />
-    <input type="number" name="Food.Price" value="@Model?.Food?.Price" max="99999.99" min="0" required /> <br />
-
-    <label>Калории: </label> <br />
-    <input type="number" name="Food.Calories" value="@Model?.Food?.Calories" max="99999.99" min="0" required /> <br />
-
-    <label>Вес: </label> <br />
-    <input type="number" name="Food.Weight" value="@Model?.Food?.Weight" max="99999.99" min="0" required /> <br />
-
-    <label>Ингредиенты:</label> <br />
-    <textarea name="Food.Ingredients" value="@Model?.Food?.Ingredients" required></textarea> <br />
-
-    <label>Фото: </label> <br />
-    <input type="file" name="Photo" id="fileInput" accept="image/*" value="@Model?.Photo" required /> <br />
-
-    <button type="submit">Добавить</button>
 </form>

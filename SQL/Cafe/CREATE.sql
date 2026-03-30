@@ -10,7 +10,9 @@ CREATE TABLE public.food(
 	calories DECIMAL(7, 2) NOT NULL,
 	weight DECIMAL(7, 2) NOT NULL,
 	ingredients TEXT NOT NULL,
-	image_address VARCHAR(255) NOT NULL, -- Адрес изображения в файловой системе программы
+	description TEXT NOT NULL,
+	front_image_address VARCHAR(255) NOT NULL,
+	back_image_address VARCHAR(255) NOT NULL, -- Адрес изображения в файловой системе программы
 	category_id INTEGER REFERENCES public.categories(category_id)
 );
 
@@ -38,12 +40,12 @@ CREATE TABLE public.users(
 CREATE TABLE public.orders(
 	order_id SERIAL PRIMARY KEY,
 	order_number VARCHAR(5) NOT NULL,
-	created_at DATE NOT NULL DEFAULT CURRENT_DATE,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
 	status VARCHAR(20) NOT NULL CHECK (status IN (
 		'Готовится',
 		'Готов'
 	)),
-	done_at DATE,
+	done_at TIMESTAMP,
 	user_id INTEGER REFERENCES users(user_id),
 	
 	CONSTRAINT chk_done_at_required CHECK (

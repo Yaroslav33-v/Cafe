@@ -31,7 +31,7 @@ namespace CafeWeb.Services
             return authDto is null ? throw new HttpRequestException() : authDto.Token;
         }
 
-        public async Task<(bool, string?)> TryToPay(PaymentModel paymentModel)
+        public async Task TryToPay(PaymentModel paymentModel)
         {
             _logger.LogInformation("Начало обработки платежа для карты {LastFour}", paymentModel.CardNumber[^4..]);
             try
@@ -66,13 +66,12 @@ namespace CafeWeb.Services
                 {
                     _logger.LogInformation("Платеж для карты {LastFour} успешно выполнен",
                         paymentModel.CardNumber[^4..]);
-                    return (true, null);
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
                     _logger.LogInformation("Платеж для карты {LastFour} не выполнен, ошибка со стороны API",
                         paymentModel.CardNumber[^4..]);
-                    return (false, "Ошибка оплаты");
+                   throw new Exception("Ошибка оплаты");
                 }
                 else
                 {
@@ -80,20 +79,20 @@ namespace CafeWeb.Services
                         paymentModel.CardNumber[^4..]);
                     string responseJson = await response.Content.ReadAsStringAsync();
                     var responseDto = JsonSerializer.Deserialize<PaymentApiResponseDto>(responseJson, _options);
-                    return (false, responseDto?.Message);
+                    throw new Exception(responseDto?.Message);
                 }
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError("Ошибка при подключении к API: {message} для карты {LastFour}",
                     ex.Message, paymentModel.CardNumber[^4..]);
-                return (false, "Ошибка оплаты");
+                throw new Exception("Ошибка оплаты");
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ошибка при обработке платежа: {message} для карты {LastFour}",
                     ex.Message, paymentModel.CardNumber[^4..]);
-                return (false, "Ошибка оплаты");
+                throw new Exception("Ошибка оплаты");
             }
         }
     }
