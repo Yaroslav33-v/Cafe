@@ -8,5 +8,9 @@ namespace CafeWeb.Controllers
         {
             return View();
         }
+        public IActionResult History()
+        {
+            return View();
+        }
     }
 }

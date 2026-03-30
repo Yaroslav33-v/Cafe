@@ -34,7 +34,7 @@ namespace CafeWeb.Services
                 }
             );
         }
-
+        
         public async Task<List<string>> GetCategoryNames()
         {
             IEnumerable<string> categoryNames = await _connection.QueryAsync<string>("SELECT name FROM public.categories");

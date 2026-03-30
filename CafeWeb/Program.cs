@@ -25,6 +25,7 @@ builder.Services.AddScoped<IDbConnection>(provider =>
     return new NpgsqlConnection(connectionString);
 });
 
+builder.Services.AddScoped<ICafeService, CafeService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
