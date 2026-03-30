@@ -5,34 +5,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-y:hidden;
 }
-.container {
+
+.out-form {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+form {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    padding: 40px 30px;
+    padding: 20px 30px;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    
-    max-width: 500px;
-    gap: 160px;
 }
-.container-content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 70px;
-    align-items: center;
-    justify-content: center;
-}
-.content-row {
-    display: grid;
-    gap:10px;
-    grid-template-columns:200px 200px;
-    margin-top: auto;
-    width: 100%;
-}
+
 label {
     font-size: 18px;
     color: #333;
@@ -40,22 +31,76 @@ label {
     margin-bottom: 5px;
     display: block;
 }
+
+.under {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 2px dashed #e0e0e0;
+    display: grid;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    grid-template-rows: 70px;
+}
+
+#rand-password{
+    width: min-content;
+    font-size: 10px;
+}
+
+.in-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#username, #password-input{
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background: white;
+    outline: none;
+}
+
+    #username, #password-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    #username, #password-input::placeholder {
+        color: black;
+        opacity: 0.7;
+    }
+
+    #username, #password-input.error {
+            border-color: #ff4757;
+            animation: shake 0.3s ease;
+    }
+
+
+#show-pasword {
+    width: 1%;
+    margin: 10px;
+    
+}
 button {
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     color: white;
     border: none;
     padding: 15px 40px;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 550;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
-    max-width: 200px;
+    max-width: 250px;
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    
 }
 
     button:hover {
@@ -71,35 +116,3 @@ button {
         opacity: 0.6;
         cursor: not-allowed;
     }
-
-
-
-#logo {
-    margin: 0 auto;
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    border-radius: 50%;
-    background: white;
-    padding: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    position: absolute;
-    top: -70px;
-    left: 50%;
-    transform-origin:center center;
-    z-index: 10;
-    
-}
-img {
-    animation: spin 8s linear infinite;
-}
-
-@keyframes spin {
-    from {
-        transform: translateX(-50%) rotate(0deg);
-    }
-
-    to {
-        transform: translateX(-50%) rotate(360deg);
-    }
-}

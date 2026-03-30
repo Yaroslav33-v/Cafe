@@ -1,0 +1,170 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Кнопка добавления */
+.admin-header {
+    padding: 20px;
+    text-align: right;
+}
+
+.add-food-btn {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 15px;
+    font-weight: 550;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+    .add-food-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+    .add-food-btn:active {
+        transform: translateY(0);
+    }
+    .add-food-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+/* Модальное окно */
+.food-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+    .food-modal.show {
+        display: flex;
+    }
+
+.food-modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: modalFadeIn 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.food-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    border-radius: 20px 20px 0 0;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+    .food-modal-header h2 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+.food-modal-close {
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+    .food-modal-close:hover {
+        transform: scale(1.1);
+    }
+
+.food-modal-body {
+    padding: 20px;
+}
+
+/* Стили для формы внутри модального окна */
+#formContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#formContainer label {
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+#formContainer input,
+#formContainer textarea,
+#formContainer select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+#formContainer button {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+    #formContainer button:hover {
+        transform: translateY(-2px);
+    }
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 20px 30px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#front-img, #back-img{
+    width: 155px;
+    height: 155px;
+}

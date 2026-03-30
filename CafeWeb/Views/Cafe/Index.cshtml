@@ -8,7 +8,26 @@
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
 </head>
 <body>
-    
+    <main>
+        @if(Model != null){
+        <div class="main-menu">
+            @foreach(var category in Model)
+            {
+                <div class="menu-category">
+
+                <h1>@category.Name</h1>
+                @foreach(var food in category.Foods)
+                {
+                    <div class="menu-position">
+
+
+                    </div>
+                }
+                 </div>
+            }
+        </div>
+        }
+    </main>
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
