@@ -14,20 +14,24 @@
     <div class="container">
         <div class="admin-header">
             <button id="openFoodModal" class="add-food-btn">Добавить блюдо</button>
+            <button class="btn-go" onclick="goToPage('/admin/index')">В админские угодия</button>
         </div>
 
         <div class="menu">
             @if (Model.Categories != null && Model.Categories.Any())
                 {   
+                    <label>Позиции, которые уже существуют:</label>
 
                     <div class="menu-position">
-                        <p>Позиции, которые уже существуют:</p>
+                        
                         @foreach (var kvp in Model.ExistingFood)
                         {
                             <div class="card">
-                                <img id="front-img" src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" />
-                                <img id="back-img" src="@Url.Content($"~{kvp.Value.BackImageAddress}")" alt="@kvp.Value.Name" />
-                                <span>@kvp.Value.Name</span>
+                                <div class="card-images">
+                                    <img id="front-img" src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" class="front-image" />
+                                    <img id="back-img" src="@Url.Content($"~{kvp.Value.BackImageAddress}")" alt="@kvp.Value.Name" class="back-image" />
+                                </div>
+                                <span class="card-title">@kvp.Value.Name</span>
                             </div>
                         }
                 </div>
@@ -100,6 +104,7 @@
         </div>
     </div>
 
-    <script src="/JS/AddFood.js"></script>
+    <script src="~/JS/AddFood.js"></script>
+    <script src="~/JS/goToPage.js"></script>
 </body>
 </html>
