@@ -1,5 +1,6 @@
 ﻿using CafeWeb.Models;
 using CafeWeb.Services;
+using CafeWeb.Static;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,7 +41,6 @@ namespace CafeWeb.Controllers
             ViewBag.Message = message;
             return View();
         }
-
         public ViewResult NewAdmin(string? message = null)
         {
             ViewBag.Message = message;

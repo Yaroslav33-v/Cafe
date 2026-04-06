@@ -2,26 +2,57 @@
 @model CafeWeb.Models.Promocode
 @{
     string tomorrow = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
-}
+}   
+<html>
+    <head>
+        <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+        <link href="~/CSS/admin-promo.css" rel="stylesheet" />
+        <title>Создание нового промокода</title>
+    </head>
+    <body>
+        
+        <div class="out-form">
+            <form method="post" class="form-promo" action="/admin/newpromo">
+                <div class="in-form">
 
-<p>@ViewBag.Message</p>
-<br /> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
+                    <div class="promo-row">
 
-<form method="post" action="/admin/newpromo">
-    <label>Промокод: </label> <br />
-    <input id="promo-input" type="text" name="Code" maxlength="20" required />
-    <button id="rand-promo" type="button">Случайный промокод</button><br />
+                        <div class="form-group"  style="flex: 1;">
 
-    <label>На сумму: </label> <br />
-    <input type="number" name="Discount" max="99999.99" min="0" step="0.01" required /> <br />
+                            <label>Промокод: </label>
+                            <input id="promo-input" type="text" name="Code" maxlength="20" placeholder="Введите промокод" required />
+                        
+                        </div>
+                        <button id="rand-promo" type="button">Случайный промокод</button>
+                    </div>
 
-    <label>Действует с суммы: </label> <br />
-    <input type="number" name="FromSum" max="99999.99" min="0" step="0.01" required /> <br />
+                    <div class="form-group">
+                        <label>На сумму: </label>
+                        <input type="number" name="Discount" id="sale-input" max="99999.99" min="0" step="0.01" placeholder="0 ₽" required />
+                    </div>
 
-    <label>Действует до:</label> <br />
-    <input type="date" name="ExpiresAt" min="@tomorrow" required />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Действует с суммы: </label>
+                            <input type="number" name="FromSum" id="from-sale-input" max="99999.99" min="0" step="0.01" placeholder="0 ₽" required  />
+                        </div>
+                    
 
-    <button type="submit">Добавить</button>
-</form>
-
-<script src="~/JS/AdminScripts.js"></script>
+                        <div class="form-group">
+                            <label>Действует до:</label>
+                            <input type="date" name="ExpiresAt" id="data-input" min="@tomorrow" required />
+                        </div>
+                        <p>@ViewBag.Message</p>
+                        <br /> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
+                    </div>
+                    <div class="under">
+                        <button type="submit">Добавить</button>
+                        <button onclick="goToPage('/admin/index')">В админские угодия</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script src="~/JS/AdminScripts.js"></script>
+        <script src="~/JS/goToPage.js"></script>
+    </body>
+</html>

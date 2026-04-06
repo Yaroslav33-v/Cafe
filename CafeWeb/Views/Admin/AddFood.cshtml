@@ -1,58 +1,110 @@
 ﻿<!-- Страница для добавления новой еды -->
 @model CafeWeb.Models.AdminFoodModel
+<!doctype html>
 
-<form method="post" action="/admin/addfood" enctype="multipart/form-data">
-    <p>@ViewBag.Message</p> <br/> <!-- Вывод информации в случае невозможности добавления (получаем только при пересылке с post-метода) -->
-    @if (Model.Categories != null && Model.Categories.Any())
-    {
-        <!-- Блок существующих позиций -->
-        <div>
-            <p>Позиции, которые уже существуют: </p>
-            @foreach (var kvp in Model.ExistingFood)
-            {
-                <div>
-                    <img src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" />
-                    <img src="@Url.Content($"~{kvp.Value.BackImageAddress}")" alt="@kvp.Value.Name" />
-                    <span>@kvp.Value.Name</span>
-                </div>
-            }
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+    <link href="~/CSS/admin-food.css" rel="stylesheet" />
+    <title> Добавление новой позиции </title>
+</head>
+<body>
+    <!-- Кнопка для открытия модального окна -->
+    <div class="container">
+        <div class="admin-header">
+            <button id="openFoodModal" class="add-food-btn">Добавить блюдо</button>
+            <button class="btn-go" onclick="goToPage('/admin/index')">В админские угодия</button>
         </div>
 
-        <label>Категория: </label>
-        <select name="SelectedCategory">
-        @foreach(var category in Model.Categories)
-        {
-            <option value="@category">@category</option>
-        }
-        </select> <br />
-        <label>Название: </label> <br />
-        <input type="text" name="Food.Name" maxlength="100" required /> <br />
+        <div class="menu">
+            @if (Model.Categories != null && Model.Categories.Any())
+                {   
+                    <label>Позиции, которые уже существуют:</label>
 
-        <label>Цена: </label> <br />
-        <input type="number" name="Food.Price" max="99999.99" step="0.01" min="0" required /> <br />
+                    <div class="menu-position">
+                        
+                        @foreach (var kvp in Model.ExistingFood)
+                        {
+                            <div class="card">
+                                <div class="card-images">
+                                    <img id="front-img" src="@Url.Content($"~{kvp.Value.FrontImageAddress}")" alt="@kvp.Value.Name" class="front-image" />
+                                    <img id="back-img" src="@Url.Content($"~{kvp.Value.BackImageAddress}")" alt="@kvp.Value.Name" class="back-image" />
+                                </div>
+                                <span class="card-title">@kvp.Value.Name</span>
+                            </div>
+                        }
+                </div>
+            }
+            else
+            {
+                <p>Не удалось получить список категорий</p> <br />
+            }
+        </div>
+    </div>
+    <!-- Контейнер для формы (оригинальная форма будет скрыта) -->
+    <div style="display: none;">
+        <form id="originalForm" method="post" action="/admin/addfood" enctype="multipart/form-data">
+            @if (Model.Categories != null && Model.Categories.Any())
+            {
+                <label>Категория: </label>
+                <select name="SelectedCategory">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select> <br />
 
-        <label>Калории: </label> <br />
-        <input type="number" name="Food.Calories" max="99999.99" step="0.01" min="0" required /> <br />
+                <label>Название: </label> <br />
+                <input type="text" name="Food.Name" maxlength="100" required /> <br />
 
-        <label>Вес: </label> <br />
-        <input type="number" name="Food.Weight" max="99999.99" step="0.01" min="0" required /> <br />
+                <label>Цена: </label> <br />
+                <input type="number" name="Food.Price" max="99999.99" step="0.01" min="0" required /> <br />
 
-        <label>Ингредиенты:</label> <br />
-        <textarea name="Food.Ingredients" required></textarea> <br />
+                <label>Калории: </label> <br />
+                <input type="number" name="Food.Calories" max="99999.99" step="0.01" min="0" required /> <br />
 
-        <label>Описание:</label> <br />
-        <textarea name="Food.Description" required></textarea> <br />
+                <label>Вес: </label> <br />
+                <input type="number" name="Food.Weight" max="99999.99" step="0.01" min="0" required /> <br />
 
-        <label>Переднее фото: </label> <br />
-        <input type="file" name="FrontPhoto" id="fileInput" accept="image/*" required /> <br />
+                <label>Ингредиенты:</label> <br />
+                <textarea name="Food.Ingredients" required></textarea> <br />
 
-        <label>Заднее фото: </label> <br />
-        <input type="file" name="BackPhoto" id="fileInput" accept="image/*" required /> <br />
+                <label>Описание:</label> <br />
+                <textarea name="Food.Description" required></textarea> <br />
 
-        <button type="submit">Добавить</button>
-    }
-    else
-    {
-         <p>Не удалось получить список категорий</p> <br />
-    }
-</form>
+                <label>Переднее фото: </label> <br />
+                <input type="file" name="FrontPhoto" accept="image/*" required /> <br />
+
+                <label>Заднее фото: </label> <br />
+                <input type="file" name="BackPhoto" accept="image/*" required /> <br />
+
+                <button type="submit">Добавить</button>
+            }
+            else
+            {
+                <p>Не удалось получить список категорий</p> <br />
+            }
+            <p>@ViewBag.Message</p> <br />
+        </form>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="foodModal" class="food-modal">
+        <div class="food-modal-content">
+            <div class="food-modal-header">
+                <h2>➕ Добавление нового блюда</h2>
+                <span class="food-modal-close">&times;</span>
+            </div>
+            <div class="food-modal-body">
+                <div id="formContainer">
+                    <!-- Сюда будет скопирована форма -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/JS/AddFood.js"></script>
+    <script src="~/JS/goToPage.js"></script>
+</body>
+</html>

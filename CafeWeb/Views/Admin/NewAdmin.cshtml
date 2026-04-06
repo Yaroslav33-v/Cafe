@@ -1,33 +1,50 @@
 ﻿@model CafeWeb.Models.User
-<head>
-    <style>
-        .available {
-            color: green;
-        }
-        .taken {
-            color: red;
-        }
-        .checking {
-            color: gray;
-        }
-    </style>
-</head>
-<body>
-    <p>@ViewBag.Message</p>
-    <form method="post" action="/admin/newadmin">
-        <label> Введите логин: </label>
-        <input id="username" type="text" name="Login" maxlength="25" required />
-        <span id="status"></span> <!-- для проверки логина -->
+<html>
+    <head>
+        <style>
+            .available {
+                color: green;
+            }
+            .taken {
+                color: red;
+            }
+            .checking {
+                color: gray;
+            }
+        </style>
+        <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+        <link href="~/CSS/admin-admin.css" rel="stylesheet" />
+        <title>Создание нового администратора</title>
+    </head>
+    <body>
+        <div class="out-form">
+            <form method="post" action="/admin/newadmin">
+                <div class="in-form">
 
-        <label>Введите пароль: </label>
-        <input id="password-input" type="password" name="Password" maxlength="20" required />
-        <label>
-            <input type="checkbox" id="show-password"> Показать пароль
-        </label>
-        <button type="button" id="rand-password">Случайный пароль</button>
+                    <label> Введите логин: </label>
+                    <input id="username" type="text" name="Login" maxlength="25" required />
+                    <span id="status"></span> <!-- для проверки логина -->
 
-        <button type="submit"> Создать </button>
-    </form>
-    <script src="~/JS/ShowPassword.js"></script>
-    <script src="~/JS/UserScripts.js"></script>
-</body>
+                    <label>Введите пароль: </label>
+                    <input id="password-input" type="password" name="Password" maxlength="20" required />
+                    <label>
+                        <input type="checkbox" id="show-password"> Показать пароль     
+                        <button type="button" id="rand-password">Случайный пароль</button>
+                    </label>
+                    <p>@ViewBag.Message</p>
+                    
+                    <div class="under">
+                        
+
+                        <button type="submit"> Создать </button>
+
+                        <button type="button" onclick="goToPage('/admin/index')">В админские угодия</button>
+                    </div>
+                </div>
+            </form>
+         </div>
+        <script src="~/JS/ShowPassword.js"></script>
+        <script src="~/JS/UserScripts.js"></script>
+        <script src="~/JS/goToPage.js"></script>
+    </body>
+</html>

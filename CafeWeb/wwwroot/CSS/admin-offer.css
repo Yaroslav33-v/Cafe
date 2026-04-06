@@ -1,0 +1,266 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo {
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: -70px;
+    left: 50%;
+    transform-origin: center center;
+    z-index: 10;
+    animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: translateX(-50%) rotate(0deg);
+    }
+
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
+}
+
+/* Кнопка добавления */
+.admin-header {
+    display: grid;
+    gap: 100px;
+    grid-template-columns: 200px 200px;
+    margin-top: auto;
+    width: 100%;
+}
+
+.add-offer-btn {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 15px;
+    font-weight: 550;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+    .add-offer-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    .add-offer-btn:active {
+        transform: translateY(0);
+    }
+
+    .add-offer-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+.btn-go {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 15px;
+    font-weight: 550;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 250px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+    .btn-go:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-go:active {
+        transform: translateY(0);
+    }
+
+    .btn-go:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+/* Модальное окно */
+.offer-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+    .offer-modal.show {
+        display: flex;
+    }
+
+.offer-modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    animation: modalFadeIn 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.offer-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    border-radius: 20px 20px 0 0;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+    .offer-modal-header h2 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+.offer-modal-close {
+    font-size: 28px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+    .offer-modal-close:hover {
+        transform: scale(1.1);
+    }
+
+.offer-modal-body {
+    padding: 20px;
+}
+
+/* Стили для формы внутри модального окна */
+#formContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#formContainer label {
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+#formContainer input,
+#formContainer textarea,
+#formContainer select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+#formContainer button {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+    #formContainer button:hover {
+        transform: translateY(-2px);
+    }
+
+.container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 20px 30px;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 130px;
+}
+.custom-select {
+width: 1000px;
+height: 500px;
+overflow-y: auto;
+border: 1px solid #ccc;
+border-radius: 5px;
+padding: 10px;
+}
+
+.custom-option {
+display: flex;
+align-items: center;
+padding: 8px;
+cursor: pointer;
+border-bottom: 1px solid #eee;
+}
+
+.custom-option:hover {
+    background-color: #f0f0f0;
+}
+
+.custom-option.selected {
+    background-color: #e3f2fd;
+}
+
+.custom-option img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.custom-option input {
+    margin-right: 10px;
+}

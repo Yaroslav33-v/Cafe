@@ -62,7 +62,7 @@ namespace CafeWeb.Services
             catch (PostgresException ex) when (ex.Message.Contains("значение ключа нарушает ограничение уникальности"))
             {
                 _logger.LogInformation("Логин '{Login}' уже существует", user.Login);
-                throw new ArgumentException("Такое блюдо уже существует");
+                throw new ArgumentException("Такой логин уже существует");
             }
             catch (PostgresException ex)
             {

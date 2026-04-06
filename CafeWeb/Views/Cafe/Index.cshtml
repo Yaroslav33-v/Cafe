@@ -1,6 +1,6 @@
-﻿
-@model List<CafeWeb.Models.Category> // Подключение модели к представлению
+﻿@model List<CafeWeb.Models.Category> // Подключение модели к представлению
 
+<!DOCTYPE html>
 <html>
 <head>
     <title>Кафе "4 Творожка"</title>
@@ -8,7 +8,36 @@
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
 </head>
 <body>
-    
+    <header>
+        <!--Здесь: поиск, faq, about, вход в аккаунт-->
+    </header>
+    <aside>
+        <!--Для боковой панели с переходами по меткам-->
+    </aside>
+    <main>
+        @if(Model != null && Model.Any())
+        {
+            <div class="main-menu">
+                @foreach(var category in Model)
+                {
+                    <div class="menu-category">
+
+                        <h1>@category.Name</h1>
+                        @foreach(var food in category.Foods)
+                        {
+                            <div class="card">
+                                <div class="card-images">
+                                    <img id="front-img" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                    <img id="back-img" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                </div>
+                                <span class="card-title">@food.Name</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </main>
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
