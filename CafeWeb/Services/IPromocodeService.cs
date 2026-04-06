@@ -4,6 +4,6 @@ namespace CafeWeb.Services
 {
     public interface IPromocodeService
     {
-        Task<Promocode> GetPromocodeInfo(string code);
+        Task<Promocode?> GetPromocodeInfo(string code);
     }
 }

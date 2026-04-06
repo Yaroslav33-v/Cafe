@@ -12,18 +12,19 @@ namespace CafeWeb.Services
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
         }
-        public async Task<Promocode> GetPromocodeInfo(string code)
+        public async Task<Promocode?> GetPromocodeInfo(string code)
         {
             string sql = @"SELECT 
 	                        from_sum AS FromSum,
-	                        discount AS Discount
+	                        discount AS Discount,
+                            expires_at::TIMESTAMP AS ExpiresAt
                         FROM public.promocodes 
                         WHERE CURRENT_DATE < expires_at 
                         AND code = @Code;";
 
             try
             {
-                var promocodeInfo = await _connection.QueryFirstAsync<Promocode>(sql, new { code });
+                var promocodeInfo = await _connection.QueryFirstOrDefaultAsync<Promocode>(sql, new { code });
                 return promocodeInfo;
             }
             catch

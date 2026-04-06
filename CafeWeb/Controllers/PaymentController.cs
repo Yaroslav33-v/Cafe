@@ -13,10 +13,12 @@ namespace CafeWeb.Controllers
         {
             _paymentService = paymentService ?? throw new ArgumentNullException(nameof(paymentService));
         }
-        [RedirectOnly]
+        
         public IActionResult Index(decimal total) 
         {
             ViewBag.Total = total;
+            ViewBag.Original = total;
+
             return View(); 
         }
         [RedirectOnly]

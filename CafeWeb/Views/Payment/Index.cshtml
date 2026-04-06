@@ -35,7 +35,8 @@
                 <div class="under-pay">
                     <b>К оплате <span id="total-price">@ViewBag.Total</span> руб.</b>
                     <input id="total-input" hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
-                    <input id="promo" class="payment-input" type="text" placeholder="Введите промокод" maxlength="20" />
+                    <input id="total-input" hidden value="@ViewBag.Original" name="OriginalAmount" style="width: 0px" />
+                    <input name="Promocode" id="promo" class="payment-input" type="text" placeholder="Введите промокод" maxlength="20" />
                     <div id="fetch-response"></div>
                     <br /><button class="btn-pay" type="submit">Оплатить</button>
                 </div>
