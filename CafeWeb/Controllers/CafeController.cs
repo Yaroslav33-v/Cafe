@@ -1,19 +1,18 @@
 ﻿using CafeWeb.Models;
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.Common;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace CafeWeb.Controllers
 {
     public class CafeController : Controller // Контроллер для кафе 
     {
         private readonly ICafeService _cafeService;
-        public CafeController(ICafeService cafeService)
+        private readonly ICartService _cartService;
+        public CafeController(ICafeService cafeService, ICartService cartService)
         {
             _cafeService = cafeService ?? throw new ArgumentNullException(nameof(cafeService));
+            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
         }
 
         public async Task<IActionResult> Index() 
@@ -39,10 +38,62 @@ namespace CafeWeb.Controllers
                 return Redirect("/error");
             }
         }
-        public IActionResult Cart()
+        public async Task<IActionResult> AddToCart(int foodId)
         {
+            if (foodId <= 0)
+                return BadRequest(new 
+                { 
+                    success = false,
+                    message = "Неверный ID блюда" 
+                });
 
-            return View();
+            try
+            {
+                // Получаем блюдо
+                Food food = await _cafeService.GetFood(foodId);
+
+                // Добавляем блюдо в сессию
+                _cartService.AddToCart(food);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = $"Блюдо '{food.Name}' добавлено в корзину!"
+                });
+            }
+            catch
+            {
+                return StatusCode(500, 
+                    new
+                    {
+                        success = false,
+                        message = "Серверная ошибка. Не удалось добавить блюдо в корзину"
+                    });
+            }
+        }
+        public IActionResult Cart() => View(_cartService.GetCart());
+        public IActionResult ClearCart()
+        {
+            try
+            {
+                _cartService.ClearCart();
+
+                return Json(new
+                {
+                    success = true,
+                    message = "Корзина очищена",
+                    cartCount = 0,
+                    totalAmount = 0
+                });
+            }
+            catch
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Не удалось очистить корзину"
+                });
+            }
         }
         public IActionResult MyOrder()
         {

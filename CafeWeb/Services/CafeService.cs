@@ -66,7 +66,7 @@ namespace CafeWeb.Services
             {
                 // Получаем все категории
                 var categories = (await _connection
-                    .QueryAsync<Category>("SELECT category_id AS Id, name AS Name FROM public.categories"))
+                    .QueryAsync<Category>("SELECT category_id AS Id, name FROM public.categories"))
                     .ToList();
 
                 // Получаем все блюда
@@ -75,10 +75,10 @@ namespace CafeWeb.Services
                         SELECT 
                             food_id AS Id, 
                             food_name AS Name, 
-                            price AS Price,
-                            calories AS Calories,
-                            weight AS Weight,
-                            ingredients AS Ingredients,
+                            price,
+                            calories,
+                            weight,
+                            ingredients,
                             front_image_address AS FrontImageAddress,
                             back_image_address AS BackImageAddress,
                             category_id AS CategoryId
@@ -87,16 +87,47 @@ namespace CafeWeb.Services
 
                 // Группируем блюда по категориям
                 foreach (var category in categories)
-                {
-                    category.Foods = foods.Where(f => f.CategoryId == category.Id).ToList();
-                }
+                    category.Foods = foods
+                        .Where(f => f.CategoryId == category.Id)
+                        .ToList();
 
                 return categories;
             }
             catch (Exception ex)
             {
-                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                _logger.LogError("Непридвиденная внутренняя ошибка: {message}", ex.Message);
                 throw new Exception("Непредвиденная внутренняя ошибка");
+            }
+        }
+
+        public async Task<Food> GetFood(int foodId)
+        {
+            try
+            {
+                var food = await _connection
+                    .QueryFirstOrDefaultAsync<Food>(@"
+                        SELECT 
+                            food_id AS Id, 
+                            food_name AS Name, 
+                            price,
+                            calories,
+                            weight,
+                            ingredients,
+                            front_image_address AS FrontImageAddress,
+                            back_image_address AS BackImageAddress,
+                            category_id AS CategoryId
+                        FROM public.food
+                        WHERE food_id = @FoodId",
+                        new
+                        {
+                            FoodId = foodId
+                        }) ?? throw new Exception();
+                return food;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Не удалось получить блюдо: {message}", ex.Message);
+                throw new Exception("Не удалось получить блюдо");
             }
         }
     }

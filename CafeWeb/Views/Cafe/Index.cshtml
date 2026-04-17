@@ -31,6 +31,8 @@
                                     <img id="back-img" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
                                 </div>
                                 <span class="card-title">@food.Name</span>
+                                <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
+                                <button type="button" onclick="">Добавить в избранное</button>
                             </div>
                         }
                     </div>
@@ -68,8 +70,8 @@
             </div>
         </div>
     </footer>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/main.js"></script>
     <script src="~/JS/checkRole.js"></script>
 </body>
-
 </html>
-

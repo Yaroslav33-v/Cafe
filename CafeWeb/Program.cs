@@ -1,6 +1,7 @@
 ﻿using CafeWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Session;
 using Microsoft.Extensions.FileProviders;
 using NLog.Extensions.Logging;
 using Npgsql;
@@ -25,12 +26,15 @@ builder.Services.AddScoped<IDbConnection>(provider =>
     return new NpgsqlConnection(connectionString);
 });
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<ICafeService, CafeService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPromocodeService, PromocodeService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 

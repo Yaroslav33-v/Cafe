@@ -1,5 +1,18 @@
-﻿@{
-    Layout = "_LayoutCart"; // Использование шаблона
-}
+﻿@model CafeWeb.Models.Cart
 
-<h1>Корзина</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Корзина</title>
+    </head>
+    <body>
+    @foreach(var item in Model.Items)
+    {
+        <p>@item.Food.Name</p>
+        <p>Количество: @item.Quantity</p>
+    }
+    <button type="button" onclick="clearCart()">Очистить корзину</button>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/cart.js"></script>
+    </body>
+</html>
