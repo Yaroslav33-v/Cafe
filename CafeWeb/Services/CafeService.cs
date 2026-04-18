@@ -1,6 +1,5 @@
 ﻿using CafeWeb.Models;
 using Dapper;
-using Npgsql;
 using System.Data;
 
 namespace CafeWeb.Services
@@ -79,6 +78,7 @@ namespace CafeWeb.Services
                             calories,
                             weight,
                             ingredients,
+                            description,
                             front_image_address AS FrontImageAddress,
                             back_image_address AS BackImageAddress,
                             category_id AS CategoryId
@@ -113,6 +113,7 @@ namespace CafeWeb.Services
                             calories,
                             weight,
                             ingredients,
+                            description,
                             front_image_address AS FrontImageAddress,
                             back_image_address AS BackImageAddress,
                             category_id AS CategoryId
@@ -121,7 +122,7 @@ namespace CafeWeb.Services
                         new
                         {
                             FoodId = foodId
-                        }) ?? throw new Exception();
+                        }) ?? throw new Exception("Не удалось получить блюдо");
                 return food;
             }
             catch (Exception ex)

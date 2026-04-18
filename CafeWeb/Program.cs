@@ -35,6 +35,7 @@ builder.Services.AddSingleton<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPromocodeService, PromocodeService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 

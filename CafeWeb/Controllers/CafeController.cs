@@ -95,6 +95,49 @@ namespace CafeWeb.Controllers
                 });
             }
         }
+        
+        public IActionResult UpdateQuantity(int id, int value)
+        {
+            try
+            {
+                // Валидация
+                if (id <= 0)
+                    return BadRequest(new { success = false, message = "Неверный ID блюда" });
+
+                var cart = _cartService.GetCart();
+                var cartItem = cart.Items.FirstOrDefault(i => i.Food.Id == id);
+
+                if (cartItem == null)
+                    return BadRequest(new { success = false, message = "Ошибка при получении блюда" });
+
+                // Обновляем количество
+                _cartService.UpdateQuantity(id, cartItem.Quantity + value);
+
+                // Получаем обновленную корзину
+                var updatedCart = _cartService.GetCart();
+                var updatedCartItem = updatedCart.Items.FirstOrDefault(i => i.Food.Id == id);
+
+                // Возвращаем обновленные данные
+                return Ok(new
+                {
+                    success = true,
+                    itemTotal = updatedCartItem?.Total ?? 0,
+                    totalAmount = updatedCart.TotalAmount,
+                    totalItems = updatedCart.TotalItems,
+                    itemQuantity = updatedCartItem?.Quantity ?? 0,
+                    itemId = id
+                });
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Ошибка при обновлении количества"
+                });
+            }
+        }
+
         public IActionResult MyOrder()
         {
             return View();

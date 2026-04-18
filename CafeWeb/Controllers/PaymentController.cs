@@ -2,20 +2,29 @@
 using CafeWeb.Models;
 using CafeWeb.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CafeWeb.Controllers
 {
+    [Authorize]
     [Route("/payment/[action]")]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
-        public PaymentController(IPaymentService paymentService)
+        private readonly ICartService _cartService;
+        public PaymentController(IPaymentService paymentService, ICartService cartService)
         {
             _paymentService = paymentService ?? throw new ArgumentNullException(nameof(paymentService));
+            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
         }
-        
-        public IActionResult Index(decimal total) 
+
+        public IActionResult Index() 
         {
+            decimal total = _cartService.GetCart().TotalAmount;
+
+            if (total <= 0)
+                return Redirect("/cafe/cart");
+
             ViewBag.Total = total;
             ViewBag.Original = total;
 
