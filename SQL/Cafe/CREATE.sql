@@ -42,6 +42,8 @@ CREATE TABLE public.orders(
 	order_number VARCHAR(5) NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	status VARCHAR(20) NOT NULL CHECK (status IN (
+		'Ожидает оплаты',
+		'Ошибка оплаты',
 		'Готовится',
 		'Готов'
 	)),
