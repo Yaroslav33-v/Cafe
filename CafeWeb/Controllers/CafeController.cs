@@ -9,10 +9,12 @@ namespace CafeWeb.Controllers
     {
         private readonly ICafeService _cafeService;
         private readonly ICartService _cartService;
-        public CafeController(ICafeService cafeService, ICartService cartService)
+        private readonly IOrderService _orderService;
+        public CafeController(ICafeService cafeService, ICartService cartService, IOrderService orderService)
         {
             _cafeService = cafeService ?? throw new ArgumentNullException(nameof(cafeService));
             _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
 
         public async Task<IActionResult> Index() 
@@ -138,9 +140,25 @@ namespace CafeWeb.Controllers
             }
         }
 
-        public IActionResult MyOrder()
+        public async Task<IActionResult> MyOrder()
         {
-            return View();
+            try
+            {
+                var strId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if(strId is not null && int.TryParse(strId, out int id))
+                {
+                    List<Order> orders = await _orderService.GetOrders(id);
+
+                    return View(orders);
+                }
+
+                return Redirect("/signout");
+            }
+            catch
+            {
+                return Redirect("/cafe/index");
+            }
         }
     }
 }

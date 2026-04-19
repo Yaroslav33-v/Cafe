@@ -1,1 +1,17 @@
 ﻿<!-- Страница для отслеживания заказа -->
+@model List<CafeWeb.Models.Order>; // List используем так как у одного пользователя может быть сразу несколько заказов
+
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+    @foreach(var order in Model)
+    {
+        <div class="order">
+
+        </div>
+    }
+    </body>
+</html>
