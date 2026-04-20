@@ -1,4 +1,5 @@
-﻿using CafeWeb.Dto;
+﻿using CafeWeb.CustomExceptions;
+using CafeWeb.Dto;
 using CafeWeb.Models;
 using System.Text;
 using System.Text.Json;
@@ -17,25 +18,25 @@ namespace CafeWeb.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _promocodeService = promocodeService ?? throw new ArgumentNullException(nameof(promocodeService));
         }
-        private static string GeneratePaymentMethod(PaymentModel paymentModel)
-        {
-            return "pm_" + (paymentModel.CardNumber.Replace(" ", "")) + "_" + paymentModel.CvvCode;
-        }
+        private static string GeneratePaymentMethod(PaymentModel paymentModel) =>
+            "pm_" + paymentModel.CardNumber.Replace(" ", "") + "_" + paymentModel.CvvCode;
 
-        private async static Task<string> GetAuthToken(string cardToken)
+        private static async Task<string> GetAuthToken(string cardToken)
         {
+            // Подключаемся к эндпоинту авторизации
             var response = await _httpClient.GetAsync($"/login/{cardToken}");
             response.EnsureSuccessStatusCode();
             
+            // Читаем ответ
             string json = await response.Content.ReadAsStringAsync();
-            PaymentAuthDto? authDto = JsonSerializer.Deserialize<PaymentAuthDto>(json, _options);
+            PaymentAuthDto authDto = JsonSerializer.Deserialize<PaymentAuthDto>(json, _options)
+                ?? throw new HttpRequestException();
 
-            return authDto is null ? throw new HttpRequestException() : authDto.Token;
+            return authDto.Token;
         }
 
-        public async Task TryToPay(PaymentModel paymentModel)
+        public async Task<bool> TryToPay(PaymentModel paymentModel)
         {
-            _logger.LogInformation("Начало обработки платежа для карты {LastFour}", paymentModel.CardNumber[^4..]);
             try
             {
                 string paymentMethod = GeneratePaymentMethod(paymentModel);
@@ -54,6 +55,7 @@ namespace CafeWeb.Services
                     }
                 }
 
+                // Создаем объект для отправки в апи
                 PaymentDto paymentDto = new
                 (
                     CardToken: paymentMethod,
@@ -66,50 +68,52 @@ namespace CafeWeb.Services
 
                 string json = JsonSerializer.Serialize(paymentDto);
 
+                // Получаем jwt
                 string jwt = await GetAuthToken(paymentDto.CardToken);
 
-                _logger.LogInformation("Для карты {LastFour} успешно сгенерирован JWT",
-                    paymentModel.CardNumber[^4..]);
-
+                // Создаем HTTP запрос
                 using var request = new HttpRequestMessage(HttpMethod.Post, "/payment_attempt");
                 request.Content = new StringContent(json, Encoding.UTF8, "application/json");
                 
                 request.Headers.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt);
 
+                // Читаем ответ от апи
                 var response = await _httpClient.SendAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
                     _logger.LogInformation("Платеж для карты {LastFour} успешно выполнен",
                         paymentModel.CardNumber[^4..]);
+
+                    return true;
                 }
                 else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                 {
                     _logger.LogInformation("Платеж для карты {LastFour} не выполнен, ошибка со стороны API",
                         paymentModel.CardNumber[^4..]);
-                   throw new Exception("Ошибка оплаты");
+                   
+                    return false;
                 }
                 else
                 {
                     _logger.LogInformation("Платеж для карты {LastFour} не выполнен",
                         paymentModel.CardNumber[^4..]);
-                    string responseJson = await response.Content.ReadAsStringAsync();
-                    var responseDto = JsonSerializer.Deserialize<PaymentApiResponseDto>(responseJson, _options);
-                    throw new Exception(responseDto?.Message);
+
+                    return false;
                 }
             }
             catch (HttpRequestException ex)
             {
                 _logger.LogError("Ошибка при подключении к API: {message} для карты {LastFour}",
                     ex.Message, paymentModel.CardNumber[^4..]);
-                throw new Exception("Ошибка оплаты");
+                throw new PaymentFailedException("Ошибка при подключении к платежной системе");
             }
             catch(Exception ex)
             {
                 _logger.LogError("Ошибка при обработке платежа: {message} для карты {LastFour}",
                     ex.Message, paymentModel.CardNumber[^4..]);
-                throw new Exception("Ошибка оплаты");
+                throw new PaymentFailedException("Ошибка при обработке платежа");
             }
         }
     }

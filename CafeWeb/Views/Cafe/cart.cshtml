@@ -1,5 +1,43 @@
-﻿@{
-    Layout = "_LayoutCart"; // Использование шаблона
-}
+﻿@model CafeWeb.Models.Cart
 
-<h1>Корзина</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Корзина</title>
+    </head>
+    <body>
+    @foreach(var item in Model.Items)
+    {
+        <div data-id="@item.Food.Id">
+            <p>@item.Food.Name</p>
+            <p>
+                Количество:
+                <span data-quantity="@item.Food.Id">@item.Quantity</span>
+            </p>
+
+            <p>Цена за блюдо: </p>
+            <p>@item.Food.Price</p>
+
+            <p>
+                Общее:
+                <span data-total="@item.Food.Id">@item.Total</span>
+            </p>
+            <button type="button" onclick="updateQuantity(@item.Food.Id, -1)"> - </button>
+            <button type="button" onclick="updateQuantity(@item.Food.Id, 1)"> + </button>
+        </div>
+    }
+    <p>
+        Общее количество:
+        <span id="totalQuantity">@Model.TotalItems</span>
+    </p>
+    <p>
+        Всего: 
+        <span id="totalPrice">@Model.TotalAmount</span>
+    </p>
+    <button type="button" onclick="clearCart()">Очистить корзину</button>
+    <button type="button" onclick="goToPage('/payment/index')">Перейти к оплате</button>
+    <script src="~/JS/goToPage.js"></script>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/cart.js"></script>
+    </body>
+</html>
