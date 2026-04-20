@@ -4,23 +4,23 @@ VALUES
     ('pm_5555555555554444_001', '4444', 12, 2027, 'MasterCard'),
     ('pm_4000000000009995_567', '9995', 12, 2028, 'American Express');
 
--- Депозит на карту 1 (+1000 USD)
+-- Депозит на карту 1 (+100000)
 INSERT INTO operations (card_id, operation_type, amount, description, status, posted_at)
-VALUES (1, 'DEPOSIT', 1000.00, 'Пополнение счета', 'POSTED', NOW());
+VALUES (1, 'DEPOSIT', 100000.00, 'Пополнение счета', 'POSTED', NOW());
 
--- Снятие с карты 1 (-200 USD)
+-- Снятие с карты 1 (-200)
 INSERT INTO operations (card_id, operation_type, amount, description, status, posted_at)
 VALUES (1, 'WITHDRAWAL', -200.00, 'Снятие наличных', 'POSTED', NOW());
 
--- Комиссия на карту 1 (-10 USD)
+-- Комиссия на карту 1 (-10)
 INSERT INTO operations (card_id, operation_type, amount, description, status, posted_at)
 VALUES (1, 'FEE', -10.00, 'Ежемесячная комиссия', 'POSTED', NOW());
 
--- Проценты на карту 2 (+50 USD)
+-- Проценты на карту 2 (+50)
 INSERT INTO operations (card_id, operation_type, amount, description, status, posted_at)
 VALUES (2, 'INTEREST', 50.00, 'Начисление процентов', 'POSTED', NOW());
 
--- Перевод 500 USD с карты 1 на карту 2
+-- Перевод 500 с карты 1 на карту 2
 INSERT INTO operations (
     card_id,
     transfer_card_id,
