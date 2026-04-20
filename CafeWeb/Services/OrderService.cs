@@ -16,8 +16,12 @@ namespace CafeWeb.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<int> CreateOrder(int userId, Order order, IDbTransaction transaction)
+        public async Task<int> CreateOrder(int userId, Order order)
         {
+            // Открываем соединение вручную для транзакций
+            if (_connection.State != ConnectionState.Open)
+                _connection.Open();
+            using var transaction = _connection.BeginTransaction();
             try
             {
                 // 1. Вставляем заказ
@@ -48,10 +52,12 @@ namespace CafeWeb.Services
                         (@FoodId, @OrderId, @Quantity)", 
                     foodOrders, transaction);
 
+                transaction.Commit();
                 return orderId;
             }
             catch (Exception ex) 
             {
+                transaction.Rollback();
                 _logger.LogError("Ошибка при создании заказа: {message}", ex.Message);
                 throw new Exception("Ошибка при создании заказа");
             }
@@ -85,22 +91,76 @@ namespace CafeWeb.Services
                     LIMIT 1")
                 ?? "AA000";
 
-        public Task<List<Order>> GetOrders(int userId)
+        public async Task<List<Order>> GetOrders(int userId)
         {
-            throw new NotImplementedException();
+            var orderDictionary = new Dictionary<int, Order>();
+
+            await _connection.QueryAsync<Order, Food, CartItem, Order>(@"
+                SELECT 
+                    o.order_id AS Id,
+                    o.order_number AS Number,
+                    o.created_at AS CreatedAt,
+                    o.status AS Status,
+                    o.done_at AS DoneAt,
+                    f.food_id AS Id,
+                    f.food_name AS Name,
+                    f.price AS Price,
+                    f.calories AS Calories,
+                    f.weight AS Weight,
+                    f.ingredients AS Ingredients,
+                    f.description AS Description,
+                    f.front_image_address AS FrontImageAddress,
+                    f.back_image_address AS BackImageAddress,
+                    f.category_id AS CategoryId,
+                    fo.food_quantity AS Quantity
+                FROM public.orders o
+                LEFT JOIN public.food_orders fo ON o.order_id = fo.order_id
+                LEFT JOIN public.food f ON fo.food_id = f.food_id
+                WHERE o.user_id = @UserId 
+                  AND o.created_at >= NOW() - INTERVAL '1 hour'
+                  AND o.status IN (@InProcess, @Ready)
+                ORDER BY o.created_at DESC, o.order_id, f.food_id",
+                (order, food, cartItem) =>
+                {
+                    // Проверяем, есть ли уже такой заказ в словаре
+                    if (!orderDictionary.TryGetValue(order.Id, out var currentOrder))
+                    {
+                        // Если нет - создаем новый
+                        currentOrder = order;
+                        currentOrder.CartItems = new List<CartItem>();
+                        orderDictionary.Add(currentOrder.Id, currentOrder);
+                    }
+
+                    // Если есть еда и количество > 0 - добавляем в корзину заказа
+                    if (food != null && cartItem != null && cartItem.Quantity > 0)
+                    {
+                        currentOrder.CartItems.Add(new CartItem
+                        {
+                            Food = food,
+                            Quantity = cartItem.Quantity
+                        });
+                    }
+
+                    return currentOrder;
+                },
+                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready},
+                splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
+            );
+
+            return orderDictionary.Values.ToList();
         }
 
-        public async Task UpdateOrderStatus(int id, string status, IDbTransaction? transaction = null)
+        public async Task UpdateOrderStatus(int id, string status)
         {
             int affected = await _connection.ExecuteAsync(@"
                 UPDATE public.orders 
                 SET status = @NewStatus
                 WHERE order_id = @OrderId
                 AND status != @NewStatus", 
-                new { NewStatus = status, OrderId = id }, transaction);
+                new { NewStatus = status, OrderId = id });
 
             if (affected == 0)
-                throw new Exception($"Не удалось обновить статус заказа {id}");
+                throw new Exception($"Не удалось обновить статус заказа");
         }
     }
 }

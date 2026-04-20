@@ -144,6 +144,7 @@ namespace CafeWeb.Controllers
         {
             try
             {
+                
                 var strId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if(strId is not null && int.TryParse(strId, out int id))

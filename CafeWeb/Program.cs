@@ -1,4 +1,5 @@
-﻿using CafeWeb.Services;
+﻿using CafeWeb.Hubs;
+using CafeWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Session;
@@ -24,10 +25,24 @@ builder.Services.AddScoped<IDbConnection>(provider =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     return new NpgsqlConnection(connectionString);
-});
+}); // Соединение с БД
 
+builder.Services.AddSignalR(options =>
+{
+    // Настройки SignalR
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+    options.MaximumReceiveMessageSize = 1024 * 10; // 10 KB
+    // Каждые 15 секунд сервер шлет "ты жив?" клиенту
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+
+    // Если 30 секунд нет ответа - соединение разрывается
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+}); // SignalR для real-time изменения статуса заказов
+
+// Добавляем HttpContextAccessor для сессий
 builder.Services.AddHttpContextAccessor();
 
+// Регистрируем сервисы в DI
 builder.Services.AddScoped<ICafeService, CafeService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
@@ -37,8 +52,13 @@ builder.Services.AddScoped<IPromocodeService, PromocodeService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
+// Регистрируем фоновый процесс в DI
+builder.Services.AddHostedService<OrderStatusUpdaterService>();
+
+// Логгирование
 builder.Logging.ClearProviders().AddNLog(builder.Configuration);
 
+// Настройки аутентификации
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -49,6 +69,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.SameSite = SameSiteMode.Strict;
     });
 
+// Политики авторизации
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
 
@@ -70,6 +91,7 @@ app.UseStaticFiles(new StaticFileOptions
     }
 }); // Кэширование изображений
 
+// Подключаем необходимые middleware
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
@@ -165,4 +187,8 @@ app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService prom
 app.MapControllerRoute(
     name: default,
     pattern: "{controller=Cafe}/{action=Index}");
+
+// Добавляем SignalR Hub 
+app.MapHub<CafeHub>("/cafeHub");
+
 app.Run();
