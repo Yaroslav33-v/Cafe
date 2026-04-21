@@ -91,12 +91,9 @@ namespace CafeWeb.Services
                     LIMIT 1")
                 ?? "AA000";
 
-        public async Task<List<Order>> GetOrders(int userId)
+        public async Task<List<Order>> GetOrders(int userId, bool all = false)
         {
-            var orderDictionary = new Dictionary<int, Order>();
-
-            await _connection.QueryAsync<Order, Food, CartItem, Order>(@"
-                SELECT 
+            string sql = @"SELECT 
                     o.order_id AS Id,
                     o.order_number AS Number,
                     o.created_at AS CreatedAt,
@@ -116,10 +113,20 @@ namespace CafeWeb.Services
                 FROM public.orders o
                 LEFT JOIN public.food_orders fo ON o.order_id = fo.order_id
                 LEFT JOIN public.food f ON fo.food_id = f.food_id
-                WHERE o.user_id = @UserId 
+                WHERE o.user_id = @UserId
+                 AND o.status IN (@InProcess, @Ready)";
+
+            if (!all)
+                sql += @"
                   AND o.created_at >= NOW() - INTERVAL '1 hour'
-                  AND o.status IN (@InProcess, @Ready)
-                ORDER BY o.created_at DESC, o.order_id, f.food_id",
+                ORDER BY o.created_at DESC, o.order_id, f.food_id";
+            else
+                sql += @"
+                ORDER BY o.created_at DESC, o.order_id, f.food_id";
+
+            var orderDictionary = new Dictionary<int, Order>();
+
+            await _connection.QueryAsync<Order, Food, CartItem, Order>(sql,
                 (order, food, cartItem) =>
                 {
                     // Проверяем, есть ли уже такой заказ в словаре

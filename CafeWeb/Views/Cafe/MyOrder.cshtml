@@ -1,7 +1,7 @@
 ﻿<!-- Страница для отслеживания заказа -->
-@model List<CafeWeb.Models.Order>; // List используем так как у одного пользователя может быть сразу несколько заказов
+@model List<CafeWeb.Models.Order> // List используем так как у одного пользователя может быть сразу несколько заказов
 @{
-    // Получаем userId из Claims или ViewBag
+    // Получаем userId из Claims
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0";
 }
 
@@ -32,7 +32,7 @@
             <div class="positions">
                 @foreach(var cartItem in order.CartItems)
                 {
-                    <p>@cartItem.Food.Name x @cartItem.Quantity</p>
+                    <p>@cartItem.Food.Name x @cartItem.Quantity шт.</p>
                 }
                 <p>@order.CartItems.Sum(i => i.Total) руб.</p>
             </div>

@@ -7,5 +7,6 @@ namespace CafeWeb.Services
         Task<List<Category>> GetFoods();
         Task<Category?> GetFavourites(int userId);
         Task<Food> GetFood(int foodId);
+        Task UpdateFavourite(int foodId, int userId);
     }
 }

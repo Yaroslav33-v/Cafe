@@ -9,7 +9,6 @@ namespace CafeWeb.Services
         private readonly IDbConnection _connection;
         private readonly ILogger<CafeService> _logger;
 
-
         public CafeService(IDbConnection connection, ILogger<CafeService> logger)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
@@ -130,6 +129,33 @@ namespace CafeWeb.Services
                 _logger.LogError("Не удалось получить блюдо: {message}", ex.Message);
                 throw new Exception("Не удалось получить блюдо");
             }
+        }
+
+        public async Task UpdateFavourite(int foodId, int userId)
+        {
+            bool exists = await _connection.ExecuteScalarAsync<bool>(@"
+                SELECT EXISTS(
+                    SELECT 1 
+                    FROM public.favourite_food 
+                    WHERE food_id = @FoodId AND user_id = @UserId
+                )", 
+                new {
+                    FoodId = foodId,
+                    UserId = userId
+                });
+
+            if(exists)
+                // Удаляем запись
+                await _connection.ExecuteAsync(@"
+                    DELETE FROM public.favourite_food 
+                    WHERE food_id = @FoodId AND user_id = @UserId",
+                    new { FoodId = foodId, UserId = userId });
+            else
+                // Добавляем запись
+                await _connection.ExecuteAsync(@"
+                    INSERT INTO public.favourite_food (food_id, user_id) 
+                    VALUES (@FoodId, @UserId)",
+                    new { FoodId = foodId, UserId = userId });
         }
     }
 }

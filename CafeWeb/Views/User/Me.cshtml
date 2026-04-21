@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Здравствуй, @ViewBag.Login ! </h1>
+        <p>Доступные действия:</p>
+        <div>
+            <button> Сменить пароль </button>
+            <button onclick="goToPage('/user/orderhistory?userId=@ViewBag.Id')"> История заказов </button>
+            <button onclick=""> Акции </button>
+            <button onclick="goToPage('/user/favourite?userId=@ViewBag.Id')"> Избранное </button>
+            @if(ViewBag.Role == "admin")
+            {
+                <button onclick="goToPage('/admin/index')">В админские угодья</button>
+            }
+        </div>
+        <script src="~/JS/goToPage.js"></script>
+    </body>
+</html>

@@ -7,6 +7,6 @@ namespace CafeWeb.Services
         Task<Order> CreateOrderModel(Cart cart); 
         Task UpdateOrderStatus(int id, string status);
         Task<int> CreateOrder(int userId, Order order);
-        Task<List<Order>> GetOrders(int userId);
+        Task<List<Order>> GetOrders(int userId, bool all = false);
     }
 }

@@ -144,7 +144,6 @@ namespace CafeWeb.Controllers
         {
             try
             {
-                
                 var strId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if(strId is not null && int.TryParse(strId, out int id))
@@ -159,6 +158,37 @@ namespace CafeWeb.Controllers
             catch
             {
                 return Redirect("/cafe/index");
+            }
+        }
+
+        public async Task<IActionResult> UpdateFavourite(int foodId)
+        {
+            try
+            {
+                var strId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                
+                if (strId is null || !int.TryParse(strId, out _))
+                    throw new KeyNotFoundException();
+
+                await _cafeService.UpdateFavourite(foodId, int.Parse(strId));
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Содержимое избранного успешно изменено"
+                });
+            }
+            catch (KeyNotFoundException)
+            {
+                return Redirect("/signout");
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Не удалось изменить избранное"
+                });
             }
         }
     }
