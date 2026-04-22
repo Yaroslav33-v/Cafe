@@ -129,5 +129,26 @@ namespace CafeWeb.Controllers
                 return Redirect("/user/me");
             }
         }
+
+        [Authorize]
+        public async Task<IActionResult> Offers()
+        {
+            try
+            {
+                List<OfferUserModel> offers = await _userService.GetOffers();
+                return View(offers);
+            }
+            catch
+            {
+                return Redirect("/user/me");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(int userId, string currentPassword, string newPassword)
+        {
+
+        }
     }
 }

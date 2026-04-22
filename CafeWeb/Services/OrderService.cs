@@ -126,7 +126,9 @@ namespace CafeWeb.Services
 
             var orderDictionary = new Dictionary<int, Order>();
 
-            await _connection.QueryAsync<Order, Food, CartItem, Order>(sql,
+            try
+            {
+                await _connection.QueryAsync<Order, Food, CartItem, Order>(sql,
                 (order, food, cartItem) =>
                 {
                     // Проверяем, есть ли уже такой заказ в словаре
@@ -150,11 +152,17 @@ namespace CafeWeb.Services
 
                     return currentOrder;
                 },
-                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready},
+                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready },
                 splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
             );
 
-            return orderDictionary.Values.ToList();
+                return orderDictionary.Values.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ошибка при получении истории заказов: {message}", ex.Message);
+                throw;
+            }
         }
 
         public async Task UpdateOrderStatus(int id, string status)

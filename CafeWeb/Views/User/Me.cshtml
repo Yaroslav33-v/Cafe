@@ -7,15 +7,39 @@
         <h1>Здравствуй, @ViewBag.Login ! </h1>
         <p>Доступные действия:</p>
         <div>
-            <button> Сменить пароль </button>
+            <button id="password-btn"> Сменить пароль </button>
             <button onclick="goToPage('/user/orderhistory?userId=@ViewBag.Id')"> История заказов </button>
-            <button onclick=""> Акции </button>
+            <button onclick="goToPage('/user/offers')"> Акции </button>
             <button onclick="goToPage('/user/favourite?userId=@ViewBag.Id')"> Избранное </button>
             @if(ViewBag.Role == "admin")
             {
                 <button onclick="goToPage('/admin/index')">В админские угодья</button>
             }
         </div>
+        <dialog id="password-dialog">
+            <form method="post" action="/user/changepassword">
+                <h3>Смена пароля</h3>
+                <label>Текущий пароль: </label>
+                <input name="CurrentPassword" type="text" id="current-password">
+                <br>
+                <br>
+                <label>Новый пароль:</label>
+                <input name="NewPassword" type="text" id="new-password">
+                <br>
+                <br>
+                <input name="UserId" value="@ViewBag.Id" hidden/>
+                <button type="submit" id="confirm-btn">Изменить пароль</button>
+                <button id="cancel-btn">Отмена</button>
+            </form>
+        </dialog>
         <script src="~/JS/goToPage.js"></script>
+        <script>
+            const dialog = document.getElementById('password-dialog');
+            const pswdButton = document.getElementById('password-btn');
+
+            pswdButton.onclick = () => dialog.showModal(); // Открыть диалог
+
+            document.getElementById('cancel-btn').onclick = () => dialog.close();
+        </script>
     </body>
 </html>

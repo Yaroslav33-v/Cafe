@@ -1,0 +1,42 @@
+﻿@model List<CafeWeb.Models.OfferUserModel>
+<!DOCTYPE html>
+<html>
+    <head><title></title></head>
+    <body>
+        @if(Model is null || !Model.Any())
+        {
+            <p>В данный момент нет доступных акций</p>
+        }
+        else foreach(var offer in Model)
+        {
+            <div class="offer-info">
+                <div>
+                    <h3>@offer.Offer.Name</h3>
+                    <p>@offer.Offer.Description</p>
+                </div>
+                <div>
+                    <p>
+                        Скидка 
+                        <span>@(offer.Offer.Discount * 100)%</span> 
+                        действует с 
+                        <span>@offer.Offer.StartsAt.ToString("dd-MM-yyyy")</span> до <span>@offer.Offer.EndsAt.ToString("dd-MM-yyyy")</span>
+                    </p>
+                </div>
+                <div>
+                    @if(offer.Foods is not null && offer.Foods.Any())
+                    {
+                        <p>Акция распространяется на следующие товары: </p>
+                        @foreach (var food in offer.Foods)
+                        {
+                            <p>@food.Name</p>
+                        }
+                    }
+                    else
+                    {
+                        <p>Акция распространяется на все товары, но только при соблюдении условий!</p>
+                    }
+                </div>
+            </div>
+        }
+</body>
+</html>
