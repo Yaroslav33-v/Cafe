@@ -52,7 +52,7 @@ namespace CafeWeb.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ошибка при входе в аккаунт: " + ex.Message);
+                _logger.LogError("Ошибка при входе в аккаунт: {message}", ex.Message);
                 throw new Exception("Проблема при входе в аккаунт");
             }
         }
@@ -70,7 +70,7 @@ namespace CafeWeb.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ошибка при создании аккаунта: " + ex.Message);
+                _logger.LogError("Ошибка при создании аккаунта: {message}", ex.Message);
                 throw new Exception("Ошибка при создании аккаунта. Попробуйте позже");
             }
         }
@@ -88,7 +88,7 @@ namespace CafeWeb.Services
             }
             catch(Exception ex) 
             {
-                _logger.LogError("Ошибка при получении данных о логине: " + ex.Message);
+                _logger.LogError("Ошибка при получении данных о логине: {message}", ex.Message);
                 throw;
             }
         }
