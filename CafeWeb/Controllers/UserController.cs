@@ -146,9 +146,52 @@ namespace CafeWeb.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(int userId, string currentPassword, string newPassword)
+        public async Task<IActionResult> ChangePassword([FromForm] int userId,
+            [FromForm] string currentPassword,
+            [FromForm] string newPassword)
         {
+            try
+            {
+                if (userId == 0)
+                {
+                    var strId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    if (strId is null)
+                        return Redirect("/signout");
 
+                    userId = int.Parse(strId);
+                }
+
+                bool success = await _userService.ChangePassword(userId, currentPassword, newPassword);
+
+                if (success)
+                    return Ok(new
+                    {
+                        success,
+                        message = "Пароль успешно обновлен"
+                    });
+
+                return Ok(new
+                {
+                    success,
+                    message = "Введен неправильный текущий пароль"
+                });
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Не удалось получить данные пользователя"
+                });
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Серверная ошибка"
+                });
+            }
         }
     }
 }

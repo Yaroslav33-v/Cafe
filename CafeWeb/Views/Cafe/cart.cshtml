@@ -6,6 +6,29 @@
         <title>Корзина</title>
     </head>
     <body>
+    @foreach(var offer in Model.OfferItems)
+    {
+        <div data-offer-id="@offer.Id">
+            <p>Акция №@offer.Id '@offer.Name'</p>
+
+            <p>
+                Количество:
+                <span data-offer-quantity="@offer.Id">@offer.Quantity</span>
+            </p>
+
+            @foreach(var food in offer.Foods)
+            {
+                <p>@food.Name</p>
+            }
+
+            <p>
+                Общее:
+                <span data-offer-total="@offer.Id">@offer.Total.ToString("N2")</span>
+            </p>
+            <button type="button" onclick="updateOfferQuantity(@offer.Id, -1)"> - </button>
+            <button type="button" onclick="updateOfferQuantity(@offer.Id, 1)"> + </button>
+        </div>
+    }
     @foreach(var item in Model.Items)
     {
         <div data-id="@item.Food.Id">
@@ -16,7 +39,7 @@
             </p>
 
             <p>Цена за блюдо: </p>
-            <p>@item.Food.Price</p>
+            <p>@item.Food.Price.ToString("N2")</p>
 
             <p>
                 Общее:
@@ -32,7 +55,7 @@
     </p>
     <p>
         Всего: 
-        <span id="totalPrice">@Model.TotalAmount</span>
+        <span id="totalPrice">@Model.TotalAmount.ToString("N2")</span>
     </p>
     <button type="button" onclick="clearCart()">Очистить корзину</button>
     <button type="button" onclick="goToPage('/payment/index')">Перейти к оплате</button>

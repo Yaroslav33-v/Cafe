@@ -102,26 +102,27 @@ namespace CafeWeb.Services
 
                 await _connection.QueryAsync<Offer, Food, OfferUserModel>(
                     @"SELECT 
-                    o.offer_name AS Name,
-                    o.description AS Description,
-                    o.discount AS Discount,
-                    o.starts_at::TIMESTAMP AS StartsAt,
-                    o.ends_at::TIMESTAMP AS EndsAt,
-                    f.food_id AS Id,
-                    f.food_name AS Name,
-                    f.price AS Price,
-                    f.calories AS Calories,
-                    f.weight AS Weight,
-                    f.ingredients AS Ingredients,
-                    f.description AS Description,
-                    f.front_image_address AS FrontImageAddress,
-                    f.back_image_address AS BackImageAddress,
-                    f.category_id AS CategoryId
-                FROM public.offers o
-                LEFT JOIN public.offers_food of ON o.offer_id = of.offer_id
-                LEFT JOIN public.food f ON of.food_id = f.food_id
-                WHERE o.ends_at >= CURRENT_DATE
-                ORDER BY o.offer_id, f.food_id",
+                        o.offer_id AS Id,
+                        o.offer_name AS Name,
+                        o.description AS Description,
+                        o.discount AS Discount,
+                        o.starts_at::TIMESTAMP AS StartsAt,
+                        o.ends_at::TIMESTAMP AS EndsAt,
+                        f.food_id AS Id,
+                        f.food_name AS Name,
+                        f.price AS Price,
+                        f.calories AS Calories,
+                        f.weight AS Weight,
+                        f.ingredients AS Ingredients,
+                        f.description AS Description,
+                        f.front_image_address AS FrontImageAddress,
+                        f.back_image_address AS BackImageAddress,
+                        f.category_id AS CategoryId
+                    FROM public.offers o
+                    LEFT JOIN public.offers_food of ON o.offer_id = of.offer_id
+                    LEFT JOIN public.food f ON of.food_id = f.food_id
+                    WHERE o.ends_at >= CURRENT_DATE
+                    ORDER BY o.offer_id, f.food_id",
                     (offer, food) =>
                     {
                         if (!offerDictionary.TryGetValue(offer.Name, out var currentOffer))
@@ -151,15 +152,43 @@ namespace CafeWeb.Services
             }
         }
 
-        public async Task ChangePassword(int userId, string current, string newPassword)
+        public async Task<bool> ChangePassword(int userId, string current, string newPassword)
         {
             try
             {
+                string? hash = await _connection.QueryFirstOrDefaultAsync<string>(@"
+                    SELECT password FROM public.users
+                    WHERE user_id = @UserId", new { UserId = userId });
 
+                if (string.IsNullOrWhiteSpace(hash))
+                    throw new KeyNotFoundException("Не удалось получить данные пользователя");
+
+                if (!_passwordService.VerifyPassword(current, hash))
+                    return false;
+
+                int affected = await _connection.ExecuteAsync(@"
+                    UPDATE public.users 
+                    SET password = @NewPassword
+                    WHERE user_id = @UserId",
+                    new
+                    {
+                        NewPassword = _passwordService.HashPassword(newPassword),
+                        UserId = userId
+                    });
+
+                if (affected <= 0)
+                    throw new Exception("Не удалось обновить пароль");
+
+                return true;
             }
-            catch
+            catch (KeyNotFoundException)
             {
-
+                throw;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Не удалось обновить пароль: {message}", ex.Message);
+                throw;
             }
         }
     }

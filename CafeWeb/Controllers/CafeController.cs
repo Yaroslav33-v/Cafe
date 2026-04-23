@@ -191,5 +191,85 @@ namespace CafeWeb.Controllers
                 });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddOfferToCart([FromBody] CartOfferModel model)
+        {
+            try
+            {
+                var foods = await _cafeService.GetFoodsByIds(model.FoodIds);
+
+                if (foods is null || !foods.Any())
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "Не удалось найти блюда"
+                    });
+
+                _cartService.AddOfferToCart(new OfferCartItem
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Discount = model.Discount,
+                    Foods = foods
+                });
+
+                return Ok(new
+                {
+                    success = true,
+                    message = "Акция успешно добавлена в корзину"
+                });
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Ошибка при добавлении акции в корзину. Попробуйте позже"
+                });
+            }
+        }
+
+        public IActionResult UpdateOfferQuantity(int offerId, int value)
+        {
+            try
+            {
+                // Валидация
+                if (offerId <= 0)
+                    return BadRequest(new { success = false, message = "Неверный ID блюда" });
+
+                var cart = _cartService.GetCart();
+                var cartItem = cart.OfferItems.FirstOrDefault(i => i.Id == offerId);
+
+                if (cartItem == null)
+                    return BadRequest(new { success = false, message = "Ошибка при получении блюда" });
+
+                // Обновляем количество
+                _cartService.UpdateOfferQuantity(offerId, cartItem.Quantity + value);
+
+                // Получаем обновленную корзину
+                var updatedCart = _cartService.GetCart();
+                var updatedCartItem = updatedCart.OfferItems.FirstOrDefault(i => i.Id == offerId);
+
+                // Возвращаем обновленные данные
+                return Ok(new
+                {
+                    success = true,
+                    itemTotal = updatedCartItem?.Total ?? 0,
+                    totalAmount = updatedCart.TotalAmount,
+                    totalItems = updatedCart.TotalItems,
+                    itemQuantity = updatedCartItem?.Quantity ?? 0,
+                    itemId = offerId
+                });
+            }
+            catch
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Ошибка при обновлении количества"
+                });
+            }
+        }
     }
 }

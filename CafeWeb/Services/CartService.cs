@@ -44,10 +44,39 @@ namespace CafeWeb.Services
             Session.SetObject(CartSessionKey, cart);
         }
 
+        public void AddOfferToCart(OfferCartItem item)
+        {
+            var cart = GetCart();
+            var existingItem = cart.OfferItems.FirstOrDefault(i => i.Id == item.Id);
+
+            if (existingItem != null)
+                existingItem.Quantity++;
+            else
+            {
+                cart.OfferItems.Add(new OfferCartItem
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Discount = item.Discount,
+                    Foods = item.Foods,
+                    Quantity = 1
+                });
+            }
+
+            Session.SetObject(CartSessionKey, cart);
+        }
+
         public void RemoveFromCart(int menuItemId)
         {
             var cart = GetCart();
             cart.Items.RemoveAll(i => i.Food.Id == menuItemId);
+            Session.SetObject(CartSessionKey, cart);
+        }
+
+        public void RemoveOfferFromCart(int offerItemId)
+        {
+            var cart = GetCart();
+            cart.OfferItems.RemoveAll(i => i.Id == offerItemId);
             Session.SetObject(CartSessionKey, cart);
         }
 
@@ -60,6 +89,22 @@ namespace CafeWeb.Services
             {
                 if (quantity <= 0)
                     cart.Items.Remove(item);
+                else
+                    item.Quantity = quantity;
+
+                Session.SetObject(CartSessionKey, cart);
+            }
+        }
+
+        public void UpdateOfferQuantity(int offerItemId, int quantity)
+        {
+            var cart = GetCart();
+            var item = cart.OfferItems.FirstOrDefault(i => i.Id == offerItemId);
+
+            if (item != null)
+            {
+                if (quantity <= 0)
+                    cart.OfferItems.Remove(item);
                 else
                     item.Quantity = quantity;
 
