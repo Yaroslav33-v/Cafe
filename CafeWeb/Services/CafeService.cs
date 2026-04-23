@@ -1,5 +1,6 @@
 ﻿using CafeWeb.Models;
 using Dapper;
+using Npgsql;
 using System.Data;
 
 namespace CafeWeb.Services
@@ -8,7 +9,6 @@ namespace CafeWeb.Services
     {
         private readonly IDbConnection _connection;
         private readonly ILogger<CafeService> _logger;
-
 
         public CafeService(IDbConnection connection, ILogger<CafeService> logger)
         {
@@ -129,6 +129,64 @@ namespace CafeWeb.Services
             {
                 _logger.LogError("Не удалось получить блюдо: {message}", ex.Message);
                 throw new Exception("Не удалось получить блюдо");
+            }
+        }
+
+        public async Task UpdateFavourite(int foodId, int userId)
+        {
+            bool exists = await _connection.ExecuteScalarAsync<bool>(@"
+                SELECT EXISTS(
+                    SELECT 1 
+                    FROM public.favourite_food 
+                    WHERE food_id = @FoodId AND user_id = @UserId
+                )", 
+                new {
+                    FoodId = foodId,
+                    UserId = userId
+                });
+
+            if(exists)
+                // Удаляем запись
+                await _connection.ExecuteAsync(@"
+                    DELETE FROM public.favourite_food 
+                    WHERE food_id = @FoodId AND user_id = @UserId",
+                    new { FoodId = foodId, UserId = userId });
+            else
+                // Добавляем запись
+                await _connection.ExecuteAsync(@"
+                    INSERT INTO public.favourite_food (food_id, user_id) 
+                    VALUES (@FoodId, @UserId)",
+                    new { FoodId = foodId, UserId = userId });
+        }
+
+        public async Task<List<Food>> GetFoodsByIds(List<int> foodIds)
+        {
+            try
+            {
+                if (foodIds is null || !foodIds.Any())
+                    return [];
+
+                var result = await _connection.QueryAsync<Food>(@"
+                    SELECT 
+                        food_id AS Id,
+                        food_name AS Name,
+                        price AS Price,
+                        calories AS Calories,
+                        weight AS Weight,
+                        ingredients AS Ingredients,
+                        description AS Description,
+                        front_image_address AS FrontImageAddress,
+                        back_image_address AS BackImageAddress,
+                        category_id AS CategoryId
+                    FROM public.food
+                    WHERE food_id = ANY(@FoodIds)", new { FoodIds = foodIds });
+
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении блюд по ID: {Message}", ex.Message);
+                return [];
             }
         }
     }

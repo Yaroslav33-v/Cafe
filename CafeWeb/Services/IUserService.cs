@@ -8,5 +8,7 @@ namespace CafeWeb.Services
         Task SignUp(User user);
         Task<ClaimsIdentity> SignIn(User user);
         Task<bool> IsNewLogin(string login);
+        Task<List<OfferUserModel>> GetOffers();
+        Task<bool> ChangePassword(int userId, string current, string newPassword);
     }
 }

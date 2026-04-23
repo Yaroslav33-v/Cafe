@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Здравствуй, @ViewBag.Login ! </h1>
+        <p>Доступные действия:</p>
+        <div>
+            <button id="password-btn"> Сменить пароль </button>
+            <button onclick="goToPage('/user/orderhistory?userId=@ViewBag.Id')"> История заказов </button>
+            <button onclick="goToPage('/user/offers')"> Акции </button>
+            <button onclick="goToPage('/user/favourite?userId=@ViewBag.Id')"> Избранное </button>
+            @if(ViewBag.Role == "admin")
+            {
+                <button onclick="goToPage('/admin/index')">В админские угодья</button>
+            }
+        </div>
+        <dialog id="password-dialog">
+        <form id="password-form" method="post" action="/user/changepassword">
+                <h3>Смена пароля</h3>
+                <label>Текущий пароль: </label>
+                <input name="currentPassword" class="passwordInput" type="password" id="current-password">
+                <br>
+                <br>
+                <label>Новый пароль:</label>
+                <input name="newPassword" class="passwordInput" type="password" id="new-password">
+                <br>
+                <br>
+                <input name="userId" value="@ViewBag.Id" hidden/>
+                <button type="submit" id="confirm-btn">Изменить пароль</button>
+                <button type="button" id="cancel-btn">Отмена</button>
+            </form>
+        </dialog>
+        <script src="~/JS/goToPage.js"></script>
+        <script src="~/JS/showNotification.js"></script>
+        <script src="~/JS/userMainPage.js"></script>
+    </body>
+</html>
