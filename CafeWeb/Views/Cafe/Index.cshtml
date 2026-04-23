@@ -20,19 +20,19 @@
             <div class="main-menu">
                 @foreach(var category in Model)
                 {
-                    <div class="menu-category">
+                    <div class="menu-category" data-category-name="@category.Name">
 
                         <h1>@category.Name</h1>
                         @foreach(var food in category.Foods)
                         {
-                            <div class="card">
+                            <div class="card" data-card-id="@food.Id">
                                 <div class="card-images">
                                     <img id="front-img" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
                                     <img id="back-img" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
                                 </div>
                                 <span class="card-title">@food.Name</span>
                                 <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
-                                <button type="button" onclick="updateFavourite(@food.Id)">Добавить в избранное</button>
+                                <button type="button" onclick="updateFavourite(@food.Id, this)">Добавить в избранное</button>
                             </div>
                         }
                     </div>
