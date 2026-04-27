@@ -2,7 +2,8 @@
     // Подтверждение действия
     const isConfirmed = confirm('Вы уверены, что хотите очистить корзину?');
 
-    if (!isConfirmed) return;
+    if (!isConfirmed)
+        return;
 
     try {
         const response = await fetch('/cafe/clearcart');
@@ -37,9 +38,6 @@ async function updateQuantity(id, value) {
             // Получаем total span
             const totalSpan = foodBlock.querySelector(`[data-total]`);
 
-            if (data.totalItems <= 0) {
-                await clearCart()
-            }
             if (data.itemQuantity <= 0) {
                 foodBlock.remove();
             }

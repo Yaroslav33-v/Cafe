@@ -35,20 +35,20 @@ h1 {
     padding-bottom: 20px;
 }
 .tab-btn{
-background: linear-gradient(45deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
-color: white;
-border: none;
-padding: 15px 40px;
-font-size: 18px;
-font-weight: 600;
-border-radius: 50px;
-cursor: pointer;
-transition: all 0.3s ease;
-width: 100%;
-max-width: 200px;
-text-transform: uppercase;
-letter-spacing: 1px;
-box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    background: linear-gradient(45deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 230px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
 button:hover {

@@ -28,10 +28,16 @@
                         {
                             <div class="card" data-card-id="@food.Id">
                                 <div class="card-images">
-                                    <img id="front-img" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
-                                    <img id="back-img" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                    <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                    <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
                                 </div>
                                 <span class="card-title">@food.Name</span>
+                                <div>
+                                    <p>@food.Description</p>
+                                    <p>Ингрединеты: @food.Ingredients</p>
+                                    <p>@food.Calories ккал. на 100г. продукта</p>
+                                </div>
+                                
                                 <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
                                 <button type="button" onclick="updateFavourite(@food.Id, this)">Добавить в избранное</button>
                             </div>
