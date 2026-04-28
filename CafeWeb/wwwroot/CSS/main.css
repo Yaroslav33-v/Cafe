@@ -104,3 +104,8 @@
     font-size: 14px;
     opacity: 0.7;
 }
+
+dialog {
+    border-radius: 10px;
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+}

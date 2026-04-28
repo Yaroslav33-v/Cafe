@@ -1,4 +1,45 @@
-﻿async function addToCart(id){
+﻿async function openFoodModal(food) {
+    const modal = document.getElementById('food-modal');
+
+    const name = modal.querySelector('#modal-food-name');
+    const frontImg = modal.querySelector('#modal-food-img-front');
+    const backImg = modal.querySelector('#modal-food-img-back');
+    const price = modal.querySelector('#modal-food-price');
+    const weight = modal.querySelector('#modal-food-weight');
+    const desc = modal.querySelector('#modal-food-desc');
+    const ingredients = modal.querySelector('#modal-food-ingredients');
+    const calories = modal.querySelector('#modal-food-calories');
+
+    name.textContent = food.Name;
+    frontImg.src = food.FrontImageAddress;
+    frontImg.alt = food.Name;
+    backImg.src = food.BackImageAddress;
+    backImg.alt = food.Name;
+    price.textContent = food.Price;
+    weight.textContent = food.Weight;
+    desc.textContent = food.Description;
+    ingredients.textContent = food.Ingredients;
+    calories.textContent = food.Calories;
+
+    const addToCartBtn = modal.querySelector('#modal-food-cart-btn');
+    const updateFavBtn = modal.querySelector('#modal-food-fav-btn');
+    modal.querySelector('#close-btn').onclick = function () {
+        modal.close();
+    }
+
+    addToCartBtn.onclick = async function () {
+        await addToCart(food.Id);
+        modal.close();
+    }
+    updateFavBtn.onclick = async function () {
+        await updateFavourite(food.Id, updateFavBtn);
+        modal.close()
+    }
+
+    modal.showModal();
+}
+
+async function addToCart(id) {
     try {
         const response = await fetch(`/cafe/addtocart?foodId=${id}`);
         const data = await response.json();
