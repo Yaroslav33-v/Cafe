@@ -1,6 +1,6 @@
 -- Аккаунт админа: Логин: admin Пароль: admin
-INSERT INTO public.users (user_id, login, "password", is_admin) VALUES
-	(6, 'admin', '$2a$11$TRMvu6lidVqzqbQbYfCnt./ENGdgBNiMARUX8p64GriWbrvKAoENS', true);
+INSERT INTO public.users (login, password, is_admin) VALUES
+	('admin', '$2a$11$TRMvu6lidVqzqbQbYfCnt./ENGdgBNiMARUX8p64GriWbrvKAoENS', true);
 
 INSERT INTO public.categories (name) VALUES 
 	('Пиццы'),
