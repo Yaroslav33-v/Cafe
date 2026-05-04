@@ -34,13 +34,9 @@ namespace CafeWeb.Services
                 }
             );
         }
-        
-        public async Task<List<string>> GetCategoryNames()
-        {
-            IEnumerable<string> categoryNames = await _connection.QueryAsync<string>("SELECT name FROM public.categories");
 
-            return categoryNames.ToList();
-        }
+        public async Task<List<string>> GetCategoryNames() => 
+            (await _connection.QueryAsync<string>("SELECT name FROM public.categories")).ToList();
 
         public async Task InsertAdmin(User user)
         {
