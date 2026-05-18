@@ -1,4 +1,4 @@
-﻿async function openFoodModal(food) {
+﻿async function openFoodModal(food, element) {
     const modal = document.getElementById('food-modal');
 
     const name = modal.querySelector('#modal-food-name');
@@ -22,7 +22,16 @@
     calories.textContent = food.Calories;
 
     const addToCartBtn = modal.querySelector('#modal-food-cart-btn');
-    const updateFavBtns = modal.querySelector('#modal-food-fav-btn');
+    const updateFavBtn = modal.querySelector('.modal-food-fav-btn');
+    updateFavBtn.classList.remove('liked');
+
+    const card = element.parentElement;
+    const isLiked = card.querySelector('.modal-food-fav-btn').classList.contains('liked');
+
+    if (isLiked) {
+        updateFavBtn.classList.toggle('liked')
+    }
+
     modal.querySelector('#close-btn').onclick = function () {
         modal.close();
     }
@@ -33,7 +42,6 @@
     }
     updateFavBtn.onclick = async function () {
         await updateFavourite(food.Id, updateFavBtn);
-        modal.close()
     }
 
     modal.showModal();
@@ -113,15 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = card.querySelector('button[onclick*="updateFavourite"]');
 
             if (button && ids.includes(foodId)) {
-                button.textContent = 'В избранном';
-
-                button.onmouseenter = () => {
-                    button.textContent = 'Удалить из избранного';
-                };
-
-                button.onmouseleave = () => {
-                    button.textContent = 'В избранном';
-                };
+                button.classList.toggle('liked')
             }
         });
     }

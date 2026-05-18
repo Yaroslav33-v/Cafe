@@ -28,7 +28,7 @@
                         @foreach(var food in category.Foods)
                         {
                             <div class="card" data-card-id="@food.Id">
-                                <div onclick="openFoodModal(@JsonSerializer.Serialize(food))">
+                                <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
                                     <div class="card-images">
                                         <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
                                         <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
@@ -98,7 +98,7 @@
         </div>
         <div id="modal-controls">
             <button id="modal-food-cart-btn" type="button">Добавить <span id="modal-food-price"></span> р. </button>
-            <button id="modal-food-fav-btn" type="button"></button>
+            <button class="modal-food-fav-btn" type="button"></button>
             <button id="close-btn" type="button">Закрыть</button>
         </div>
     </dialog>
