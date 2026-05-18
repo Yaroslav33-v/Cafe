@@ -40,8 +40,10 @@ CREATE TABLE public.users(
 CREATE TABLE public.orders(
 	order_id SERIAL PRIMARY KEY,
 	order_number VARCHAR(5) NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	status VARCHAR(20) NOT NULL CHECK (status IN (
+		'Ожидает оплаты',
+		'Ошибка оплаты',
 		'Готовится',
 		'Готов'
 	)),
@@ -67,7 +69,8 @@ CREATE TABLE public.offers_food(
 CREATE TABLE public.food_orders(
 	id BIGSERIAL PRIMARY KEY,
 	food_id INTEGER REFERENCES public.food(food_id),
-	order_id INTEGER REFERENCES public.orders(order_id)
+	order_id INTEGER REFERENCES public.orders(order_id),
+	food_quantity INTEGER NOT NULL CHECK (food_quantity > 0)
 );
 
 CREATE TABLE public.favourite_food(

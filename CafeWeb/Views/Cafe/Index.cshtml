@@ -1,4 +1,5 @@
-﻿@model List<CafeWeb.Models.Category> // Подключение модели к представлению
+﻿@using System.Text.Json
+@model List<CafeWeb.Models.Category> // Подключение модели к представлению
 
 <!DOCTYPE html>
 <html>
@@ -6,8 +7,7 @@
     <title>Кафе "4 Творожка"</title>
     <link href="~/CSS/main.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
-    <link rel="stylesheet" href="~/elegant_font/HTML_CSS/style.css">
-    <link rel="stylesheet" href="~/elegant_font/HTML_CSS/mfglabs_iconset.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <header>
@@ -22,17 +22,27 @@
             <div class="main-menu">
                 @foreach(var category in Model)
                 {
-                    <div class="menu-category">
+                    <div class="menu-category" data-category-name="@category.Name">
 
                         <h1>@category.Name</h1>
                         @foreach(var food in category.Foods)
                         {
-                            <div class="card">
-                                <div class="card-images">
-                                    <img id="front-img" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
-                                    <img id="back-img" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                            <div class="card" data-card-id="@food.Id">
+                                <div onclick="openFoodModal(@JsonSerializer.Serialize(food))">
+                                    <div class="card-images">
+                                        <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                        <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                    </div>
+                                    <span class="card-title">@food.Name</span>
+                                    <div>
+                                        <p>@food.Description</p>
+                                        <p>Ингредиенты: @food.Ingredients</p>
+                                        <p>@food.Calories ккал. на 100г. продукта</p>
+                                    </div>
                                 </div>
-                                <span class="card-title">@food.Name</span>
+                                
+                                <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
+                                <button type="button" onclick="updateFavourite(@food.Id, this)">Добавить в избранное</button>
                             </div>
                         }
                     </div>
@@ -50,10 +60,10 @@
                 <div class="footer-col">
                     <h4>Контакты</h4>
                     <ul>
-                        <li><i class="fas icon_house"></i> ул. Асаткина, 32</li>
-                        <li><i class="fas icon_phone"></i> +7 (904) 033-08-49</li>
-                        <li><i class="fas icon_clock"></i> Ежедневно с 9:00 до 23:00</li>
-                        <li> <i class="fas icon-mail"></i>hello4tvorojka@mail.ru</li>
+                        <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
+                        <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
+                        <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
+                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -70,8 +80,27 @@
             </div>
         </div>
     </footer>
+    <dialog id="food-modal" >
+        <div id="food-info">
+            <h1 id="modal-food-name"></h1>
+            <img id="modal-food-img-front" width="300" height="200" />
+            <img id="modal-food-img-back" width="300" height="200" />
+            <div>
+                <p><span id="modal-food-price"></span> руб.</p>
+                <p><span id="modal-food-weight"></span> г.</p>
+                <p id="modal-food-desc"></p>
+                <p>Ингредиенты: <span id="modal-food-ingredients"></span></p>
+                <p><span id="modal-food-calories"></span> ккал. на 100г. продукта</p>
+            </div>
+        </div>
+        <div id="modal-controls">
+            <button id="modal-food-cart-btn" type="button">Добавить в корзину</button>
+            <button id="modal-food-fav-btn" type="button">Добавить в избранное</button>
+            <button id="close-btn" type="button">Закрыть</button>
+        </div>
+    </dialog>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/main.js"></script>
     <script src="~/JS/checkRole.js"></script>
 </body>
-
 </html>
-

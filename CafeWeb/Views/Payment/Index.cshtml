@@ -33,7 +33,7 @@
                 <input id="cvv" class="payment-input" type="text" inputmode="numeric" maxlength="3"
                        placeholder="CVV" autocomplete="cc-csc" name="CvvCode" required />
                 <div class="under-pay">
-                    <b>К оплате <span id="total-price">@ViewBag.Total</span> руб.</b>
+                    <b>К оплате <span id="total-price">@ViewBag.Total.ToString("N2")</span> руб.</b>
                     <input id="total-input" hidden value="@ViewBag.Total" name="TotalAmount" style="width: 0px"/>
                     <input id="total-input" hidden value="@ViewBag.Original" name="OriginalAmount" style="width: 0px" />
                     <input name="Promocode" id="promo" class="payment-input" type="text" placeholder="Введите промокод" maxlength="20" />

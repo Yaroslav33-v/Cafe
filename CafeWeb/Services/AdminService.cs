@@ -34,17 +34,13 @@ namespace CafeWeb.Services
                 }
             );
         }
-        
-        public async Task<List<string>> GetCategoryNames()
-        {
-            IEnumerable<string> categoryNames = await _connection.QueryAsync<string>("SELECT name FROM public.categories");
 
-            return categoryNames.ToList();
-        }
+        public async Task<List<string>> GetCategoryNames() => 
+            (await _connection.QueryAsync<string>("SELECT name FROM public.categories")).ToList();
 
         public async Task InsertAdmin(User user)
         {
-            _logger.LogInformation("Получена заявка на регистрацию нового админа: " + user.Login);
+            _logger.LogInformation("Получена заявка на регистрацию нового админа: {Login}", user.Login);
             try
             {
                 string hashedPassword = _passwordService.HashPassword(user.Password);
@@ -66,12 +62,12 @@ namespace CafeWeb.Services
             }
             catch (PostgresException ex)
             {
-                _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
+                _logger.LogError("Внутренняя ошибка в базе данных: {message}", ex.Message);
                 throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                _logger.LogError("Непридвиденная внутренняя ошибка: {message}", ex.Message);
                 throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }
@@ -136,12 +132,12 @@ namespace CafeWeb.Services
             }
             catch (PostgresException ex)
             {
-                _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
+                _logger.LogError("Внутренняя ошибка в базе данных: {message}", ex.Message);
                 throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                _logger.LogError("Непридвиденная внутренняя ошибка: {message}", ex.Message);
                 throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }
@@ -189,12 +185,12 @@ namespace CafeWeb.Services
             }
             catch (PostgresException ex)
             {
-                _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
+                _logger.LogError("Внутренняя ошибка в базе данных: {message}", ex.Message);
                 throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                _logger.LogError("Непридвиденная внутренняя ошибка: {message}", ex.Message);
                 throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }
@@ -224,12 +220,12 @@ namespace CafeWeb.Services
             }
             catch (PostgresException ex)
             {
-                _logger.LogError("Внутренняя ошибка в базе данных: " + ex.Message);
+                _logger.LogError("Внутренняя ошибка в базе данных: {message}", ex.Message);
                 throw new Exception("Внутренняя ошибка в базе данных");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Непридвиденная внутренняя ошибка: " + ex.Message);
+                _logger.LogError("Непридвиденная внутренняя ошибка: {message}", ex.Message);
                 throw new Exception("Непридвиденная внутренняя ошибка");
             }
         }

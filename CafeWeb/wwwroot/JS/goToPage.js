@@ -1,3 +1,3 @@
 ﻿function goToPage(url) {
-    document.location.replace(url);
+    document.location.href = url;
 }

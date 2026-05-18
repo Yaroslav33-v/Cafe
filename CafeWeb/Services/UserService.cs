@@ -1,5 +1,6 @@
 ﻿using CafeWeb.Models;
 using Dapper;
+using Npgsql;
 using System.Data;
 using System.Security.Claims;
 
@@ -52,7 +53,7 @@ namespace CafeWeb.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ошибка при входе в аккаунт: " + ex.Message);
+                _logger.LogError("Ошибка при входе в аккаунт: {message}", ex.Message);
                 throw new Exception("Проблема при входе в аккаунт");
             }
         }
@@ -70,7 +71,7 @@ namespace CafeWeb.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ошибка при создании аккаунта: " + ex.Message);
+                _logger.LogError("Ошибка при создании аккаунта: {message}", ex.Message);
                 throw new Exception("Ошибка при создании аккаунта. Попробуйте позже");
             }
         }
@@ -88,7 +89,105 @@ namespace CafeWeb.Services
             }
             catch(Exception ex) 
             {
-                _logger.LogError("Ошибка при получении данных о логине: " + ex.Message);
+                _logger.LogError("Ошибка при получении данных о логине: {message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<OfferUserModel>> GetOffers()
+        {
+            try
+            {
+                var offerDictionary = new Dictionary<string, OfferUserModel>();
+
+                await _connection.QueryAsync<Offer, Food, OfferUserModel>(
+                    @"SELECT 
+                        o.offer_id AS Id,
+                        o.offer_name AS Name,
+                        o.description AS Description,
+                        o.discount AS Discount,
+                        o.starts_at::TIMESTAMP AS StartsAt,
+                        o.ends_at::TIMESTAMP AS EndsAt,
+                        f.food_id AS Id,
+                        f.food_name AS Name,
+                        f.price AS Price,
+                        f.calories AS Calories,
+                        f.weight AS Weight,
+                        f.ingredients AS Ingredients,
+                        f.description AS Description,
+                        f.front_image_address AS FrontImageAddress,
+                        f.back_image_address AS BackImageAddress,
+                        f.category_id AS CategoryId
+                    FROM public.offers o
+                    LEFT JOIN public.offers_food of ON o.offer_id = of.offer_id
+                    LEFT JOIN public.food f ON of.food_id = f.food_id
+                    WHERE o.ends_at >= CURRENT_DATE
+                    ORDER BY o.offer_id, f.food_id",
+                    (offer, food) =>
+                    {
+                        if (!offerDictionary.TryGetValue(offer.Name, out var currentOffer))
+                        {
+                            currentOffer = new OfferUserModel
+                            {
+                                Offer = offer,
+                                Foods = []
+                            };
+                            offerDictionary.Add(currentOffer.Offer.Name, currentOffer);
+                        }
+
+                        if (food != null && food.Id > 0)
+                            currentOffer.Foods.Add(food);
+
+                        return currentOffer;
+                    },
+                    splitOn: "Id"
+                );
+
+                return offerDictionary.Values.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Не удалось получить акции: {message}", ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> ChangePassword(int userId, string current, string newPassword)
+        {
+            try
+            {
+                string? hash = await _connection.QueryFirstOrDefaultAsync<string>(@"
+                    SELECT password FROM public.users
+                    WHERE user_id = @UserId", new { UserId = userId });
+
+                if (string.IsNullOrWhiteSpace(hash))
+                    throw new KeyNotFoundException("Не удалось получить данные пользователя");
+
+                if (!_passwordService.VerifyPassword(current, hash))
+                    return false;
+
+                int affected = await _connection.ExecuteAsync(@"
+                    UPDATE public.users 
+                    SET password = @NewPassword
+                    WHERE user_id = @UserId",
+                    new
+                    {
+                        NewPassword = _passwordService.HashPassword(newPassword),
+                        UserId = userId
+                    });
+
+                if (affected <= 0)
+                    throw new Exception("Не удалось обновить пароль");
+
+                return true;
+            }
+            catch (KeyNotFoundException)
+            {
+                throw;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Не удалось обновить пароль: {message}", ex.Message);
                 throw;
             }
         }
