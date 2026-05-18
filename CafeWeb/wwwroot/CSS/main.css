@@ -109,3 +109,71 @@ dialog {
     border-radius: 10px;
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
 }
+.modal-food-fav-btn {
+    width: 80px;
+    height: 80px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+    outline: none;
+    transition: transform 0.2s;
+}
+
+    .modal-food-fav-btn:active {
+        transform: scale(0.85);
+    }
+
+   
+    .modal-food-fav-btn::before,
+    .modal-food-fav-btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 40px;
+        height: 64px;
+        border-radius: 40px 40px 0 0;
+        background: #ff4d6d;
+    }
+
+    .modal-food-fav-btn::before {
+        left: 40px;
+        transform: rotate(-45deg);
+        transform-origin: 0 100%;
+    }
+
+    .modal-food-fav-btn::after {
+        left: 0;
+        transform: rotate(45deg);
+        transform-origin: 100% 100%;
+    }
+
+   
+    .modal-food-fav-btn.liked::before,
+    .modal-food-fav-btn.liked::after {
+        background: #e63950;
+    }
+
+    
+    .modal-food-fav-btn.liked {
+        animation: pulse 0.4s ease;
+    }
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.3);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

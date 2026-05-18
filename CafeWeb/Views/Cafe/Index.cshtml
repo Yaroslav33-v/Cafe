@@ -42,7 +42,7 @@
                                 </div>
                                 
                                 <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
-                                <button type="button" onclick="updateFavourite(@food.Id, this)">Добавить в избранное</button>
+                                <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
                             </div>
                         }
                     </div>
@@ -82,20 +82,23 @@
     </footer>
     <dialog id="food-modal" >
         <div id="food-info">
+            
             <h1 id="modal-food-name"></h1>
             <img id="modal-food-img-front" width="300" height="200" />
             <img id="modal-food-img-back" width="300" height="200" />
+
             <div>
-                <p><span id="modal-food-price"></span> руб.</p>
-                <p><span id="modal-food-weight"></span> г.</p>
+          
+                <p> Вес: <span id="modal-food-weight"></span> г.</p>
                 <p id="modal-food-desc"></p>
                 <p>Ингредиенты: <span id="modal-food-ingredients"></span></p>
                 <p><span id="modal-food-calories"></span> ккал. на 100г. продукта</p>
+
             </div>
         </div>
         <div id="modal-controls">
-            <button id="modal-food-cart-btn" type="button">Добавить в корзину</button>
-            <button id="modal-food-fav-btn" type="button">Добавить в избранное</button>
+            <button id="modal-food-cart-btn" type="button">Добавить <span id="modal-food-price"></span> р. </button>
+            <button id="modal-food-fav-btn" type="button"></button>
             <button id="close-btn" type="button">Закрыть</button>
         </div>
     </dialog>

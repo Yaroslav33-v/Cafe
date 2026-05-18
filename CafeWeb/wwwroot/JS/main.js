@@ -22,7 +22,7 @@
     calories.textContent = food.Calories;
 
     const addToCartBtn = modal.querySelector('#modal-food-cart-btn');
-    const updateFavBtn = modal.querySelector('#modal-food-fav-btn');
+    const updateFavBtns = modal.querySelector('#modal-food-fav-btn');
     modal.querySelector('#close-btn').onclick = function () {
         modal.close();
     }
@@ -73,15 +73,13 @@ async function updateFavourite(foodId, buttonElement) {
         const response = await fetch(`/cafe/updatefavourite?foodId=${foodId}`);
         const data = await response.json();
 
-        let btnText = buttonElement.textContent;
-
         if (response.ok && data.success) {
             // Успешное добавление
             showNotification(data.message, 'success');
-            if (btnText === 'Добавить в избранное') {
-                buttonElement.textContent = 'Удалить из избранного';
+            if (buttonElement.classList.contains('liked')) {
+                buttonElement.classList.toggle('liked');
             } else {
-                buttonElement.textContent = 'Добавить в избранное';
+                buttonElement.classList.toggle('liked');
             }
             // Здесь надо как-то изменять блок избранных
             // Самый простой вариант: Подождать 2-3 секунды и обновить страницу, но можешь сделать че то другое
