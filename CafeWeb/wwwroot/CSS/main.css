@@ -2,39 +2,67 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     min-height: 100vh;
-    
+    overflow-x: hidden;
 }
 
 header {
-    
     flex-shrink: 0;
+    margin: 0;
+    padding: 40px 0; 
+    position: relative;
 }
 
 .header-top {
-    background: linear-gradient(135deg, #F5E6D3 0%, #FFF8F0 50%, #FAEBD7 100%); 
-    padding: 20px 0;
+    width: 100%;
+    background: linear-gradient(135deg, #F5E6D3 0%, #FFF8F0 50%, #FAEBD7 100%);
+    padding: 0;
+    height: 75px; 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-bottom: 2px solid #DEB887;
+    display: flex;
+    align-items: center;
+    position: relative;
+   
+    border-radius: 50px; 
+    
 }
 
 .header-content {
-    width:100%;
+    max-width: 1000px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    position: relative;
 }
 
-.logo img {
-    height: 50px;
-    width: auto;
+.logo {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%); 
+    z-index: 2;
+}
+
+    .logo img {
+        display: block;
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+    }
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    margin-left: 160px; 
+   
 }
 
 .header-nav {
     display: flex;
-    gap: 20px;
-    align-items: center;
+    gap: 25px;
 }
 
     .header-nav a {
@@ -55,15 +83,14 @@ header {
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
     color: white;
     border: none;
-    padding: 10px 25px;
-    font-size: 16px;
-    font-weight: 500;
+    padding: 8px 25px;
     border-radius: 25px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 10px rgba(160, 82, 45, 0.3);
+    font-size: 16px;
     white-space: nowrap;
-    margin-left: 10px;
+    flex-shrink: 0;
+    z-index: 2;
+    margin-right: 10px;
 }
 
     .login-btn:hover {
@@ -76,23 +103,53 @@ header {
         transform: translateY(0);
     }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-icon {
+    position: relative;
+    color: #8B4513;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 24px;
+}
+
+    .cart-icon:hover {
+        color: #A0522D;
+    }
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4757;
+    color: white;
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
 .search-wrapper {
-    padding: 20px 0;
+    padding: 20px 150px;
+    margin-top: 30px;
 }
 
 .search {
-    max-width: 1000px; 
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 20px;
-}
-
-.search {
     width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
 }
 #searchInput {
-    width: 50%;
+    width: 100%;
     padding: 12px 15px;
     font-size: 16px;
     border: 2px solid #e0e0e0;
@@ -100,6 +157,7 @@ header {
     transition: all 0.3s ease;
     background: white;
     outline: none;
+    box-sizing: border-box;
 }
 
     #searchInput:focus {
@@ -154,11 +212,11 @@ dialog {
 .modal-food-fav-btn {
     position: absolute;
     top: 5px;
-    left: 7px;
+    right: 72px;
     z-index: 10;
     border-radius: 50%;
-    width: 5px;
-    height: 5px;
+    width: 1px;
+    height: 1px;
     border: none;
     padding: 0;
     outline: none;
@@ -360,7 +418,9 @@ dialog {
 .footer {
     background: #2d2d2d;
     color: #f0f0f0;
-    padding: 60px 0 30px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 .container-foot {
     max-width: 1200px;

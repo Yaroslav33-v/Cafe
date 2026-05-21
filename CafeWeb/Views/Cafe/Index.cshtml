@@ -1,5 +1,5 @@
 ﻿@using System.Text.Json
-@model List<CafeWeb.Models.Category> // Подключение модели к представлению
+@model List<CafeWeb.Models.Category> 
 
 <!DOCTYPE html>
 <html>
@@ -13,14 +13,23 @@
     <header>
         <div class="header-top">
             <div class="header-content">
-                <div class="logo">
-                    <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                <div class="header-left">
+                    <div class="logo">
+                        <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                    </div>
+                    <nav class="header-nav">
+                        <a href="~/HTML/about.html">О нас</a>
+                        <a href="~/HTML/faq.html">FAQ</a>
+                    </nav>
                 </div>
-                <nav class="header-nav">
-                    <a href="~/HTML/about.html">О нас</a>
-                    <a href="~/HTML/faq.html">FAQ</a>
-                    <button class="login-btn" onclick="goToPage('/user/SingIn/')"></button>
-                </nav>
+                <div class="header-actions">
+                    <a href="/cart" class="cart-icon" title="Корзина">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <button class="login-btn" onclick="goToPage('/user/SingIn/')">Войти</button>
+                </div>
+                
             </div>
         </div>
         <div class="search-wrapper">
