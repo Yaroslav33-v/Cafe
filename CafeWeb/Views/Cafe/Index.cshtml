@@ -18,22 +18,22 @@
                         <img src="~/IMG/logo-cafe.png" alt="Logo" />
                     </div>
                     <nav class="header-nav">
-                        <a href="~/HTML/about.html">О нас</a>
-                        <a href="~/HTML/faq.html">FAQ</a>
+                        <a href="/about">О нас</a>
+                        <a href="/faq">FAQ</a>
                     </nav>
                 </div>
                 <div class="header-actions">
-                    <a href="/cart" class="cart-icon" title="Корзина">
+                    <a href="/cafe/cart" class="cart-icon" title="Корзина">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
                     </a>
-                    <button class="login-btn" onclick="goToPage('/user/SingIn/')">Войти</button>
+                    <button class="login-btn" onclick="goToPage('/user/signin')">Войти</button>
                 </div>
                 
             </div>
         </div>
         <div class="search-wrapper">
-            <div calss="search">
+            <div class="search">
                 <input type="text" id="searchInput" placeholder="Поиск блюд...">
             </div>
         </div>
@@ -126,6 +126,7 @@
             <button id="close-btn" type="button">Закрыть</button>
         </div>
     </dialog>
+    <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
     <script src="~/JS/main.js"></script>
     <script src="~/JS/checkRole.js"></script>

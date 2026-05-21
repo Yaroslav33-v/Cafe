@@ -156,7 +156,7 @@ app.MapGet("/me", (HttpContext context) =>
         name,
         role
     });
-}).RequireAuthorization(); // endpoint для получения данных о пользователе
+});// endpoint для получения данных о пользователе
 
 app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService promocodeService) => {
     try
