@@ -203,12 +203,90 @@ header {
     border-left: 4px solid #ffc107;
 }
 
-
-
-dialog {
-    border-radius: 10px;
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+#food-modal {
+    border: none;
+    border-radius: 20px;
+    padding: 25px;
+    background: linear-gradient(135deg, #F5E6D3 0%, #FFF8F0 50%, #FAEBD7 100%);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 350px;
+    width: 90%;
 }
+
+    #food-modal::backdrop {
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+#food-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    overflow-x: hidden;
+}
+
+#modal-food-name {
+    margin: 0;
+    font-size: 22px;
+    color: #8B4513;
+    text-align: center;
+}
+
+#modal-food-img-front {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+#modal-food-img-back {
+    display: none; /* скрываем вторую фотку */
+}
+
+#food-info div p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #5D3A1A;
+}
+
+#modal-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+#modal-food-cart-btn {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+    #modal-food-cart-btn:hover {
+        background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    }
+#close-btn {
+    background: transparent;
+    border: 1px solid #A0522D;
+    color: #A0522D;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+    #close-btn:hover {
+        background: #A0522D;
+        color: white;
+    }
+    
 .modal-food-fav-btn {
     position: absolute;
     top: 5px;
