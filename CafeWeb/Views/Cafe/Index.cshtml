@@ -11,7 +11,23 @@
 </head>
 <body>
     <header>
-        <!--Здесь: поиск, faq, about, вход в аккаунт-->
+        <div class="header-top">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                </div>
+                <nav class="header-nav">
+                    <a href="~/HTML/about.html">О нас</a>
+                    <a href="~/HTML/faq.html">FAQ</a>
+                    <button class="login-btn" onclick="goToPage('/user/SingIn/')"></button>
+                </nav>
+            </div>
+        </div>
+        <div class="search-wrapper">
+            <div calss="search">
+                <input type="text" id="searchInput" placeholder="Поиск блюд...">
+            </div>
+        </div>
     </header>
     <aside>
         <!--Для боковой панели с переходами по меткам-->
@@ -26,21 +42,23 @@
                         <div class="menu-category" data-category-name="@category.Name">
 
                             <h1>@category.Name</h1>
-                            @foreach(var food in category.Foods)
-                            {
-                                <div class="card" data-card-id="@food.Id">
-                                    <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
-                                        <div class="card-images">
-                                            <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
-                                            <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                            <div class="category-items">
+                                @foreach(var food in category.Foods)
+                                {
+                                    <div class="card" data-card-id="@food.Id">
+                                        <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
+                                            <div class="card-images">
+                                                <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                                <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                            </div>
+                                            <span class="card-title">@food.Name</span>
                                         </div>
-                                        <span class="card-title">@food.Name</span>
-                                    </div>
                                 
-                                    <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
-                                    <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
-                                </div>
-                            }
+                                        <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
+                                        <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     }
                 </div>
@@ -102,5 +120,6 @@
     <script src="~/JS/showNotification.js"></script>
     <script src="~/JS/main.js"></script>
     <script src="~/JS/checkRole.js"></script>
+    <script src="~/JS/Search.js"></script>
 </body>
 </html>
