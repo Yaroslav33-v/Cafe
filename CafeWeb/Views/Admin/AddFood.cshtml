@@ -42,7 +42,7 @@
             }
         </div>
     </div>
-    <!-- Контейнер для формы (оригинальная форма будет скрыта) -->
+    
     <div style="display: none;">
         <form id="originalForm" method="post" action="/admin/addfood" enctype="multipart/form-data">
             @if (Model.Categories != null && Model.Categories.Any())
@@ -89,16 +89,16 @@
         </form>
     </div>
 
-    <!-- Модальное окно -->
+    
     <div id="foodModal" class="food-modal">
         <div class="food-modal-content">
             <div class="food-modal-header">
-                <h2>➕ Добавление нового блюда</h2>
+                <h2> Добавление нового блюда</h2>
                 <span class="food-modal-close">&times;</span>
             </div>
             <div class="food-modal-body">
                 <div id="formContainer">
-                    <!-- Сюда будет скопирована форма -->
+                    
                 </div>
             </div>
         </div>

@@ -16,42 +16,39 @@
     <aside>
         <!--Для боковой панели с переходами по меткам-->
     </aside>
-    <main>
-        @if(Model != null && Model.Any())
-        {
-            <div class="main-menu">
-                @foreach(var category in Model)
-                {
-                    <div class="menu-category" data-category-name="@category.Name">
+    <main class="main-content">
+        <div class="container">
+            @if(Model != null && Model.Any())
+            {
+                <div class="main-menu">
+                    @foreach(var category in Model)
+                    {
+                        <div class="menu-category" data-category-name="@category.Name">
 
-                        <h1>@category.Name</h1>
-                        @foreach(var food in category.Foods)
-                        {
-                            <div class="card" data-card-id="@food.Id">
-                                <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
-                                    <div class="card-images">
-                                        <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
-                                        <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                            <h1>@category.Name</h1>
+                            @foreach(var food in category.Foods)
+                            {
+                                <div class="card" data-card-id="@food.Id">
+                                    <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
+                                        <div class="card-images">
+                                            <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                            <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                        </div>
+                                        <span class="card-title">@food.Name</span>
                                     </div>
-                                    <span class="card-title">@food.Name</span>
-                                    <div>
-                                        <p>@food.Description</p>
-                                        <p>Ингредиенты: @food.Ingredients</p>
-                                        <p>@food.Calories ккал. на 100г. продукта</p>
-                                    </div>
-                                </div>
                                 
-                                <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
-                                <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-        }
+                                    <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
+                                    <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </main>
     <footer class="footer">
-        <div class="container">
+        <div class="container-foot">
             <div class="footer-content">
                 <div class="footer-col">
                     <h4>Четыре творожка</h4>
