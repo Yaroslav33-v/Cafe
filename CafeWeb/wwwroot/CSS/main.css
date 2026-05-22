@@ -1,9 +1,28 @@
 ﻿body {
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     min-height: 100vh;
     overflow-x: hidden;
 }
+
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 50px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #f6d6aa;
+    border-radius: 10px;
+}
+
+    body::-webkit-scrollbar-thumb:hover {
+        background: #f9cc75;
+    }
 
 header {
     flex-shrink: 0;
@@ -211,6 +230,7 @@ header {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     max-width: 350px;
     width: 90%;
+    overflow-x: hidden;
 }
 
     #food-modal::backdrop {
@@ -396,6 +416,7 @@ header {
 }
 
 .back-image {
+    object-fit: cover;
     top: 0;
     left: 0;
     z-index: 2;
@@ -404,6 +425,26 @@ header {
 
 .card:hover .back-image {
     transform: translateY(0);
+}
+.card:hover .front-image {
+    animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    99% {
+        opacity: 0;
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 .card-title {
@@ -421,7 +462,7 @@ header {
     padding: 20px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    border-radius: 20px;
+    border-radius: 20px 11px 11px 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     padding: 20px 30px;
     position: relative;
@@ -500,6 +541,10 @@ header {
     padding: 0;
     box-sizing: border-box;
 }
+.footer img {
+    width:150px;
+    height: 112px;
+}
 .container-foot {
     max-width: 1200px;
     margin: 0 auto;
@@ -561,6 +606,27 @@ header {
 }
 
 
+.container::-webkit-scrollbar {
+    width: 10px;
+    
+}
+
+.container::-webkit-scrollbar-track {
+    background: white; 
+    border-radius: 50px;
+    
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: #f6d6aa;
+    border-radius: 10px;
+}
+
+    .container::-webkit-scrollbar-thumb:hover {
+        background: #f9cc75;
+    }
+
+
 @keyframes slideInRight {
     from {
         transform: translateX(100%);
@@ -598,3 +664,4 @@ header {
         transform: translateX(5px);
     }
 }
+
