@@ -32,10 +32,7 @@
                 line-height: 1.5;
             ">
                 <div style="margin-bottom: 15px;">
-                    🍪 Мы используем файлы cookie для улучшения работы сайта. 
-                    Продолжая использование, вы соглашаетесь с нашей 
-                    <a href="/privacy-policy" style="color: #ffa500; text-decoration: underline;">политикой конфиденциальности</a>.
-                </div>
+                    🍪 Мы используем файлы cookie для улучшения работы сайта.                 
                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
                     <button id="cookie-reject" style="
                         background: #555;
@@ -45,6 +42,7 @@
                         cursor: pointer;
                         border-radius: 6px;
                         font-size: 13px;
+                        margin-top: 10px;
                     ">Принимаю только необходимые</button>
                     <button id="cookie-accept" style="
                         background: #4CAF50;
@@ -55,6 +53,7 @@
                         border-radius: 6px;
                         font-weight: bold;
                         font-size: 13px;
+                        margin-top: 10px;
                     ">Принимаю все</button>
                 </div>
             </div>
