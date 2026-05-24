@@ -47,6 +47,14 @@
     </header>
     <aside>
         <!--Для боковой панели с переходами по меткам-->
+        <nav>
+            <ul>
+                @foreach(var category in Model)
+                {
+                    <a href="#@category.Name.Replace(" ", "-")">@category.Name</a>
+                }
+            </ul>
+        </nav>
     </aside>
     <main class="main-content">
         <div class="container">
@@ -55,7 +63,7 @@
                 <div class="main-menu">
                     @foreach(var category in Model)
                     {
-                        <div class="menu-category" data-category-name="@category.Name">
+                        <div id="@category.Name.Replace(" ", "-")" class="menu-category" data-category-name="@category.Name">
 
                             <h1>@category.Name</h1>
                             <div class="category-items">
@@ -138,5 +146,6 @@
     <script src="~/JS/main.js"></script>
     <script src="~/JS/Search.js"></script>
     <script src="~/JS/cookieConsent.js"></script>
+    <script src="~/JS/nav.js"></script>
 </body>
 </html>
