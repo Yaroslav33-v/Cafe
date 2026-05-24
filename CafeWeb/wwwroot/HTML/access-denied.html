@@ -8,6 +8,12 @@
     <link href="../CSS/access-denied.css" rel="stylesheet" />
 </head>
 <body>
+    <noscript>
+        <!-- Отображается только если у пользователя выключен js в браузере -->
+        <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
+            Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
+        </div>
+    </noscript>
     <div class="container">
         <img id="logo" src="../IMG/logo-cafe.png" />
         <div class="container-row">
@@ -27,13 +33,13 @@
 
         </div>
     </div>
-   
+
     <script>
-      
+
         function goToMainPage() {
-            document.location.replace("/Cafe/Index")
+            document.location.replace("/cafe/index")
         }
     </script>
-  
+
 </body>
 </html>

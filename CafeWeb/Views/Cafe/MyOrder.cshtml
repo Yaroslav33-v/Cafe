@@ -11,6 +11,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     </head>
     <body>
+    <noscript>
+        <!-- Отображается только если у пользователя выключен js в браузере -->
+        <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
+            Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
+        </div>
+    </noscript>
     @if (!Model.Any())
     {
         <p>В данный момент для вас нет ни одного заказа</p>
