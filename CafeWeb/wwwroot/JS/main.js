@@ -1,4 +1,30 @@
-﻿async function openFoodModal(food, element) {
+﻿async function updateCartCounter() {
+    try {
+        const response = await fetch('/cart-count');
+        const data = await response.json();
+
+        const cartCounter = document.querySelector('.cart-count');
+        if (cartCounter) {
+            cartCounter.textContent = data.count;
+        }
+    } catch (error) {
+        console.error('Ошибка обновления корзины: ', error);
+    }
+}
+
+async function getUserData() {
+    try {
+        const response = await fetch('/me');
+        const data = await response.json();
+
+        return data;
+
+    } catch (error){
+        console.error('Ошибка получения данных пользователя: ', error);
+    }
+}
+
+async function openFoodModal(food, element) {
     const modal = document.getElementById('food-modal');
 
     const name = modal.querySelector('#modal-food-name');
@@ -54,6 +80,7 @@ async function addToCart(id) {
         if (response.ok && data.success) {
             // Успешное добавление
             showNotification(data.message || 'Блюдо добавлено в корзину!', 'success');
+            await updateCartCounter();
         } else if (response.status === 400) {
             // Ошибка валидации
             showNotification(data.message || 'Нельзя добавить это блюдо', 'warning');
@@ -109,9 +136,54 @@ async function updateFavourite(foodId, buttonElement) {
     }   
 }
 
+function sanitizeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Над этим тоже рекомендую подумать, потому что без перезагрузки страницы, у него начинаются проблемы
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Отображаем кнопку для входа, либо имя пользователя
+    let user = await getUserData();
+
+    const profileActionsDiv = document.getElementById('profile-actions');
+
+    if (user.name) {
+        const safeName = sanitizeHtml(user.name);
+        profileActionsDiv.innerHTML = `
+            <a href="/user/me" class="user-icon" title="Профиль">
+                <i class="fas fa-user-circle"></i>
+                <span class="username">${safeName}</span>
+            </a>`;
+    }
+    else {
+        profileActionsDiv.innerHTML = `
+            <button class="login-btn" onclick="goToPage('/user/signin')">
+                Войти
+            </button>`;
+    }
+
+    // Добавляем действие для тайной кнопки
+    const adminTeleportation = document.getElementById('admin-relocation');
+    adminTeleportation.addEventListener('click', async () => {
+        let data = await getUserData();
+
+        if (data.role === "admin") {
+            document.location.replace("/admin/index");
+        }
+    });
+
+    // Обновляем корзину
+    await updateCartCounter();
+
+    // Работаем с избранным
     const favoriteDiv = document.querySelector('.menu-category[data-category-name="Избранное"]');
+
     if (favoriteDiv) {
         const ids = Array.from(favoriteDiv.querySelectorAll('.card')).map(card => parseInt(card.dataset.cardId));
         const cards = document.querySelectorAll('.card');

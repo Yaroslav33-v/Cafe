@@ -184,6 +184,12 @@ app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService prom
     }
 }); // endpoint для проверки существования промокода
 
+app.MapGet("/cart-count", (ICartService cartService) =>
+{
+    var cart = cartService.GetCart();
+    return Results.Ok(new { count = cart.TotalItems });
+}); // endpoint для получения количества позиций в корзине
+
 app.MapControllerRoute(
     name: default,
     pattern: "{controller=Cafe}/{action=Index}");
