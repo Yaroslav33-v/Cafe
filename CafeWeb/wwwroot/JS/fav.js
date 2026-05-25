@@ -32,17 +32,23 @@
         updateFavBtn.classList.toggle('liked')
     }
 
+    let wasFavUpdated = false;
+
     modal.querySelector('#close-btn').onclick = function () {
         modal.close();
-        document.location.reload();
+        if (wasFavUpdated) {
+            document.location.reload();
+        }
     }
 
     addToCartBtn.onclick = async function () {
         await addToCart(food.Id);
         modal.close();
     }
+
     updateFavBtn.onclick = async function () {
         await updateFavourite(food.Id, updateFavBtn);
+        wasFavUpdated = !wasFavUpdated;
     }
 
     modal.showModal();
