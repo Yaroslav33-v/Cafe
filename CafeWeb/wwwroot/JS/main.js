@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let data = await getUserData();
 
         if (data.role === "admin") {
-            document.location.replace("/admin/index");
+            document.location.href = "/admin/index";
         }
     });
 
