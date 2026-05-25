@@ -45,18 +45,19 @@
             </div>
         </div>
     </header>
-    <aside>
-        <!--Для боковой панели с переходами по меткам-->
-        <nav>
-            <ul>
-                @foreach(var category in Model)
-                {
-                    <a href="#@category.Name.Replace(" ", "-")">@category.Name</a>
-                }
-            </ul>
-        </nav>
-    </aside>
+    
     <main class="main-content">
+        <aside>
+            <!--Для боковой панели с переходами по меткам-->
+            <nav>
+                <ul>
+                    @foreach (var category in Model)
+                    {
+                        <li><a href="#@category.Name.Replace(" ", "-")">@category.Name</a></li>
+                    }
+                </ul>
+            </nav>
+        </aside>
         <div class="container">
             @if(Model != null && Model.Any())
             {
