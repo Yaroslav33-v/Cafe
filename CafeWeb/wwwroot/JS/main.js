@@ -1,4 +1,30 @@
-﻿async function openFoodModal(food) {
+﻿async function updateCartCounter() {
+    try {
+        const response = await fetch('/cart-count');
+        const data = await response.json();
+
+        const cartCounter = document.querySelector('.cart-count');
+        if (cartCounter) {
+            cartCounter.textContent = data.count;
+        }
+    } catch (error) {
+        console.error('Ошибка обновления корзины: ', error);
+    }
+}
+
+async function getUserData() {
+    try {
+        const response = await fetch('/me');
+        const data = await response.json();
+
+        return data;
+
+    } catch (error){
+        console.error('Ошибка получения данных пользователя: ', error);
+    }
+}
+
+async function openFoodModal(food, element) {
     const modal = document.getElementById('food-modal');
 
     const name = modal.querySelector('#modal-food-name');
@@ -22,7 +48,16 @@
     calories.textContent = food.Calories;
 
     const addToCartBtn = modal.querySelector('#modal-food-cart-btn');
-    const updateFavBtn = modal.querySelector('#modal-food-fav-btn');
+    const updateFavBtn = modal.querySelector('.modal-food-fav-btn');
+    updateFavBtn.classList.remove('liked');
+
+    const card = element.parentElement;
+    const isLiked = card.querySelector('.modal-food-fav-btn').classList.contains('liked');
+
+    if (isLiked) {
+        updateFavBtn.classList.toggle('liked')
+    }
+
     modal.querySelector('#close-btn').onclick = function () {
         modal.close();
     }
@@ -33,7 +68,6 @@
     }
     updateFavBtn.onclick = async function () {
         await updateFavourite(food.Id, updateFavBtn);
-        modal.close()
     }
 
     modal.showModal();
@@ -46,6 +80,7 @@ async function addToCart(id) {
         if (response.ok && data.success) {
             // Успешное добавление
             showNotification(data.message || 'Блюдо добавлено в корзину!', 'success');
+            await updateCartCounter();
         } else if (response.status === 400) {
             // Ошибка валидации
             showNotification(data.message || 'Нельзя добавить это блюдо', 'warning');
@@ -73,15 +108,13 @@ async function updateFavourite(foodId, buttonElement) {
         const response = await fetch(`/cafe/updatefavourite?foodId=${foodId}`);
         const data = await response.json();
 
-        let btnText = buttonElement.textContent;
-
         if (response.ok && data.success) {
             // Успешное добавление
             showNotification(data.message, 'success');
-            if (btnText === 'Добавить в избранное') {
-                buttonElement.textContent = 'Удалить из избранного';
+            if (buttonElement.classList.contains('liked')) {
+                buttonElement.classList.toggle('liked');
             } else {
-                buttonElement.textContent = 'Добавить в избранное';
+                buttonElement.classList.toggle('liked');
             }
             // Здесь надо как-то изменять блок избранных
             // Самый простой вариант: Подождать 2-3 секунды и обновить страницу, но можешь сделать че то другое
@@ -103,9 +136,54 @@ async function updateFavourite(foodId, buttonElement) {
     }   
 }
 
+function sanitizeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Над этим тоже рекомендую подумать, потому что без перезагрузки страницы, у него начинаются проблемы
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Отображаем кнопку для входа, либо имя пользователя
+    let user = await getUserData();
+
+    const profileActionsDiv = document.getElementById('profile-actions');
+
+    if (user.name) {
+        const safeName = sanitizeHtml(user.name);
+        profileActionsDiv.innerHTML = `
+            <a href="/user/me" class="user-icon" title="Профиль">
+                <i class="fas fa-user-circle"></i>
+                <span class="username">${safeName}</span>
+            </a>`;
+    }
+    else {
+        profileActionsDiv.innerHTML = `
+            <button class="login-btn" onclick="goToPage('/user/signin')">
+                Войти
+            </button>`;
+    }
+
+    // Добавляем действие для тайной кнопки
+    const adminTeleportation = document.getElementById('admin-relocation');
+    adminTeleportation.addEventListener('click', async () => {
+        let data = await getUserData();
+
+        if (data.role === "admin") {
+            document.location.replace("/admin/index");
+        }
+    });
+
+    // Обновляем корзину
+    await updateCartCounter();
+
+    // Работаем с избранным
     const favoriteDiv = document.querySelector('.menu-category[data-category-name="Избранное"]');
+
     if (favoriteDiv) {
         const ids = Array.from(favoriteDiv.querySelectorAll('.card')).map(card => parseInt(card.dataset.cardId));
         const cards = document.querySelectorAll('.card');
@@ -115,15 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const button = card.querySelector('button[onclick*="updateFavourite"]');
 
             if (button && ids.includes(foodId)) {
-                button.textContent = 'В избранном';
-
-                button.onmouseenter = () => {
-                    button.textContent = 'Удалить из избранного';
-                };
-
-                button.onmouseleave = () => {
-                    button.textContent = 'В избранном';
-                };
+                button.classList.toggle('liked')
             }
         });
     }

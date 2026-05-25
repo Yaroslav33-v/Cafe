@@ -4,6 +4,12 @@
 
     </head>
     <body>
+        <noscript>
+            <!-- Отображается только если у пользователя выключен js в браузере -->
+            <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
+                Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
+            </div>
+        </noscript>
         <h1>Здравствуй, @ViewBag.Login ! </h1>
         <p>Доступные действия:</p>
         <div>
@@ -15,9 +21,10 @@
             {
                 <button onclick="goToPage('/admin/index')">В админские угодья</button>
             }
+            <button onclick="goToPage('/cafe/index')"> На главную </button>
         </div>
         <dialog id="password-dialog">
-        <form id="password-form" method="post" action="/user/changepassword">
+            <form id="password-form" method="post" action="/user/changepassword">
                 <h3>Смена пароля</h3>
                 <label>Текущий пароль: </label>
                 <input name="currentPassword" class="passwordInput" type="password" id="current-password">

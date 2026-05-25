@@ -3,9 +3,15 @@
 	<head>
 		<link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
 		<link href="~/CSS/admin-main.css" rel="stylesheet" />
-		<title> Адмиские угодия </title>
+		<title> Админские угодия </title>
 	</head>
 	<body>
+	<noscript>
+		<!-- Отображается только если у пользователя выключен js в браузере -->
+		<div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
+			Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
+		</div>
+	</noscript>
 		<div class="container">
 			<div class="container-content">
 				<img id="logo"src="~/IMG/logo-cafe.png" />
@@ -15,21 +21,25 @@
 					<button class="admin" onclick="goToPageAdmin()">Добавить нового админа</button>
 					<button class="offer" onclick="goToPageOffer()">Добавить новую акцию</button>
 					<button class="promo" onclick="goToPagePromo()">Добавить новый промокод</button>
+					<button class="exit" onclick="goToPageMain()">Вернуться на главную</button>
 				</div>
 			</div>
 		</div>
 		<script>
 			function goToPageFood() {
-				document.location.assign("/Admin/AddFood")
+				document.location.assign("/admin/addfood")
 			}
 			function goToPageAdmin() {
-				document.location.assign("/Admin/NewAdmin")
+				document.location.assign("/admin/newadmin")
 			}
 			function goToPageOffer() {
-				document.location.assign("/Admin/NewOffer")
+				document.location.assign("/admin/newoffer")
 			}
 			function goToPagePromo() {
-				document.location.assign("/Admin/NewPromo")
+				document.location.assign("/admin/newзromo")
+			}
+			function goToPageMain() {
+				document.location.assign("/cafe/index")
 			}
 		</script>
 	</body>

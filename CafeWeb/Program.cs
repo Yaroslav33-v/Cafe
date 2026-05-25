@@ -156,7 +156,7 @@ app.MapGet("/me", (HttpContext context) =>
         name,
         role
     });
-}).RequireAuthorization(); // endpoint для получения данных о пользователе
+});// endpoint для получения данных о пользователе
 
 app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService promocodeService) => {
     try
@@ -183,6 +183,12 @@ app.MapGet("/is-valid-promo/{promo}",async (string promo, IPromocodeService prom
         return Results.StatusCode(500);
     }
 }); // endpoint для проверки существования промокода
+
+app.MapGet("/cart-count", (ICartService cartService) =>
+{
+    var cart = cartService.GetCart();
+    return Results.Ok(new { count = cart.TotalItems });
+}); // endpoint для получения количества позиций в корзине
 
 app.MapControllerRoute(
     name: default,

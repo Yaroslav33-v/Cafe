@@ -6,6 +6,12 @@
         <title>Корзина</title>
     </head>
     <body>
+    <noscript>
+        <!-- Отображается только если у пользователя выключен js в браузере -->
+        <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
+            Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
+        </div>
+    </noscript>
     @foreach(var offer in Model.OfferItems)
     {
         <div data-offer-id="@offer.Id">
