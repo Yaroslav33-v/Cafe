@@ -1,8 +1,13 @@
-﻿@model CafeWeb.Models.Category?
+﻿@using System.Text.Json
+@model CafeWeb.Models.Category?
 
 <!DOCTYPE html>
 <html>
-    <head><title></title></head>
+    <head>
+        <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+        <link href="~/CSS/favourite.css" rel="stylesheet" />
+        <title> Избранное </title>
+    </head>
     <body>
         <noscript>
             <!-- Отображается только если у пользователя выключен js в браузере -->
@@ -10,25 +15,62 @@
                 Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
             </div>
         </noscript>
-        @if(Model is null || !Model.Foods.Any())
-        {
-        <p>В данный момент вы еще не добавили ни одного блюда в избранное</p>
-        }
-        else 
-        {
-            <h3>ИЗБРАННОЕ</h3>
-            @foreach(var food in Model.Foods)
+        <div class="container">
+            @if(Model is null || !Model.Foods.Any())
             {
-                <div class="card">
-                    <div class="card-images">
-                        <img id="front-img" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
-                        <img id="back-img" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+            <p>В данный момент вы еще не добавили ни одного блюда в избранное</p>
+            }
+            else 
+            {
+                <div class="main-menu">
+                    <h3>ИЗБРАННОЕ</h3>
+                    <div class="category-items">
+                        @foreach(var food in Model.Foods)
+                        {
+                            <div class="card" data-card-id="@food.Id">
+                                <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
+                                    <div class="card-images">
+                                        <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                        <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                    </div>
+                                    <span class="card-title">@food.Name</span>
+                                </div>
+
+                                <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
+                                <button class="modal-food-fav-btn liked" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
+                            </div>
+                        }
                     </div>
-                    <span class="card-title">@food.Name</span>
-                    <button type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
-                    <button type="button" onclick="updateFavourite(@food.Id)">Добавить в избранное</button>
                 </div>
             }
-        }
+            <div class="bottom">
+                <button id="exit" onclick="goToPage('/user/me')"> Назад </button>
+            </div>
+        </div>
+    <dialog id="food-modal">
+        <div id="food-info">
+
+            <h1 id="modal-food-name"></h1>
+            <img id="modal-food-img-front" width="300" height="200" />
+            <img id="modal-food-img-back" width="300" height="200" />
+
+            <div>
+
+                <p> Вес: <span id="modal-food-weight"></span> г.</p>
+                <p id="modal-food-desc"></p>
+                <p>Ингредиенты: <span id="modal-food-ingredients"></span></p>
+                <p><span id="modal-food-calories"></span> ккал. на 100г. продукта</p>
+
+            </div>
+        </div>
+        <div id="modal-controls">
+            <button id="modal-food-cart-btn" type="button">Добавить <span id="modal-food-price"></span> р. </button>
+            <button class="modal-food-fav-btn liked" type="button"></button>
+            <button id="close-btn" type="button">Закрыть</button>
+        </div>
+    </dialog>
+    <script src="~/JS/goToPage.js"></script>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/fav.js"></script>
 </body>
 </html>
