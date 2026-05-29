@@ -41,7 +41,12 @@ namespace CafeWeb.Controllers
             return View();
         }
         [RedirectOnly]
-        public ViewResult PaymentSucceeded() => View();
+        public ViewResult PaymentSucceeded(int orderId) 
+        {
+            ViewBag.Id = orderId;
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Pay([FromForm] PaymentModel paymentModel)
         {
@@ -71,7 +76,7 @@ namespace CafeWeb.Controllers
                         // Устанавливаем маркер для атрибута
                         TempData["RedirectOnly"] = true;
 
-                        return RedirectToAction("PaymentSucceeded");
+                        return RedirectToAction("PaymentSucceeded", new {orderId});
                     }
                     else
                     {

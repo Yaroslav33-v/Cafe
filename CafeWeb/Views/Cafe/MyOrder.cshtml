@@ -1,5 +1,5 @@
 ﻿<!-- Страница для отслеживания заказа -->
-@model List<CafeWeb.Models.Order> // List используем так как у одного пользователя может быть сразу несколько заказов
+@model CafeWeb.Models.Order? // List используем так как у одного пользователя может быть сразу несколько заказов
 @{
     // Получаем userId из Claims
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0";
@@ -17,30 +17,30 @@
             Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
         </div>
     </noscript>
-    @if (!Model.Any())
+    @if (Model is null)
     {
         <p>В данный момент для вас нет ни одного заказа</p>
     }
-    else foreach(var order in Model)
+    else 
     {
         <div class="order">
             <div class="order-status">
                 <h3>
                     ЗАКАЗ №
-                    <span>@order.Number.ToUpper()</span>
+                    <span>@Model.Number.ToUpper()</span>
                 </h3>
-                    <p data-order-id="@order.Id">@order.Status</p>
+                    <p data-order-id="@Model.Id">@Model.Status</p>
                 <p>
                     Заказ создан:
-                    <span>@order.CreatedAt</span>
+                    <span>@Model.CreatedAt</span>
                 </p>
             </div>
             <div class="positions">
-                @foreach(var cartItem in order.CartItems)
+                @foreach(var cartItem in Model.CartItems)
                 {
                     <p>@cartItem.Food.Name x @cartItem.Quantity шт.</p>
                 }
-                <p>@order.CartItems.Sum(i => i.Total) руб.</p>
+                <p>@Model.CartItems.Sum(i => i.Total) руб.</p>
             </div>
         </div>
     }

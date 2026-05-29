@@ -37,7 +37,10 @@
                     }
                     <p>@order.CartItems.Sum(i => i.Total) руб.</p>
                 </div>
+                <button onclick="goToPage('/cafe/myorder?orderId=@order.Id')">Детали заказа</button>
             </div>
         }
+        <button onclick="goToPage('/user/me')">Назад</button>
+        <script src="/JS/goToPage.js"></script>
     </body>
 </html>
