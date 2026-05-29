@@ -18,7 +18,11 @@
         <div class="container">
             @if(Model is null || !Model.Foods.Any())
             {
-            <p>В данный момент вы еще не добавили ни одного блюда в избранное</p>
+                <div id="none-fav">
+                    <p class="mes">В данный момент вы еще не добавили ни одного блюда в избранное</p>
+                    <p class="mes">Иди скорее добавь что нибудь!</p>
+                    <button  class="btn-go" onclick="goToPage('/cafe/index')">Посмотреть меню</button>
+               </div>
             }
             else 
             {
@@ -34,8 +38,9 @@
                                         <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
                                     </div>
                                     <span class="card-title">@food.Name</span>
+                                    <p class="card-title"><span>@food.Price</span> р</p>
                                 </div>
-
+                                 <label id="price"></label>
                                 <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
                                 <button class="modal-food-fav-btn liked" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
                             </div>

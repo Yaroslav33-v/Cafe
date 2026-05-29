@@ -163,7 +163,7 @@ header {
 
 .search {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: auto 16% auto;
     padding: 0 20px;
     width: 100%;
 }
@@ -358,18 +358,19 @@ aside {
         background: #A0522D;
         color: white;
     }
-    
+
 .modal-food-fav-btn {
     position: absolute;
-    top: 5px;
-    right: 72px;
+    top: 10px;
+    right: 10px;
     z-index: 10;
-    border-radius: 50%;
-    width: 1px;
-    height: 1px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
     border: none;
-    padding: 0;
+    cursor: pointer;
     outline: none;
+    padding: 0;
     transition: transform 0.2s;
 }
 
@@ -377,20 +378,21 @@ aside {
         transform: scale(0.85);
     }
 
-   
+    
     .modal-food-fav-btn::before,
     .modal-food-fav-btn::after {
         content: "";
         position: absolute;
         top: 0;
-        width: 40px;
-        height: 64px;
-        border-radius: 40px 40px 0 0;
+        width: 20px;
+        height: 32px;
+        border-radius: 20px 20px 0 0;
         background: #cec9c9;
+        transition: background 0.2s;
     }
 
     .modal-food-fav-btn::before {
-        left: 40px;
+        left: 20px;
         transform: rotate(-45deg);
         transform-origin: 0 100%;
     }
@@ -401,13 +403,12 @@ aside {
         transform-origin: 100% 100%;
     }
 
-   
+    
     .modal-food-fav-btn.liked::before,
     .modal-food-fav-btn.liked::after {
         background: #e63950;
     }
 
-    
     .modal-food-fav-btn.liked {
         animation: pulse 0.4s ease;
     }
@@ -493,6 +494,7 @@ aside {
 .container {
     width: 100%;
     max-width: 1000px;
+    min-height:500px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -504,6 +506,7 @@ aside {
     height: auto;
     max-height: calc(100vh - 150px); 
     overflow-y: auto;
+
     
 }
 .main-menu {
@@ -652,6 +655,25 @@ aside {
     opacity: 0.7;
 }
 
+.not-found-message {
+    text-align: center;
+    padding: 50px 20px;
+    background: #fff;
+    border-radius: 16px;
+    margin: 20px 0;
+}
+
+    .not-found-message p {
+        margin: 10px 0;
+        font-size: 18px;
+        color: #666;
+    }
+
+        .not-found-message p:first-child {
+            font-size: 24px;
+            font-weight: 600;
+            color: #c17b2c;
+        }
 .container::-webkit-scrollbar {
     width: 10px;
     

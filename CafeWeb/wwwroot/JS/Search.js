@@ -1,7 +1,7 @@
 ﻿document.getElementById('searchInput').addEventListener('input', function () {
     const query = this.value.toLowerCase();
 
-    // Если поиск пустой - показываем всё
+    
     if (query === '') {
         document.querySelectorAll('.card').forEach(card => {
             card.style.display = '';
@@ -12,24 +12,24 @@
         return;
     }
 
-    // Флаг для отслеживания, есть ли совпадения по категориям
+    
     let categoryMatch = false;
 
-    // Проверяем категории
+    
     document.querySelectorAll('.menu-category').forEach(category => {
         const categoryName = category.querySelector('h1').textContent.toLowerCase();
         const cards = category.querySelectorAll('.card');
 
-        // Если категория совпадает с поиском
+        
         if (categoryName.includes(query)) {
             category.style.display = '';
             categoryMatch = true;
-            // Показываем все карточки в этой категории
+            
             cards.forEach(card => {
                 card.style.display = '';
             });
         } else {
-            // Если категория не совпала, проверяем карточки внутри
+            
             let hasVisibleCards = false;
 
             cards.forEach(card => {
@@ -43,7 +43,7 @@
                 }
             });
 
-            // Показываем категорию только если в ней есть видимые карточки
+            
             if (hasVisibleCards) {
                 category.style.display = '';
             } else {
@@ -51,4 +51,41 @@
             }
         }
     });
+});
+
+document.getElementById('searchInput').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    let hasMatches = false;
+
+    document.querySelectorAll('.menu-category').forEach(category => {
+        let categoryHasMatch = false;
+        const cards = category.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            const title = card.querySelector('.card-title').textContent.toLowerCase();
+            if (title.includes(query)) {
+                card.style.display = '';
+                categoryHasMatch = true;
+                hasMatches = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        category.style.display = categoryHasMatch || query === '' ? '' : 'none';
+    });
+
+    let notFoundMsg = document.getElementById('not-found-message');
+
+    if (!hasMatches && query !== '') {
+        if (!notFoundMsg) {
+            notFoundMsg = document.createElement('div');
+            notFoundMsg.id = 'not-found-message';
+            notFoundMsg.innerHTML = '<p> Ничего не найдено</p>';
+            document.querySelector('.container').appendChild(notFoundMsg);
+        }
+        notFoundMsg.style.display = 'block';
+    } else {
+        if (notFoundMsg) notFoundMsg.style.display = 'none';
+    }
 });
