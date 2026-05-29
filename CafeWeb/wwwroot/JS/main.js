@@ -128,7 +128,8 @@ async function updateFavourite(foodId, buttonElement) {
         } else if (response.status === 404) {
             // Блюдо не найдено
             showNotification('Блюдо не найдено', 'error');
-
+        } else if (response.status === 403) {
+            showNotification('Для добавления блюда в избранного необходимо быть авторизованным', 'error');
         } else {
             // Другие ошибки
             throw new Error(data.message || 'Неизвестная ошибка');
