@@ -15,43 +15,61 @@
                 Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
             </div>
         </noscript>
-        <div class="container">
-            @if(Model is null || !Model.Foods.Any())
-            {
-                <div id="none-fav">
-                    <p class="mes">В данный момент вы еще не добавили ни одного блюда в избранное</p>
-                    <p class="mes">Иди скорее добавь что нибудь!</p>
-                    <button  class="btn-go" onclick="goToPage('/cafe/index')">Посмотреть меню</button>
-               </div>
-            }
-            else 
-            {
-                <div class="main-menu">
-                    <h3>ИЗБРАННОЕ</h3>
-                    <div class="category-items">
-                        @foreach(var food in Model.Foods)
-                        {
-                            <div class="card" data-card-id="@food.Id">
-                                <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
-                                    <div class="card-images">
-                                        <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
-                                        <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
-                                    </div>
-                                    <span class="card-title">@food.Name</span>
-                                    <p class="card-title"><span>@food.Price</span> р</p>
-                                </div>
-                                 <label id="price"></label>
-                                <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
-                                <button class="modal-food-fav-btn liked" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
-                            </div>
-                        }
+        <header>
+            <div class="header-top">
+                <div class="header-content">
+                    <div class="header-left">
+                        <div class="logo">
+                            <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                            <h1>Добро пожаловать в избранное</h1>
+                        </div>
+
                     </div>
                 </div>
-            }
-            <div class="bottom">
-                <button id="exit" onclick="goToPage('/user/me')"> Назад </button>
             </div>
-        </div>
+        </header>
+        <div class="main-content">
+            <div class="container">
+                @if(Model is null || !Model.Foods.Any())
+                {
+                    <div id="none-fav">
+                        <p class="mes">В данный момент вы еще не добавили ни одного блюда в избранное</p>
+                        <p class="mes">Иди скорее добавь что-нибудь!</p>
+                        <button  class="btn-go" onclick="goToPage('/cafe/index')">Посмотреть меню</button>
+                   </div>
+                }
+                else 
+                {
+                    <div class="main-menu">
+                        <h3>ИЗБРАННОЕ</h3>
+                        <div class="category-items">
+                            @foreach(var food in Model.Foods)
+                            {
+                                <div class="card" data-card-id="@food.Id">
+                                    <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
+                                        <div class="card-images">
+                                            <img id="front-img" width="300" height="200" src="@Url.Content($"~{food.FrontImageAddress}")" alt="@food.Name" class="front-image" />
+                                            <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
+                                        </div>
+                                        <span class="card-title">@food.Name</span>
+                                        <p class="card-title"><span>@food.Price</span> р</p>
+                                    </div>
+                                     <label id="price"></label>
+                                    <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
+                                    <button class="modal-food-fav-btn liked" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
+                                </div>
+                            }
+                        
+                        </div>
+                        <div class="bottom">
+                            <button id="exit" onclick="goToPage('/user/me')"> Назад </button>
+                        </div>
+                    
+                    </div>
+                }
+            
+            </div>
+    </div>
     <dialog id="food-modal">
         <div id="food-info">
 
