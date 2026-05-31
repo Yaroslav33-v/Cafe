@@ -11,7 +11,7 @@ namespace CafeWeb.Services
         private readonly ILogger<OrderStatusUpdaterService> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly TimeSpan _checkInterval = TimeSpan.FromSeconds(1); // Проверка каждую минуту
-        private readonly int _cookingDurationSeconds = 5; // Время приготовления
+        private readonly int _cookingDurationSeconds = 60; // Время приготовления в секундах
 
         public OrderStatusUpdaterService(ILogger<OrderStatusUpdaterService> logger, IServiceProvider serviceProvider)
         {

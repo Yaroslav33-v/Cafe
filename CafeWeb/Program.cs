@@ -122,6 +122,29 @@ app.MapGet("/error", (HttpContext context) =>
     return Results.File(filePath, "text/html");
 });// Путь к error.html
 
+app.MapGet("/cafe/getcart", (ICartService cartService) =>
+{
+    var cart = cartService.GetCart();
+    return Results.Ok(new
+    {
+        success = true,
+        items = cart.Items.Select(i => new
+        {
+            id = i.Food.Id,
+            quantity = i.Quantity,
+            total = i.Total
+        }),
+        offerItems = cart.OfferItems.Select(o => new
+        {
+            id = o.Id,
+            quantity = o.Quantity,
+            total = o.Total
+        }),
+        totalAmount = cart.TotalAmount,
+        totalItems = cart.TotalItems
+    });
+});
+
 app.MapGet("/check-login/{login}", async (IUserService userService, string login) =>
 {
     try
