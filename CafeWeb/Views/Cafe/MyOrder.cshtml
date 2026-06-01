@@ -1,50 +1,141 @@
-﻿<!-- Страница для отслеживания заказа -->
-@model CafeWeb.Models.Order? // List используем так как у одного пользователя может быть сразу несколько заказов
+﻿@model CafeWeb.Models.Order?
 @{
-    // Получаем userId из Claims
     var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0";
 }
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
-    </head>
-    <body>
+<head>
+    <title>Детали заказа - Кафе "4 Творожка"</title>
+    <link href="~/CSS/my-order.css" rel="stylesheet" />
+    <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+</head>
+<body>
     <noscript>
-        <!-- Отображается только если у пользователя выключен js в браузере -->
         <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
             Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
         </div>
     </noscript>
-    @if (Model is null)
-    {
-        <p>В данный момент для вас нет ни одного заказа</p>
-    }
-    else 
-    {
-        <div class="order">
-            <div class="order-status">
-                <h3>
-                    ЗАКАЗ №
-                    <span>@Model.Number.ToUpper()</span>
-                </h3>
-                    <p data-order-id="@Model.Id">@Model.Status</p>
-                <p>
-                    Заказ создан:
-                    <span>@Model.CreatedAt</span>
-                </p>
-            </div>
-            <div class="positions">
-                @foreach(var cartItem in Model.CartItems)
-                {
-                    <p>@cartItem.Food.Name x @cartItem.Quantity шт.</p>
-                }
-                <p>@Model.CartItems.Sum(i => i.Total) руб.</p>
+
+    <header>
+        <div class="header-top">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                    </div>
+                    <nav class="header-nav">
+                        <a href="/about">О нас</a>
+                        <a href="/faq">FAQ</a>
+                    </nav>
+                </div>
+                <div class="header-actions">
+                    <div id="profile-actions"></div>
+                </div>
             </div>
         </div>
-    }
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="orders-container">
+                <div class="page-header">
+                    <h1 class="page-title">Детали заказа</h1>
+                    <button class="btn-back" onclick="goToPage('/user/orderhistory')">
+                        <i class="fas fa-arrow-left"></i> К списку
+                    </button>
+                </div>
+
+                @if (Model is null)
+                {
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="empty-title">Заказ не найден</div>
+                        <div class="empty-message">Заказ с таким номером не существует</div>
+                        <button class="btn-continue" onclick="goToPage('/user/orderhistory')">
+                            <i class="fas fa-list"></i> К истории заказов
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-number">
+                                ЗАКАЗ № <span>@Model.Number.ToUpper()</span>
+                            </div>
+                            <div class="order-status status-@Model.Status.ToLower()" data-order-id="@Model.Id">
+                                @Model.Status
+                            </div>
+                            <div class="order-date">
+                                <i class="far fa-calendar-alt"></i> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                            </div>
+                        </div>
+
+                        <div class="order-items-list">
+                            @foreach (var cartItem in Model.CartItems)
+                            {
+                                <div class="order-item-row">
+                                    <div class="item-info">
+                                        <div class="item-name">@cartItem.Food.Name</div>
+                                    </div>
+                                    <div class="item-quantity">x @cartItem.Quantity шт.</div>
+                                    <div class="item-price">@cartItem.Total.ToString("N2") ₽</div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="order-summary">
+                            <span class="summary-label">Итого:</span>
+                            <span class="summary-value">@Model.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container-foot">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Четыре творожка</h4>
+                    <p>Кафе честной еды. Готовим с душой с 2020 года. От сырников до бургеров — каждый найдёт своё.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
+                        <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
+                        <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
+                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Мы в соцсетях</h4>
+                    <ul>
+                        <li><a href="https://vk.com/club236358484"><i class="fab fa-vk"></i> ВКонтакте</a></li>
+                        <li><a href="https://t.me/FourTvorojka"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Четыре творожка. Все права защищены.</p>
+                <img id="admin-relocation" src="~/IMG/crybady.jpg" />
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/JS/goToPage.js"></script>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/main.js"></script>
+
     <script>
+        // SignalR для обновления статуса
         const userId = '@userId';
         let connection;
 
@@ -57,8 +148,8 @@
                 let statusElement = document.querySelector(`[data-order-id="${update.orderId}"]`);
                 if (statusElement) {
                     statusElement.textContent = update.status;
-                    // Вот здесь меняем стили
-                    statusElement.style.color = "green";
+                    statusElement.className = `order-status status-${update.status.toLowerCase()}`;
+                    showNotification(`Статус заказа №${update.orderNumber} изменён на "${update.status}"`, 'success');
                 }
             });
 
@@ -75,6 +166,28 @@
         if (userId && userId !== '0') {
             initializeSignalR();
         }
+
+        // Профиль
+        document.addEventListener('DOMContentLoaded', async () => {
+            let user = await getUserData();
+            const profileActionsDiv = document.getElementById('profile-actions');
+
+            if (profileActionsDiv) {
+                if (user.name) {
+                    const safeName = sanitizeHtml(user.name);
+                    profileActionsDiv.innerHTML = `
+                        <a href="/user/me" class="user-icon" title="Профиль">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="username">${safeName}</span>
+                        </a>`;
+                } else {
+                    profileActionsDiv.innerHTML = `
+                        <button class="login-btn" onclick="goToPage('/user/signin')">
+                            Войти
+                        </button>`;
+                }
+            }
+        });
     </script>
-    </body>
+</body>
 </html>
