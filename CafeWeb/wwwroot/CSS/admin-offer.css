@@ -7,6 +7,24 @@
     justify-content: center;
 }
 
+*::-webkit-scrollbar {
+    width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 50px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #f6d6aa;
+    border-radius: 10px;
+}
+
+    *::-webkit-scrollbar-thumb:hover {
+        background: #f9cc75;
+    }
+
 #logo {
     margin: 0 auto;
     width: 150px;

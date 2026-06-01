@@ -26,7 +26,7 @@
         <div class="menu">
             @if (Model.Categories != null && Model.Categories.Any())
                 {   
-                    <label>Позиции, которые уже существуют:</label>
+                    <h1>Позиции, которые уже существуют:</h1>
 
                     <div class="menu-position">
                         
@@ -80,10 +80,16 @@
                 <textarea name="Food.Description" required></textarea> <br />
 
                 <label>Переднее фото: </label> <br />
-                <input type="file" name="FrontPhoto" accept="image/*" required /> <br />
+                <div class="file-wrapper">
+                    <input class="photo" type="file" name="FrontPhoto" accept="image/*" required /> <br />
+                    <span class="file-btn">Выберите файл</span>
+                </div>
 
                 <label>Заднее фото: </label> <br />
-                <input type="file" name="BackPhoto" accept="image/*" required /> <br />
+                <div class="file-wrapper">
+                    <input class="photo" type="file" name="BackPhoto" accept="image/*" required /> <br />
+                    <span class="file-btn">Выберите файл</span>
+                </div>
 
                 <button type="submit">Добавить</button>
             }

@@ -10,6 +10,25 @@ body {
     min-height: 100vh;
     padding: 50px 20px;
 }
+
+    body::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    body::-webkit-scrollbar-track {
+        background: white;
+        border-radius: 50px;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: #f6d6aa;
+        border-radius: 10px;
+    }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: #f9cc75;
+        }
+
 h1 {
     text-align: center;
     color: #2d3a4a;
