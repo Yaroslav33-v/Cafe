@@ -180,7 +180,11 @@ namespace CafeWeb.Controllers
             }
             catch (KeyNotFoundException)
             {
-                return Redirect("/signout");
+                return StatusCode(403, new
+                {
+                    success = false,
+                    message = "Для добавления блюда в избранного необходимо быть авторизованным"
+                });
             }
             catch
             {

@@ -17,30 +17,16 @@
 				<img id="logo"src="~/IMG/logo-cafe.png" />
 				<label> Выберите операцию:</label>
 				<div class="content-row">
-					<button class="food" onclick="goToPageFood()">Добавить новое блюдо</button>
-					<button class="admin" onclick="goToPageAdmin()">Добавить нового админа</button>
-					<button class="offer" onclick="goToPageOffer()">Добавить новую акцию</button>
-					<button class="promo" onclick="goToPagePromo()">Добавить новый промокод</button>
-					<button class="exit" onclick="goToPageMain()">Вернуться на главную</button>
+				<button class="food" onclick="goToPage('/admin/addfood')">Добавить новое блюдо</button>
+				<button class="admin" onclick="goToPage('/admin/newadmin')">Добавить нового админа</button>
+				<button class="offer" onclick="goToPage('/admin/newoffer')">Добавить новую акцию</button>
+				<button class="promo" onclick="goToPage('/admin/newpromo')">Добавить новый промокод</button>
+					
 				</div>
+			<button class="exit" onclick="goToPage('/cafe/index')">Вернуться на главную</button>
 			</div>
 		</div>
-		<script>
-			function goToPageFood() {
-				document.location.assign("/admin/addfood")
-			}
-			function goToPageAdmin() {
-				document.location.assign("/admin/newadmin")
-			}
-			function goToPageOffer() {
-				document.location.assign("/admin/newoffer")
-			}
-			function goToPagePromo() {
-				document.location.assign("/admin/newзromo")
-			}
-			function goToPageMain() {
-				document.location.assign("/cafe/index")
-			}
-		</script>
+		
+		<script src="~/JS/goToPage.js"></script>
 	</body>
 </html>

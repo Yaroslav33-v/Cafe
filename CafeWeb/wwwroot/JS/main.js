@@ -58,16 +58,23 @@ async function openFoodModal(food, element) {
         updateFavBtn.classList.toggle('liked')
     }
 
+    let wasFavUpdated = false;
+
     modal.querySelector('#close-btn').onclick = function () {
         modal.close();
+        if (wasFavUpdated) {
+            document.location.reload();
+        }
     }
 
     addToCartBtn.onclick = async function () {
         await addToCart(food.Id);
         modal.close();
     }
+
     updateFavBtn.onclick = async function () {
         await updateFavourite(food.Id, updateFavBtn);
+        wasFavUpdated = !wasFavUpdated;
     }
 
     modal.showModal();
@@ -121,7 +128,8 @@ async function updateFavourite(foodId, buttonElement) {
         } else if (response.status === 404) {
             // Блюдо не найдено
             showNotification('Блюдо не найдено', 'error');
-
+        } else if (response.status === 403) {
+            showNotification('Для добавления блюда в избранного необходимо быть авторизованным', 'error');
         } else {
             // Другие ошибки
             throw new Error(data.message || 'Неизвестная ошибка');
@@ -156,16 +164,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (user.name) {
         const safeName = sanitizeHtml(user.name);
         profileActionsDiv.innerHTML = `
+        <div class="user-menu-wrapper">
             <a href="/user/me" class="user-icon" title="Профиль">
                 <i class="fas fa-user-circle"></i>
                 <span class="username">${safeName}</span>
-            </a>`;
-    }
-    else {
+            </a>
+            <button class="dropdown-arrow" id="dropdown-arrow" title="Меню">
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-panel" id="dropdown-panel">
+                <button class="logout-btn" onclick="goToPage('/signout')">
+                    <i class="fa-solid fa-right-from-bracket"></i> Выйти
+                </button>
+            </div>
+        </div>`;
+
+        // Логика открытия/закрытия панельки
+        const arrow = document.getElementById('dropdown-arrow');
+        const panel = document.getElementById('dropdown-panel');
+
+        arrow.addEventListener('click', (e) => {
+            e.stopPropagation();
+            panel.classList.toggle('active');
+            arrow.classList.toggle('rotated');
+        });
+
+        // Закрытие при клике вне панели
+        document.addEventListener('click', (e) => {
+            if (!profileActionsDiv.contains(e.target)) {
+                panel.classList.remove('active');
+                arrow.classList.remove('rotated');
+            }
+        });
+
+    } else {
         profileActionsDiv.innerHTML = `
-            <button class="login-btn" onclick="goToPage('/user/signin')">
-                Войти
-            </button>`;
+        <button class="login-btn" onclick="goToPage('/user/signin')">
+            Войти
+        </button>`;
     }
 
     // Добавляем действие для тайной кнопки
@@ -174,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         let data = await getUserData();
 
         if (data.role === "admin") {
-            document.location.replace("/admin/index");
+            document.location.href = "/admin/index";
         }
     });
 

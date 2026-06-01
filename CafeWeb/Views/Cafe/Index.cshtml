@@ -48,7 +48,7 @@
     
     <main class="main-content">
         <aside>
-            <!--Для боковой панели с переходами по меткам-->
+            
             <nav>
                 <ul>
                     @foreach (var category in Model)
@@ -77,6 +77,7 @@
                                                 <img id="back-img" width="300" height="200" src="@Url.Content($"~{food.BackImageAddress}")" alt="@food.Name" class="back-image" />
                                             </div>
                                             <span class="card-title">@food.Name</span>
+                                            <p class="card-title"><span>@food.Price</span> р</p>
                                         </div>
                                 
                                         <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>

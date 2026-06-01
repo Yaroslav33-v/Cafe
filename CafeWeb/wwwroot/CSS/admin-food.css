@@ -7,6 +7,23 @@
     justify-content: center;
 }
 
+    *::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: white;
+        border-radius: 50px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background: #f6d6aa;
+        border-radius: 10px;
+    }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: #f9cc75;
+        }
 
 .admin-header {
     padding: 20px;
@@ -258,4 +275,35 @@
     max-height: 1000px;
     overflow-y: auto;
     padding: 20px;
+}
+
+.file-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.photo {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 1%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-btn {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.file-wrapper:hover .file-btn {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(160, 82, 45, 0.4);
 }

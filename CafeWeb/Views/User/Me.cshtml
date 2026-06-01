@@ -1,7 +1,9 @@
 ﻿<!DOCTYPE html>
 <html>
     <head>
-
+        <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+        <link href="~/CSS/user-me.css" rel="stylesheet" />
+        <title> Профиль @ViewBag.Login </title>
     </head>
     <body>
         <noscript>
@@ -10,18 +12,38 @@
                 Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
             </div>
         </noscript>
-        <h1>Здравствуй, @ViewBag.Login ! </h1>
-        <p>Доступные действия:</p>
-        <div>
-            <button id="password-btn"> Сменить пароль </button>
-            <button onclick="goToPage('/user/orderhistory?userId=@ViewBag.Id')"> История заказов </button>
-            <button onclick="goToPage('/user/offers')"> Акции </button>
-            <button onclick="goToPage('/user/favourite?userId=@ViewBag.Id')"> Избранное </button>
-            @if(ViewBag.Role == "admin")
-            {
-                <button onclick="goToPage('/admin/index')">В админские угодья</button>
-            }
-            <button onclick="goToPage('/cafe/index')"> На главную </button>
+
+        <header>
+            <div class="header-top">
+                <div class="header-content">
+                    <div class="header-left">
+                        <div class="logo">
+                            <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                            <h1>Добро пожаловать в профиль, @ViewBag.Login !</h1>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="main-content">
+            <div class="container">
+            
+                <h2>Доступные действия:</h2>
+                <div class="container-content">
+                    <div class="content-row">
+                        <button id="password-btn"> Сменить пароль </button>
+                        <button onclick="goToPage('/user/orderhistory?userId=@ViewBag.Id')"> История заказов </button>
+                        <button onclick="goToPage('/user/offers')"> Акции </button>
+                        <button onclick="goToPage('/user/favourite?userId=@ViewBag.Id')"> Избранное </button>
+                        @if(ViewBag.Role == "admin")
+                        {
+                            <button onclick="goToPage('/admin/index')">В админские угодья</button>
+                        }
+                    </div>
+                    <button id="exit" onclick="goToPage('/cafe/index')"> На главную </button>
+                </div>
+            </div>
         </div>
         <dialog id="password-dialog">
             <form id="password-form" method="post" action="/user/changepassword">
@@ -35,8 +57,11 @@
                 <br>
                 <br>
                 <input name="userId" value="@ViewBag.Id" hidden/>
-                <button type="submit" id="confirm-btn">Изменить пароль</button>
-                <button type="button" id="cancel-btn">Отмена</button>
+
+               <div class="bottom">
+                    <button type="submit" id="confirm-btn">Изменить пароль</button>
+                    <button type="button" id="cancel-btn">Отмена</button>
+                </div>
             </form>
         </dialog>
         <script src="~/JS/goToPage.js"></script>
