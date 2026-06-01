@@ -32,6 +32,10 @@
                     </nav>
                 </div>
                 <div class="header-actions">
+                    <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
                     <div id="profile-actions"></div>
                 </div>
             </div>
@@ -132,62 +136,6 @@
 
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
-    <script src="~/JS/main.js"></script>
-
-    <script>
-        // SignalR для обновления статуса
-        const userId = '@userId';
-        let connection;
-
-        async function initializeSignalR() {
-            connection = new signalR.HubConnectionBuilder()
-                .withUrl("/cafeHub")
-                .build();
-
-            connection.on("OrderUpdated", (update) => {
-                let statusElement = document.querySelector(`[data-order-id="${update.orderId}"]`);
-                if (statusElement) {
-                    statusElement.textContent = update.status;
-                    statusElement.className = `order-status status-${update.status.toLowerCase()}`;
-                    showNotification(`Статус заказа №${update.orderNumber} изменён на "${update.status}"`, 'success');
-                }
-            });
-
-            try {
-                await connection.start();
-                if (userId && userId !== '0') {
-                    await connection.invoke("RegisterUser", parseInt(userId));
-                }
-            } catch (error) {
-                console.error("SignalR error:", error);
-            }
-        }
-
-        if (userId && userId !== '0') {
-            initializeSignalR();
-        }
-
-        // Профиль
-        document.addEventListener('DOMContentLoaded', async () => {
-            let user = await getUserData();
-            const profileActionsDiv = document.getElementById('profile-actions');
-
-            if (profileActionsDiv) {
-                if (user.name) {
-                    const safeName = sanitizeHtml(user.name);
-                    profileActionsDiv.innerHTML = `
-                        <a href="/user/me" class="user-icon" title="Профиль">
-                            <i class="fas fa-user-circle"></i>
-                            <span class="username">${safeName}</span>
-                        </a>`;
-                } else {
-                    profileActionsDiv.innerHTML = `
-                        <button class="login-btn" onclick="goToPage('/user/signin')">
-                            Войти
-                        </button>`;
-                }
-            }
-        });
-    </script>
+    <script src="~/JS/myOrder.js"></script>
 </body>
 </html>

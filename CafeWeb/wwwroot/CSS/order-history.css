@@ -228,6 +228,33 @@ header {
         transform: translateY(-2px);
     }
 
+.cart-icon {
+    position: relative;
+    color: #8B4513;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 24px;
+}
+    .cart-icon:hover {
+        color: #A0522D;
+    }
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4757;
+    color: white;
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
 /* Order card */
 .order-card {
     background: white;

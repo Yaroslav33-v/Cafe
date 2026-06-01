@@ -28,6 +28,10 @@
                     </nav>
                 </div>
                 <div class="header-actions">
+                    <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
                     <div id="profile-actions"></div>
                 </div>
             </div>
@@ -105,7 +109,7 @@
 
                             <div class="order-footer">
                                 <button class="btn-details" onclick="goToPage('/cafe/myorder?orderId=@order.Id')">
-                                   Подробнее
+                                    Подробнее
                                 </button>
                                 <div class="order-total">
                                     <span class="order-total-label">Итого:</span>
@@ -152,29 +156,6 @@
 
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
-    <script src="~/JS/main.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            let user = await getUserData();
-            const profileActionsDiv = document.getElementById('profile-actions');
-
-            if (profileActionsDiv) {
-                if (user.name) {
-                    const safeName = sanitizeHtml(user.name);
-                    profileActionsDiv.innerHTML = `
-                        <a href="/user/me" class="user-icon" title="Профиль">
-                            <i class="fas fa-user-circle"></i>
-                            <span class="username">${safeName}</span>
-                        </a>`;
-                } else {
-                    profileActionsDiv.innerHTML = `
-                        <button class="login-btn" onclick="goToPage('/user/signin')">
-                            Войти
-                        </button>`;
-                }
-            }
-        });
-    </script>
+    <script src="~/JS/orderHistory.js"></script>
 </body>
 </html>
