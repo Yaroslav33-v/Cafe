@@ -140,7 +140,7 @@ namespace CafeWeb.Controllers
             }
         }
 
-        public async Task<IActionResult> MyOrder()
+        public async Task<IActionResult> MyOrder(int orderId)
         {
             try
             {
@@ -148,9 +148,9 @@ namespace CafeWeb.Controllers
 
                 if(strId is not null && int.TryParse(strId, out int id))
                 {
-                    List<Order> orders = await _orderService.GetOrders(id);
+                    Order? order = await _orderService.GetOrderById(id, orderId);
 
-                    return View(orders);
+                    return View(order);
                 }
 
                 return Redirect("/signout");

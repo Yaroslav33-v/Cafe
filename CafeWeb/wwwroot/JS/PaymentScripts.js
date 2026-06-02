@@ -9,12 +9,18 @@
         timeout = setTimeout(later, delay);
     };
 }
+function parsePrice(priceString) {
+    // Удаляем все пробелы и заменяем запятую на точку
+    const cleanString = priceString.toString().replace(/\s/g, '').replace(',', '.');
+    return parseFloat(cleanString);
+}
+
 // Проверка промокода через API
 async function checkPromocode(promo) {
     const responseEl = document.getElementById('fetch-response');
     const totalPriceEl = document.getElementById('total-price');
     const totalInput = document.getElementById('total-input');
-    const originalTotal = parseFloat(totalPriceEl.dataset.originalTotal || totalPriceEl.textContent);
+    const originalTotal = parsePrice(totalPriceEl.dataset.originalTotal || totalPriceEl.textContent);
 
     // Сохраняем оригинальную сумму при первом вызове
     if (!totalPriceEl.dataset.originalTotal) {

@@ -152,7 +152,7 @@ namespace CafeWeb.Services
 
                     return currentOrder;
                 },
-                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready },
+                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready},
                 splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
             );
 
@@ -163,6 +163,7 @@ namespace CafeWeb.Services
                 _logger.LogError("Ошибка при получении истории заказов: {message}", ex.Message);
                 throw;
             }
+            
         }
 
         public async Task UpdateOrderStatus(int id, string status)
@@ -176,6 +177,73 @@ namespace CafeWeb.Services
 
             if (affected == 0)
                 throw new Exception($"Не удалось обновить статус заказа");
+        }
+
+        public async Task<Order?> GetOrderById(int userId, int orderId)
+        {
+            string sql = @"SELECT 
+                    o.order_id AS Id,
+                    o.order_number AS Number,
+                    o.created_at AS CreatedAt,
+                    o.status AS Status,
+                    o.done_at AS DoneAt,
+                    f.food_id AS Id,
+                    f.food_name AS Name,
+                    f.price AS Price,
+                    f.calories AS Calories,
+                    f.weight AS Weight,
+                    f.ingredients AS Ingredients,
+                    f.description AS Description,
+                    f.front_image_address AS FrontImageAddress,
+                    f.back_image_address AS BackImageAddress,
+                    f.category_id AS CategoryId,
+                    fo.food_quantity AS Quantity
+                FROM public.orders o
+                LEFT JOIN public.food_orders fo ON o.order_id = fo.order_id
+                LEFT JOIN public.food f ON fo.food_id = f.food_id
+                WHERE o.user_id = @UserId
+                 AND o.order_id = @OrderId
+                 AND o.status IN (@InProcess, @Ready)";
+
+            var orderDictionary = new Dictionary<int, Order>();
+
+            try
+            {
+                await _connection.QueryAsync<Order, Food, CartItem, Order>(sql,
+                (order, food, cartItem) =>
+                {
+                    // Проверяем, есть ли уже такой заказ в словаре
+                    if (!orderDictionary.TryGetValue(order.Id, out var currentOrder))
+                    {
+                        // Если нет - создаем новый
+                        currentOrder = order;
+                        currentOrder.CartItems = new List<CartItem>();
+                        orderDictionary.Add(currentOrder.Id, currentOrder);
+                    }
+
+                    // Если есть еда и количество > 0 - добавляем в корзину заказа
+                    if (food != null && cartItem != null && cartItem.Quantity > 0)
+                    {
+                        currentOrder.CartItems.Add(new CartItem
+                        {
+                            Food = food,
+                            Quantity = cartItem.Quantity
+                        });
+                    }
+
+                    return currentOrder;
+                },
+                new { UserId = userId, OrderId = orderId, OrderStatus.InProcess, OrderStatus.Ready},
+                splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
+            );
+
+                return orderDictionary.Values.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ошибка при получении истории заказов: {message}", ex.Message);
+                throw;
+            }
         }
     }
 }
