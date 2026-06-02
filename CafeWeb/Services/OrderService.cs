@@ -114,7 +114,7 @@ namespace CafeWeb.Services
                 LEFT JOIN public.food_orders fo ON o.order_id = fo.order_id
                 LEFT JOIN public.food f ON fo.food_id = f.food_id
                 WHERE o.user_id = @UserId
-                 AND o.status IN (@InProcess, @Ready, @Error, @Pending)";
+                 AND o.status IN (@InProcess, @Ready)";
 
             if (!all)
                 sql += @"
@@ -152,7 +152,7 @@ namespace CafeWeb.Services
 
                     return currentOrder;
                 },
-                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready, OrderStatus.Error, OrderStatus.Pending },
+                new { UserId = userId, OrderStatus.InProcess, OrderStatus.Ready},
                 splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
             );
 
@@ -203,7 +203,7 @@ namespace CafeWeb.Services
                 LEFT JOIN public.food f ON fo.food_id = f.food_id
                 WHERE o.user_id = @UserId
                  AND o.order_id = @OrderId
-                 AND o.status IN (@InProcess, @Ready, @Error, @Pending)";
+                 AND o.status IN (@InProcess, @Ready)";
 
             var orderDictionary = new Dictionary<int, Order>();
 
@@ -233,7 +233,7 @@ namespace CafeWeb.Services
 
                     return currentOrder;
                 },
-                new { UserId = userId, OrderId = orderId, OrderStatus.InProcess, OrderStatus.Ready, OrderStatus.Error, OrderStatus.Pending},
+                new { UserId = userId, OrderId = orderId, OrderStatus.InProcess, OrderStatus.Ready},
                 splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
             );
 

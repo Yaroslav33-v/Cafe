@@ -40,7 +40,6 @@
     <link href="~/CSS/cart.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
 </head>
 <body>
     <noscript>
@@ -62,7 +61,10 @@
                     </nav>
                 </div>
                 <div class="header-actions">
-                    
+                    <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">@Model.TotalItems</span>
+                    </a>
                     <div id="profile-actions"></div>
                 </div>
             </div>
@@ -72,7 +74,12 @@
     <main class="main-content">
         <div class="container">
             <div class="cart-container">
-                <h1 class="cart-title">🛒 Моя корзина</h1>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <h1 class="cart-title" style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">Моя корзина</h1>
+                    <button class="btn-back" onclick="goToPage('/cafe/index')">
+                        <i class="fas fa-arrow-left"></i> Назад в меню
+                    </button>
+                </div>
 
                 <div id="cart-items-container">
                     @if (!Model.Items.Any() && !Model.OfferItems.Any())
@@ -201,16 +208,18 @@
             try {
                 const response = await fetch('/cafe/getcart');
                 const data = await response.json();
-                
+
                 if (data.success) {
+                    // Обновляем счетчики
                     const totalQuantitySpan = document.getElementById('totalQuantity');
                     const totalPriceSpan = document.getElementById('totalPrice');
                     const cartCountSpan = document.querySelector('.cart-count');
-                    
+
                     if (totalQuantitySpan) totalQuantitySpan.textContent = data.totalItems;
                     if (totalPriceSpan) totalPriceSpan.textContent = data.totalAmount.toFixed(2) + ' ₽';
                     if (cartCountSpan) cartCountSpan.textContent = data.totalItems;
-                    
+
+                    // Обновляем отдельные элементы
                     if (data.items) {
                         for (const item of data.items) {
                             const quantitySpan = document.querySelector(`[data-quantity="${item.id}"]`);
@@ -219,7 +228,7 @@
                             if (totalSpan) totalSpan.textContent = item.total.toFixed(2) + ' ₽';
                         }
                     }
-                    
+
                     if (data.offerItems) {
                         for (const offer of data.offerItems) {
                             const quantitySpan = document.querySelector(`[data-offer-quantity="${offer.id}"]`);
@@ -234,19 +243,21 @@
             }
         }
 
-        // Переопределяем функции для обновления UI
+        // Переопределяем функцию updateQuantity для обновления UI
         const originalUpdateQuantity = updateQuantity;
         window.updateQuantity = async function(id, value) {
             await originalUpdateQuantity(id, value);
             await refreshCartUI();
         };
 
+        // Переопределяем функцию updateOfferQuantity
         const originalUpdateOfferQuantity = updateOfferQuantity;
         window.updateOfferQuantity = async function(id, value) {
             await originalUpdateOfferQuantity(id, value);
             await refreshCartUI();
         };
 
+        // Переопределяем функцию clearCart
         const originalClearCart = clearCart;
         window.clearCart = async function() {
             await originalClearCart();

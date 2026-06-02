@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>История заказов - Кафе "4 Творожка"</title>
-    <link href="~/CSS/order-history.css" rel="stylesheet" />
+    <link href="~/CSS/orderHistory.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -40,86 +40,79 @@
 
     <main class="main-content">
         <div class="container">
-            <div class="orders-container">
-                <div class="page-header">
-                    <h1 class="page-title">История заказов</h1>
-                    <button class="btn-back" onclick="goToPage('/user/me')">
-                        <i class="fas fa-arrow-left"></i> Назад
+            <div class="history-header">
+                <button class="btn-back" onclick="goToPage('/user/me')">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </button>
+                <h1 class="history-title">История заказов</h1>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="empty-history">
+                    <div class="empty-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="empty-title">У вас пока нет заказов</div>
+                    <div class="empty-message">Перейдите в меню и сделайте первый заказ!</div>
+                    <button class="btn-continue" onclick="goToPage('/cafe/index')">
+                        <i class="fas fa-utensils"></i> В меню
                     </button>
                 </div>
-
-                @if (!Model.Any())
-                {
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-receipt"></i>
-                        </div>
-                        <div class="empty-title">История пуста</div>
-                        <div class="empty-message">Вы пока не сделали ни одного заказа</div>
-                        <button class="btn-continue" onclick="goToPage('/cafe/index')">
-                            <i class="fas fa-utensils"></i> В меню
-                        </button>
-                    </div>
-                }
-                else
-                {
-                    foreach (var order in Model)
+            }
+            else
+            {
+                <div class="orders-list">
+                    @foreach (var order in Model)
                     {
                         <div class="order-card">
                             <div class="order-header">
-                                <div class="order-number">
-                                    ЗАКАЗ № <span>@order.Number.ToUpper()</span>
+                                <div class="order-number">                                    
+                                    ЗАКАЗ № @order.Number.ToUpper()
                                 </div>
-                                @{
-                                    string statusClass = order.Status switch
-                                    {
-                                        "Готов" => "готов",
-                                        "Готовится" => "готовится",
-                                        "Ожидает оплаты" => "ожидает",
-                                        "Ошибка оплаты" => "ошибка",
-                                        _ => "ожидает"
-                                    };
-                                }
-                                <div class="order-status status-@statusClass">
+                                <div class="order-status @(order.Status == "Готов" ? "status-ready" : "status-progress")">
                                     @order.Status
                                 </div>
-                                <div class="order-date">
-                                    <i class="far fa-calendar-alt"></i> @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")
-                                </div>
                             </div>
-
+                            <div class="order-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                            </div>
                             <div class="order-items">
-                                @foreach (var cartItem in order.CartItems.Take(3))
+                                @{
+                                    var firstItems = order.CartItems.Take(3).ToList();
+                                    var remainingCount = order.CartItems.Count - 3;
+                                }
+                                @foreach (var item in firstItems)
                                 {
                                     <div class="order-item">
-                                        <span class="order-item-name">@cartItem.Food.Name</span>
-                                        <span class="order-item-quantity">x @cartItem.Quantity шт.</span>
-                                        <span class="order-item-price">@cartItem.Total.ToString("N2") ₽</span>
+                                        <span class="item-name">@item.Food.Name</span>
+                                        <span class="item-quantity">x @item.Quantity</span>
+                                        <span class="item-price">@item.Total.ToString("N2") ₽</span>
                                     </div>
                                 }
-                                @if (order.CartItems.Count > 3)
+                                @if (remainingCount > 0)
                                 {
-                                    <div class="order-item">
-                                        <span class="order-item-more">и ещё @(order.CartItems.Count - 3) позиция(ий)...</span>
-                                        <span class="order-item-quantity"></span>
-                                        <span class="order-item-price"></span>
+                                    <div class="order-more">
+                                        <i class="fas fa-ellipsis-h"></i> и ещё @remainingCount позиция(ий)
                                     </div>
                                 }
                             </div>
-
                             <div class="order-footer">
-                                <button class="btn-details" onclick="goToPage('/cafe/myorder?orderId=@order.Id')">
-                                    Подробнее
-                                </button>
+                                <div class="order-actions">
+                                    <button class="btn-details" onclick="goToPage('/cafe/myorder?orderId=@order.Id')">
+                                        <i class="fas fa-info-circle"></i> Подробнее
+                                    </button>
+                                </div>
                                 <div class="order-total">
-                                    <span class="order-total-label">Итого:</span>
-                                    <span class="order-total-value">@order.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
+                                    <span>Итого:</span>
+                                    <span class="total-amount">@order.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
                                 </div>
                             </div>
                         </div>
                     }
-                }
-            </div>
+                </div>
+            }
         </div>
     </main>
 
@@ -128,7 +121,7 @@
             <div class="footer-content">
                 <div class="footer-col">
                     <h4>Четыре творожка</h4>
-                    <p>Кафе честной еды. Готовим с душой с 2020 года. От сырников до бургеров — каждый найдёт своё.</p>
+                    <p>Кафе честной еды. Готовим с душой с 2020 года.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Контакты</h4>
@@ -136,7 +129,6 @@
                         <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
                         <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
                         <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
-                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -149,13 +141,12 @@
             </div>
             <div class="footer-bottom">
                 <p>© 2026 Четыре творожка. Все права защищены.</p>
-                <img id="admin-relocation" src="~/IMG/crybady.jpg" />
             </div>
         </div>
     </footer>
 
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
-    <script src="~/JS/orderHistory.js"></script>
+    <script src="~/JS/main.js"></script>
 </body>
 </html>

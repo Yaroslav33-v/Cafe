@@ -1,16 +1,12 @@
 ﻿@model CafeWeb.Models.Order?
-@{
-    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0";
-}
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Детали заказа - Кафе "4 Творожка"</title>
-    <link href="~/CSS/my-order.css" rel="stylesheet" />
+    <title>Мой заказ - Кафе "4 Творожка"</title>
+    <link href="~/CSS/myOrder.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 </head>
 <body>
     <noscript>
@@ -44,62 +40,67 @@
 
     <main class="main-content">
         <div class="container">
-            <div class="orders-container">
-                <div class="page-header">
-                    <h1 class="page-title">Детали заказа</h1>
-                    <button class="btn-back" onclick="goToPage('/user/orderhistory')">
-                        <i class="fas fa-arrow-left"></i> К списку
+            <div class="order-header-page">
+                <button class="btn-back" onclick="goToPage('/user/orderhistory')">
+                    <i class="fas fa-arrow-left"></i> Назад к истории
+                </button>
+            </div>
+
+            @if (Model is null)
+            {
+                <div class="empty-order">
+                    <div class="empty-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="empty-title">Заказ не найден</div>
+                    <div class="empty-message">Возможно, заказ был удалён или вы указали неверный номер</div>
+                    <button class="btn-continue" onclick="goToPage('/user/orderhistory')">
+                        <i class="fas fa-list"></i> К истории заказов
                     </button>
                 </div>
-
-                @if (Model is null)
-                {
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-box-open"></i>
-                        </div>
-                        <div class="empty-title">Заказ не найден</div>
-                        <div class="empty-message">Заказ с таким номером не существует</div>
-                        <button class="btn-continue" onclick="goToPage('/user/orderhistory')">
-                            <i class="fas fa-list"></i> К истории заказов
-                        </button>
-                    </div>
-                }
-                else
-                {
-                    <div class="order-card">
-                        <div class="order-header">
-                            <div class="order-number">
-                                ЗАКАЗ № <span>@Model.Number.ToUpper()</span>
-                            </div>
-                            <div class="order-status status-@Model.Status.ToLower()" data-order-id="@Model.Id">
-                                @Model.Status
-                            </div>
-                            <div class="order-date">
-                                <i class="far fa-calendar-alt"></i> @Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")
-                            </div>
+            }
+            else
+            {
+                <div class="order-details">
+                    <div class="order-card-large">
+                        <div class="order-status-badge @(Model.Status == "Готов" ? "badge-ready" : "badge-progress")">
+                            @Model.Status
                         </div>
 
-                        <div class="order-items-list">
-                            @foreach (var cartItem in Model.CartItems)
-                            {
-                                <div class="order-item-row">
-                                    <div class="item-info">
-                                        <div class="item-name">@cartItem.Food.Name</div>
+                        <div class="order-number-large">
+                            ЗАКАЗ № @Model.Number.ToUpper()
+                        </div>
+
+                        <div class="order-date-large">
+                            <i class="fas fa-calendar-alt"></i>
+                            Создан: @Model.CreatedAt.ToString("dd.MM.yyyy в HH:mm")
+                        </div>
+
+                        <div class="order-items-large">
+                            <h3>Состав заказа</h3>
+                            <div class="items-list">
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <div class="order-item-large">
+                                        <div class="item-info">
+                                            <span class="item-name">@item.Food.Name</span>
+                                            <span class="item-quantity">x @item.Quantity</span>
+                                        </div>
+                                        <div class="item-price">
+                                            @item.Total.ToString("N2") ₽
+                                        </div>
                                     </div>
-                                    <div class="item-quantity">x @cartItem.Quantity шт.</div>
-                                    <div class="item-price">@cartItem.Total.ToString("N2") ₽</div>
-                                </div>
-                            }
+                                }
+                            </div>
                         </div>
 
-                        <div class="order-summary">
-                            <span class="summary-label">Итого:</span>
-                            <span class="summary-value">@Model.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
+                        <div class="order-total-large">
+                            <span>Общая сумма:</span>
+                            <span class="total-amount">@Model.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     </main>
 
@@ -108,7 +109,7 @@
             <div class="footer-content">
                 <div class="footer-col">
                     <h4>Четыре творожка</h4>
-                    <p>Кафе честной еды. Готовим с душой с 2020 года. От сырников до бургеров — каждый найдёт своё.</p>
+                    <p>Кафе честной еды. Готовим с душой с 2020 года.</p>
                 </div>
                 <div class="footer-col">
                     <h4>Контакты</h4>
@@ -116,7 +117,6 @@
                         <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
                         <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
                         <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
-                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -129,13 +129,12 @@
             </div>
             <div class="footer-bottom">
                 <p>© 2026 Четыре творожка. Все права защищены.</p>
-                <img id="admin-relocation" src="~/IMG/crybady.jpg" />
             </div>
         </div>
     </footer>
 
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
-    <script src="~/JS/myOrder.js"></script>
+    <script src="~/JS/main.js"></script>
 </body>
 </html>
