@@ -1,4 +1,8 @@
 ﻿@model CafeWeb.Models.Order?
+@{
+    // Получаем userId из Claims
+    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0";
+}
 
 <!DOCTYPE html>
 <html>
@@ -7,6 +11,7 @@
     <link href="~/CSS/myOrder.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 </head>
 <body>
     <noscript>
@@ -46,6 +51,8 @@
                 </button>
             </div>
 
+            <input hidden id="userId" value="@userId" />
+
             @if (Model is null)
             {
                 <div class="empty-order">
@@ -63,7 +70,7 @@
             {
                 <div class="order-details">
                     <div class="order-card-large">
-                        <div class="order-status-badge @(Model.Status == "Готов" ? "badge-ready" : "badge-progress")">
+                        <div class="order-status-badge @(Model.Status == "Готов" ? "badge-ready" : "badge-progress")" data-order-id="@Model.Id">
                             @Model.Status
                         </div>
 
@@ -75,6 +82,14 @@
                             <i class="fas fa-calendar-alt"></i>
                             Создан: @Model.CreatedAt.ToString("dd.MM.yyyy в HH:mm")
                         </div>
+
+                        @if(Model.DoneAt is not null)
+                        {
+                            <div class="order-date-large">
+                                <i class="fas fa-calendar-alt"></i>
+                                Приготовлен: @Model.DoneAt?.ToString("dd.MM.yyyy в HH:mm")
+                            </div>
+                        }
 
                         <div class="order-items-large">
                             <h3>Состав заказа</h3>
@@ -132,9 +147,8 @@
             </div>
         </div>
     </footer>
-
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
-    <script src="~/JS/main.js"></script>
+    <script src="~/JS/myOrder.js"></script>
 </body>
 </html>
