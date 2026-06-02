@@ -67,11 +67,11 @@ body::-webkit-scrollbar-thumb {
 }
 
 .section-light {
-    background-color: #eec66a;
+    background-color: #DEB887;
 }
 
 .section-cream {
-    background-color: #d6a240;
+    background-color: #DEB886;
 }
 
 .section-brown {
@@ -148,7 +148,7 @@ body::-webkit-scrollbar-thumb {
 }
 .values-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
     margin-top: 20px;
 }
