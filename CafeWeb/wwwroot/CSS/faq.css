@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(130deg, #A0522D 0%, #199212 80%, #DEB887 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     min-height: 100vh;
     padding: 50px 20px;
 }
@@ -92,17 +92,6 @@ button:disabled {
         display: block;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 .faq-list-modern {
     display: flex;
@@ -189,5 +178,35 @@ button:disabled {
     top: -120px;
     left: 50%;
     transform: translateX(-50%);
+  
     z-index: 10;
+}
+.exit {
+    margin-top:5%;
+    background: none;
+    border: 1px solid #d4a373;
+    color: #8B4513;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+    .exit:hover {
+        background: #d4a373;
+        color: #fff;
+    }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

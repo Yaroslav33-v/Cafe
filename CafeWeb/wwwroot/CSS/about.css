@@ -34,7 +34,7 @@ body::-webkit-scrollbar-thumb {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 10px;
 }
 .about-hero {
     height: 60vh;
@@ -74,51 +74,66 @@ body::-webkit-scrollbar-thumb {
     transition: box-shadow 0.3s;
 }
 
-    
     .sticky-nav.is-sticky {
         box-shadow: 0 2px 15px rgba(0,0,0,0.08);
     }
 
     .sticky-nav .container {
         display: flex;
-        gap: 32px;
-        overflow-x: auto; 
-        -webkit-overflow-scrolling: touch;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+        overflow: visible;
+        padding: 0 20px;
     }
 
-        
-        .sticky-nav .container::-webkit-scrollbar {
-            display: none;
-        }
+
+.exit {
+    background: none;
+    border: 1px solid #d4a373;
+    color: #8B4513;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+    .exit:hover {
+        background: #d4a373;
+        color: #fff;
+    }
+
 
 .sticky-nav-links {
     display: flex;
-    gap: 32px;
+    gap: 24px;
     align-items: center;
+    justify-content: center;
+    flex: 1;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin:0px 150px 0 150px;
+    padding: 0 10px;
 }
-
 
     .sticky-nav-links::-webkit-scrollbar {
         display: none;
     }
 
+
 .sticky-nav-link {
     position: relative;
-    display: inline-block;
     font-size: 15px;
     font-weight: 500;
     color: #666;
     text-decoration: none;
-    padding: 16px 4px;
+    padding: 18px 4px;
     white-space: nowrap;
     transition: color 0.3s;
-
 }
 
-   
     .sticky-nav-link::after {
         content: '';
         position: absolute;
@@ -139,7 +154,6 @@ body::-webkit-scrollbar-thumb {
             width: 100%;
         }
 
-    
     .sticky-nav-link.active {
         color: #d4a373;
     }
@@ -148,6 +162,23 @@ body::-webkit-scrollbar-thumb {
             width: 100%;
         }
 
+
+#profile-actions {
+    flex-shrink: 0;
+}
+
+    #profile-actions a {
+        text-decoration: none;
+        color: #8B4513;
+        font-size: 18px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        white-space: nowrap;
+    }
+
+        #profile-actions a:hover {
+            color: #A0522D;
+        }
 .login-btn {
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
     color: white;
@@ -199,7 +230,7 @@ body::-webkit-scrollbar-thumb {
     }
 
 .dropdown-panel {
-    position: absolute;
+    position: relative;
     top: 100%;
     right: 0;
     margin-top: 8px;

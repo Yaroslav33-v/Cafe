@@ -1,15 +1,32 @@
 ﻿body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 90%, #DEB887 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+    body::-webkit-scrollbar {
+        width: 10px;
+    }
 
+    body::-webkit-scrollbar-track {
+        background: white;
+        border-radius: 50px;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: #f6d6aa;
+        border-radius: 10px;
+    }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: #f9cc75;
+        }
 .out-form {
     width: 100%;
     max-width: 500px;
+    height:700px;
     padding: 20px;
 }
 
@@ -18,7 +35,7 @@ form {
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    padding: 40px 30px;
+    padding: 30px 20px;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -27,13 +44,11 @@ label {
     font-size: 18px;
     color: #333;
     font-weight: 500;
-    margin-bottom: 5px;
     display: block;
 }
 
 .under-pay {
-    margin-top: 20px;
-    padding-top: 20px;
+    padding:10px;
     border-top: 2px dashed #e0e0e0;
     display: flex;
     flex-direction: column;
@@ -52,14 +67,14 @@ label {
 .in-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .btn-pay {
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     color: white;
     border: none;
-    padding: 15px 40px;
+    padding: 15px 20px;
     font-size: 18px;
     font-weight: 600;
     border-radius: 50px;

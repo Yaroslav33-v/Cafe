@@ -52,14 +52,7 @@ img {
     padding: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
-@keyframes spin{
-    from {
-        transform: rotate(0deg);
-    }
-    to{
-        transform: rotate(360deg);
-    }
-}
+
 h1 {
     font-size: 280px;
     color: #333;
@@ -84,4 +77,13 @@ p {
     line-height: 1;
     display: inline-block;
     filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.5));
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
