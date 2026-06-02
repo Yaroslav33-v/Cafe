@@ -24,39 +24,8 @@ async function getUserData() {
     }
 }
 
-// Экранирование HTML
-function sanitizeHtml(str) {
-    if (!str) return '';
-    return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', async () => {
     // Обновляем счетчик корзины
     await updateCartCounter();
-
-    // Отображаем кнопку для входа, либо имя пользователя
-    let user = await getUserData();
-    const profileActionsDiv = document.getElementById('profile-actions');
-
-    if (profileActionsDiv) {
-        if (user.name) {
-            const safeName = sanitizeHtml(user.name);
-            profileActionsDiv.innerHTML = `
-                <a href="/user/me" class="user-icon" title="Профиль">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="username">${safeName}</span>
-                </a>`;
-        } else {
-            profileActionsDiv.innerHTML = `
-                <button class="login-btn" onclick="goToPage('/user/signin')">
-                    Войти
-                </button>`;
-        }
-    }
 });

@@ -69,24 +69,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (userId && userId !== '0') {
         initializeSignalR();
     }
-
-    // Отображаем кнопку для входа, либо имя пользователя
-    let user = await getUserData();
-    const profileActionsDiv = document.getElementById('profile-actions');
-
-    if (profileActionsDiv) {
-        if (user.name) {
-            const safeName = sanitizeHtml(user.name);
-            profileActionsDiv.innerHTML = `
-                <a href="/user/me" class="user-icon" title="Профиль">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="username">${safeName}</span>
-                </a>`;
-        } else {
-            profileActionsDiv.innerHTML = `
-                <button class="login-btn" onclick="goToPage('/user/signin')">
-                    Войти
-                </button>`;
-        }
-    }
 });
