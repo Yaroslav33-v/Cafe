@@ -15,15 +15,36 @@
             Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
         </div>
     </noscript>
-    <section class="about-hero">
+    <nav class="sticky-nav" id="stickyNav">
+        <div class="container">
+            <button class="exit" onclick="goToPage('/cafe/index')"> Назад </button>
+            <div class="sticky-nav-links">
+
+                <a href="#about" class="sticky-nav-link active">О нас</a>
+                <a href="#story" class="sticky-nav-link">Наша история</a>
+                <a href="#cinus" class="sticky-nav-link">Наши ценности</a>
+                <a href="#stats" class="sticky-nav-link">Наша статистика</a>
+                <a href="#meny" class="sticky-nav-link">Меню</a>
+                <a href="#contacts" class="sticky-nav-link">Контакты</a>
+            </div>
+            <div id="profile-actions">
+
+            </div>
+        </div>
+        
+    </nav>
+    <section id="about" class="about-hero">
         <div class="container">
             <h1>О нас</h1>
             <p>Место, где встретились бабушкины рецепты и современная кухня</p>
         </div>
+
     </section>
 
-    <!-- История нашего кафе-->
-    <section class="section section-light">
+
+
+
+    <section id="story" class="section section-light">
         <div class="container">
             <h2 class="section-title">Наша история</h2>
             <div class="section-subtitle">Как все начиналось</div>
@@ -50,8 +71,8 @@
             </div>
         </div>
     </section>
-    <!--Наши ценности-->
-    <section class="section section-cream">
+
+    <section id="cinus" class="section section-cream">
         <div class="container">
             <h2 class="section-title">Наши ценности</h2>
             <div class="section-subtitle">Почему нам можно доверять</div>
@@ -91,8 +112,8 @@
         </div>
 
     </section>
-    <!--Наши показатели в цифрах-->
-    <section class="section section-brown">
+
+    <section id="stats" class="section section-brown">
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item">
@@ -114,8 +135,8 @@
             </div>
         </div>
     </section>
-    <!--Меню в цифрах-->
-    <section class="section section-light">
+
+    <section id="meny" class="section section-light">
         <div class="container">
             <h2 class="section-title">Что у нас есть</h2>
             <div class="section-subtitle">Каждый найдёт что-то своё</div>
@@ -159,7 +180,7 @@
         </div>
     </section>
 
-    <!-- Призыв к действию -->
+
     <section class="cta">
         <div class="container">
             <h2>Хотите попробовать?</h2>
@@ -169,8 +190,8 @@
     </section>
     <script src="../JS/goToPage.js"></script>
 
-    <!-- Футер -->
-    <footer class="footer">
+
+    <footer id="contacts" class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-col">
@@ -199,6 +220,14 @@
             </div>
         </div>
     </footer>
-</body>
 
+    <button class="scroll-to-top" id="scrollToTop" title="Наверх">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="../JS/scroll.js"></script>
+    <script src="../JS/main.js"></script>
+    <script src="../JS/nav.js"></script>
+</body>
+    
 </html>
