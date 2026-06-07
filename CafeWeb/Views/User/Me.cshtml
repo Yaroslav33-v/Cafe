@@ -4,6 +4,8 @@
         <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
         <link href="~/CSS/user-me.css" rel="stylesheet" />
         <title> Профиль @ViewBag.Login </title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     </head>
     <body>
         <noscript>
@@ -19,18 +21,28 @@
                     <div class="header-left">
                         <div class="logo">
                             <img src="~/IMG/logo-cafe.png" alt="Logo" />
-                            <h1>Добро пожаловать в профиль, @ViewBag.Login !</h1>
+                            <label>Добро пожаловать в профиль, @ViewBag.Login !</label>
                         </div>
 
+                    </div>
+                    <div class="header-actions">
+                        <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count"></span>
+                        </a>
+                        <div id="profile-actions">
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
+    
         <div class="main-content">
             <div class="container">
             
-                <h2>Доступные действия:</h2>
+               
                 <div class="container-content">
+                    <label id="do">Доступные действия:</label>
                     <div class="content-row">
                         <button id="password-btn"> Сменить пароль </button>
                         <button onclick="goToPage('/user/orderhistory?userId=@ViewBag.Id')"> История заказов </button>
@@ -67,5 +79,6 @@
         <script src="~/JS/goToPage.js"></script>
         <script src="~/JS/showNotification.js"></script>
         <script src="~/JS/userMainPage.js"></script>
+        <script src="~/JS/main.js"></script>
     </body>
 </html>

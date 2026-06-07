@@ -228,7 +228,7 @@ header {
 }
 
 .search {
-    max-width: 1000px;
+    max-width: 1060px;
     margin: auto 16% auto;
     padding: 0 20px;
     width: 100%;
@@ -269,7 +269,7 @@ header {
 aside {
     position:relative;
     margin-right: 5%;
-    margin-bottom: 15%;
+    margin-bottom: 13%;
     width: 200px;
     height: fit-content;
     background: #fff8f0;

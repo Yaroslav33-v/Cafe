@@ -27,9 +27,17 @@
                     <div class="header-left">
                         <div class="logo">
                             <img src="~/IMG/logo-cafe.png" alt="Logo" />
-                            <h1>Добро пожаловать в акции</h1>
+                            <label>Добро пожаловать в акции</label>
                         </div>
 
+                    </div>
+                    <div class="header-actions">
+                        <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count"></span>
+                        </a>
+                        <div id="profile-actions">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,7 +61,7 @@
                         <div class="offer-card">
                             <div class="offer-info">
                             
-                                <h3>Акция @offer.Offer.Name</h3>
+                                <h2>Акция @offer.Offer.Name</h2>
                                 <p>@offer.Offer.Description</p>
                             
                             
@@ -104,5 +112,6 @@
         <script src="~/JS/showNotification.js"></script>
         <script src="~/JS/addOfferToCart.js"></script>
         <script src="~/JS/goToPage.js"></script>
+        <script src="~/JS/main.js"></script>
     </body>
 </html>

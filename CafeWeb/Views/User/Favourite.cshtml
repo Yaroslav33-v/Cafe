@@ -7,7 +7,9 @@
         <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
         <link href="~/CSS/favourite.css" rel="stylesheet" />
         <title> Избранное </title>
-    </head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
     <body>
         <noscript>
             <!-- Отображается только если у пользователя выключен js в браузере -->
@@ -21,9 +23,17 @@
                     <div class="header-left">
                         <div class="logo">
                             <img src="~/IMG/logo-cafe.png" alt="Logo" />
-                            <h1>Добро пожаловать в избранное</h1>
+                            <label>Добро пожаловать в акции</label>
                         </div>
 
+                    </div>
+                    <div class="header-actions">
+                        <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count"></span>
+                        </a>
+                        <div id="profile-actions">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,7 +51,7 @@
                 else 
                 {
                     <div class="main-menu">
-                        <h3>ИЗБРАННОЕ</h3>
+                        <h2>Избранное</h2>
                         <div class="category-items">
                             @foreach(var food in Model.Foods)
                             {
@@ -95,5 +105,6 @@
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
     <script src="~/JS/fav.js"></script>
+    <script src="~/JS/main.js"></script>
 </body>
 </html>
