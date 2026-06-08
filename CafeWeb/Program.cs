@@ -71,7 +71,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 // Политики авторизации
 builder.Services.AddAuthorizationBuilder()
-    .AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+    .AddPolicy("AdminOnly", policy => policy.RequireRole("admin"))
+    .AddPolicy("UserOnly", policy =>
+        policy.RequireAssertion(context =>
+        {
+            // Если не авторизован - пропускаем
+            if (!context.User.Identity.IsAuthenticated)
+                return true;
+
+            // Если авторизован - проверяем что НЕ админ и имеет роль User
+            return !context.User.IsInRole("admin") &&
+                   context.User.IsInRole("user");
+        }));
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())

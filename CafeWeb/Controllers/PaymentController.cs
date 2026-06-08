@@ -9,6 +9,7 @@ using System.Security.Claims;
 namespace CafeWeb.Controllers
 {
     [Authorize]
+    [Authorize(Policy = "UserOnly")]
     [Route("/payment/[action]")]
     public class PaymentController : Controller
     {

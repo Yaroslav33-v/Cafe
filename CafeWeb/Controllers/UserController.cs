@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 namespace CafeWeb.Controllers
 {
+    [Authorize(Policy = "UserOnly")]
     [Route("/user/[action]")]
     public class UserController : Controller
     {
@@ -59,7 +60,10 @@ namespace CafeWeb.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                return Redirect(returnUrl ?? "/Cafe/Index");
+                if (claimsIdentity.FindFirst(ClaimTypes.Role).Value == "admin")
+                    return Redirect("/admin/index");
+
+                return Redirect(returnUrl ?? "/cafe/index");
             }
             catch(Exception ex) 
             {
