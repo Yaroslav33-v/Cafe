@@ -617,3 +617,6 @@ body::-webkit-scrollbar-thumb {
         transform: scale(0.9);
     }
 
+#cinus {
+    border-top: 1px solid black;
+}

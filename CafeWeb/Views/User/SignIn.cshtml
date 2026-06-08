@@ -19,7 +19,7 @@
     <form method="post" action="/user/signin">
     
         <div class="in-form">
-            <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155">
+            <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155" onclick="goToPage('/cafe/index')">
             <label> Введите логин: </label>
             <input id="username" type="text" name="Login" maxlength="25" required />
             <p>@ViewBag.Problem</p>
@@ -37,6 +37,6 @@
         </div>
     </form>
 </div>
-
+    <script src="~/JS/ShowPassword.js"></script>
+    <script src="~/JS/goToPage.js"></script>
 </body>
-<script src="~/JS/ShowPassword.js"></script>

@@ -197,3 +197,8 @@ header {
         background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
         color: white;
     }
+
+#hello-label {
+    font-weight: 600;
+    font-size: 19px
+}

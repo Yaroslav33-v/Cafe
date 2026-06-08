@@ -1,4 +1,30 @@
-﻿// Функция для экранирования HTML
+﻿async function updateCartCounter() {
+    try {
+        const response = await fetch('/cart-count');
+        const data = await response.json();
+
+        const cartCounter = document.querySelector('.cart-count');
+        if (cartCounter) {
+            cartCounter.textContent = data.count;
+        }
+    } catch (error) {
+        console.error('Ошибка обновления корзины: ', error);
+    }
+}
+
+async function getUserData() {
+    try {
+        const response = await fetch('/me');
+        const data = await response.json();
+
+        return data;
+
+    } catch (error) {
+        console.error('Ошибка получения данных пользователя: ', error);
+    }
+}
+
+// Функция для экранирования HTML
 function sanitizeHtml(str) {
     if (!str) return '';
     return str
@@ -14,6 +40,8 @@ const profileActionsDiv = document.getElementById('profile-actions');
 document.addEventListener('DOMContentLoaded', async () => {
     // Отображаем кнопку для входа, либо имя пользователя
     let user = await getUserData();
+
+    await updateCartCounter();
 
     if (user.name) {
         const safeName = sanitizeHtml(user.name);

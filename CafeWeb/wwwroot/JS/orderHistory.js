@@ -20,7 +20,6 @@ async function getUserData() {
         return data;
     } catch (error) {
         console.error('Ошибка получения данных пользователя: ', error);
-        return {};
     }
 }
 

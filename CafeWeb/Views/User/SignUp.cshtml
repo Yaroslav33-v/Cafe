@@ -30,7 +30,7 @@
    
         <form method="post" action="/user/signup">
             <div class="in-form">
-                <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155">
+                <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155" onclick="goToPage('/cafe/index')">
                 <label>Введите логин: </label>
                 <input id="username"  type="text" name="Login" maxlength="25" required />
                 <span id="status"></span> 
@@ -47,6 +47,7 @@
             </div>
         </form>
     </div>
+    <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/ShowPassword.js"></script>
     <script src="~/JS/UserScripts.js"></script>
 </body>
