@@ -154,7 +154,7 @@ app.MapGet("/check-login/{login}", async (IUserService userService, string login
 app.MapGet("/signout", async (HttpContext context) =>
 {
     await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return Results.Redirect("/user/signin");
+    return Results.Redirect("/");
 }); // endpoint для выхода из аккаунта
 
 app.MapGet("/me", (HttpContext context) =>

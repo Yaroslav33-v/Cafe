@@ -47,6 +47,11 @@ namespace CafeWeb.Controllers
             return View();
         }
 
+        public ViewResult History()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddFood([FromForm] AdminFoodModel adminFoodModel)
         {

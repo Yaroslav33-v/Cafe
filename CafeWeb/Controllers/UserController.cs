@@ -8,7 +8,6 @@ using System.Security.Claims;
 
 namespace CafeWeb.Controllers
 {
-    [Authorize(Policy = "UserOnly")]
     [Route("/user/[action]")]
     public class UserController : Controller
     {
@@ -40,14 +39,22 @@ namespace CafeWeb.Controllers
             {
                 await _userService.SignUp(user);
 
-                if (!string.IsNullOrEmpty(referer))
+                ClaimsIdentity claimsIdentity = await _userService.SignIn(user);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity));
+
+                if (!string.IsNullOrEmpty(referer) && !referer.Contains("/signin", StringComparison.CurrentCultureIgnoreCase))
                     return Redirect(referer);
 
-                return RedirectToAction("SignIn");
+                var roleClaim = claimsIdentity.FindFirst(ClaimTypes.Role);
+                if (roleClaim != null && roleClaim.Value == "admin")
+                    return Redirect("/admin/index");
+
+                return Redirect("/cafe/index");
             }
             catch(Exception ex)
             {
-                return RedirectToAction("SignIn", new { referer, problem = ex.Message });
+                return RedirectToAction("SignUp", new { referer, problem = ex.Message });
             }
         }
 
@@ -60,8 +67,10 @@ namespace CafeWeb.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                if (claimsIdentity.FindFirst(ClaimTypes.Role).Value == "admin")
+                var roleClaim = claimsIdentity.FindFirst(ClaimTypes.Role);
+                if (roleClaim != null && roleClaim.Value == "admin")
                     return Redirect("/admin/index");
+
 
                 return Redirect(returnUrl ?? "/cafe/index");
             }
@@ -72,6 +81,7 @@ namespace CafeWeb.Controllers
         }
 
         [Authorize]
+        [Authorize(Policy = "UserOnly")]
         public IActionResult Me()
         {
             var name = HttpContext.User.FindFirst(ClaimTypes.Name)?.Value;
@@ -89,6 +99,7 @@ namespace CafeWeb.Controllers
         }
 
         [Authorize]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> OrderHistory(int userId)
         {
             try
@@ -112,6 +123,7 @@ namespace CafeWeb.Controllers
         }
 
         [Authorize]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> Favourite(int userId)
         {
             try
@@ -135,6 +147,7 @@ namespace CafeWeb.Controllers
         }
 
         [Authorize]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> Offers()
         {
             try
@@ -149,6 +162,7 @@ namespace CafeWeb.Controllers
         }
 
         [Authorize]
+        [Authorize(Policy = "UserOnly")]
         [HttpPost]
         public async Task<IActionResult> ChangePassword([FromForm] int userId,
             [FromForm] string currentPassword,
