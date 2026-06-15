@@ -1,10 +1,12 @@
 ﻿using CafeWeb.Models;
 using CafeWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace CafeWeb.Controllers
 {
+    [Authorize(Policy = "UserOnly")]
     public class CafeController : Controller // Контроллер для кафе 
     {
         private readonly ICafeService _cafeService;

@@ -1,4 +1,5 @@
-﻿using CafeWeb.Models;
+﻿using CafeWeb.Enums;
+using CafeWeb.Models;
 using Dapper;
 using Npgsql;
 using System.Data;
@@ -227,6 +228,72 @@ namespace CafeWeb.Services
             {
                 _logger.LogError("Непридвиденная внутренняя ошибка: {message}", ex.Message);
                 throw new Exception("Непридвиденная внутренняя ошибка");
+            }
+        }
+
+        public async Task<List<Order>> GetAllOrders()
+        {
+            string sql = @"SELECT 
+	                        o.user_id AS UserId,
+	                        u.login AS Login,
+                            o.order_id AS Id,
+                            o.order_number AS Number,
+                            o.created_at AS CreatedAt,
+                            o.status AS Status,
+                            o.done_at AS DoneAt,
+                            f.food_id AS Id,
+                            f.food_name AS Name,
+                            f.price AS Price,
+                            f.calories AS Calories,
+                            f.weight AS Weight,
+                            f.ingredients AS Ingredients,
+                            f.description AS Description,
+                            f.front_image_address AS FrontImageAddress,
+                            f.back_image_address AS BackImageAddress,
+                            f.category_id AS CategoryId,
+                            fo.food_quantity AS Quantity
+                        FROM public.orders o
+                        LEFT JOIN public.food_orders fo ON o.order_id = fo.order_id
+                        LEFT JOIN public.food f ON fo.food_id = f.food_id
+                        LEFT JOIN public.users u ON o.user_id = u.user_id";
+
+            var orderDictionary = new Dictionary<int, Order>();
+
+            try
+            {
+                await _connection.QueryAsync<Order, Food, CartItem, Order>(sql,
+                (order, food, cartItem) =>
+                {
+                    // Проверяем, есть ли уже такой заказ в словаре
+                    if (!orderDictionary.TryGetValue(order.Id, out var currentOrder))
+                    {
+                        // Если нет - создаем новый
+                        currentOrder = order;
+                        currentOrder.CartItems = new List<CartItem>();
+                        orderDictionary.Add(currentOrder.Id, currentOrder);
+                    }
+
+                    // Если есть еда и количество > 0 - добавляем в корзину заказа
+                    if (food != null && cartItem != null && cartItem.Quantity > 0)
+                    {
+                        currentOrder.CartItems.Add(new CartItem
+                        {
+                            Food = food,
+                            Quantity = cartItem.Quantity
+                        });
+                    }
+
+                    return currentOrder;
+                },
+                splitOn: "Id, Quantity"  // Указываем, где заканчивается Order и начинается Food
+            );
+
+                return orderDictionary.Values.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ошибка при получении истории заказов: {message}", ex.Message);
+                throw;
             }
         }
     }

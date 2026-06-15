@@ -3,6 +3,7 @@ using CafeWeb.Services;
 using CafeWeb.Static;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CafeWeb.Controllers
 {
@@ -45,6 +46,12 @@ namespace CafeWeb.Controllers
         {
             ViewBag.Message = message;
             return View();
+        }
+
+        public async Task<IActionResult> History()
+        {
+            var orders = await _adminService.GetAllOrders();
+            return View(orders);            
         }
 
         [HttpPost]

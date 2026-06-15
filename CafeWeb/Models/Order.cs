@@ -2,6 +2,8 @@
 {
     public class Order
     {
+        public int? UserId { get; set; }
+        public string? Login { get; set; }
         public int Id { get; set; }
         public string Number { get; set; } = null!;
         public DateTime CreatedAt { get; set; } 
