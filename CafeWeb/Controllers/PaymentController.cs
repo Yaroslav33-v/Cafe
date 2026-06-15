@@ -53,6 +53,11 @@ namespace CafeWeb.Controllers
         {
             try
             {
+                var role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+
+                if (role == "admin")
+                    return Redirect("/admin/index");
+
                 var strId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (strId is not null && int.TryParse(strId, out int userId))
