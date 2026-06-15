@@ -231,7 +231,7 @@ namespace CafeWeb.Services
             }
         }
 
-        public async Task<List<FullOrderModel>> GetAllOrders()
+        public async Task<List<Order>> GetAllOrders()
         {
             string sql = @"SELECT 
 	                        o.user_id AS UserId,
@@ -257,26 +257,26 @@ namespace CafeWeb.Services
                         LEFT JOIN public.food f ON fo.food_id = f.food_id
                         LEFT JOIN public.users u ON o.user_id = u.user_id";
 
-            var orderDictionary = new Dictionary<int, FullOrderModel>();
+            var orderDictionary = new Dictionary<int, Order>();
 
             try
             {
-                await _connection.QueryAsync<FullOrderModel, Food, CartItem, FullOrderModel>(sql,
+                await _connection.QueryAsync<Order, Food, CartItem, Order>(sql,
                 (order, food, cartItem) =>
                 {
                     // Проверяем, есть ли уже такой заказ в словаре
-                    if (!orderDictionary.TryGetValue(order.Order.Id, out var currentOrder))
+                    if (!orderDictionary.TryGetValue(order.Id, out var currentOrder))
                     {
                         // Если нет - создаем новый
                         currentOrder = order;
-                        currentOrder.Order.CartItems = new List<CartItem>();
-                        orderDictionary.Add(currentOrder.Order.Id, currentOrder);
+                        currentOrder.CartItems = new List<CartItem>();
+                        orderDictionary.Add(currentOrder.Id, currentOrder);
                     }
 
                     // Если есть еда и количество > 0 - добавляем в корзину заказа
                     if (food != null && cartItem != null && cartItem.Quantity > 0)
                     {
-                        currentOrder.Order.CartItems.Add(new CartItem
+                        currentOrder.CartItems.Add(new CartItem
                         {
                             Food = food,
                             Quantity = cartItem.Quantity

@@ -1,25 +1,25 @@
-﻿@model List<CafeWeb.Models.FullOrderModel>
+﻿@model List<CafeWeb.Models.Order>
 
 @foreach(var order in Model)
 {
-    <p>@order.Login</p>
     <div class="order-card">
+        <h1>@order.Login</h1>
         <div class="order-header">
             <div class="order-number">
-                ЗАКАЗ № @order.Order.Number.ToUpper()
+                ЗАКАЗ № @order.Number.ToUpper()
             </div>
-            <div class="order-status @(order.Order.Status == "Готов" ? "status-ready" : "status-progress")">
-                @order.Order.Status
+            <div class="order-status @(order.Status == "Готов" ? "status-ready" : "status-progress")">
+                @order.Status
             </div>
         </div>
         <div class="order-date">
             <i class="fas fa-calendar-alt"></i>
-            @order.Order.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+            @order.CreatedAt.ToString("dd.MM.yyyy HH:mm")
         </div>
         <div class="order-items">
             @{
-                var firstItems = order.Order.CartItems.Take(3).ToList();
-                var remainingCount = order.Order.CartItems.Count - 3;
+                var firstItems = order.CartItems.Take(3).ToList();
+                var remainingCount = order.CartItems.Count - 3;
             }
             @foreach (var item in firstItems)
             {
@@ -38,13 +38,13 @@
         </div>
         <div class="order-footer">
             <div class="order-actions">
-                <button class="btn-details" onclick="goToPage('/cafe/myorder?orderId=@order.Order.Id')">
+                <button class="btn-details" onclick="goToPage('/cafe/myorder?orderId=@order.Id')">
                     <i class="fas fa-info-circle"></i> Подробнее
                 </button>
             </div>
             <div class="order-total">
                 <span>Итого:</span>
-                <span class="total-amount">@order.Order.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
+                <span class="total-amount">@order.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
             </div>
         </div>
     </div>

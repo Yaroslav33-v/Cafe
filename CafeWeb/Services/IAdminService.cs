@@ -10,6 +10,6 @@ namespace CafeWeb.Services
         Task InsertAdmin(User user);
         Task<List<string>> GetCategoryNames();
         Task<Dictionary<int, FoodShortModel>> GetAllFood();
-        Task<List<FullOrderModel>> GetAllOrders();
+        Task<List<Order>> GetAllOrders();
     }
 }
