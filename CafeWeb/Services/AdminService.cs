@@ -293,7 +293,7 @@ namespace CafeWeb.Services
             catch (Exception ex)
             {
                 _logger.LogError("Ошибка при получении истории заказов: {message}", ex.Message);
-                throw;
+                return [];
             }
         }
     }

@@ -1,6 +1,13 @@
 ﻿@model List<CafeWeb.Models.Order>
 
-@foreach(var order in Model)
+
+@if (!Model.Any())
+{
+    <div>
+        <p>История заказов пуста</p>
+    </div>
+}
+else foreach(var order in Model)
 {
     <div class="order-card">
         <h1>@order.Login</h1>
