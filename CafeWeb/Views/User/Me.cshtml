@@ -4,7 +4,8 @@
         <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
         <link href="~/CSS/user-me.css" rel="stylesheet" />
         <title> Профиль @ViewBag.Login </title>
-    <link href="~/CSS/header.css" rel="stylesheet" />
+        <link href="~/CSS/header.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </head>
     <body>
         <noscript>
@@ -20,23 +21,28 @@
                 <div class="header-left">
                     <div class="logo">
                         <img src="~/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
-                        <label>Добро пожаловать в профиль</label>
                     </div>
-
+                    <nav class="header-nav">
+                        <a href="/about">О нас</a>
+                        <a href="/faq">FAQ</a>
+                    </nav>
                 </div>
                 <div class="header-actions">
                     <a href="/cafe/cart" class="cart-icon" title="Корзина">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count"></span>
+                        <span class="cart-count">0</span>
                     </a>
-                    <div id="profile-actions">
-                    </div>
+                    <div id="profile-actions"></div>
                 </div>
             </div>
         </div>
     </header>
         <div class="main-content">
             <div class="container">
+                <div class="history-header">
+                   
+                    <h1 class="history-title">Добро пожаловать в профиль, @ViewBag.login</h1>
+                </div>
             
                 <label>Доступные действия:</label>
                 <div class="container-content">

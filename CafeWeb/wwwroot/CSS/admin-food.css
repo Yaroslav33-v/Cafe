@@ -59,36 +59,34 @@
         cursor: not-allowed;
     }
 
-.btn-go {
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    font-size: 15px;
-    font-weight: 550;
-    border-radius: 50px;
+#exit {
+    background: transparent;
+    color: #CD853F;
+    border: 2px solid #CD853F;
+    padding: 10px 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    max-width: 250px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s;
+    border-radius:50px;
+    font-size:19px;
 }
 
-    .btn-go:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    #exit:hover {
+        background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+        color: white;
     }
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+}
 
-    .btn-go:active {
-        transform: translateY(0);
-    }
+button:active {
+    transform: translateY(0);
+}
 
-    .btn-go:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
 
 .food-modal {
@@ -201,7 +199,7 @@
 
 .container {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1100px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);

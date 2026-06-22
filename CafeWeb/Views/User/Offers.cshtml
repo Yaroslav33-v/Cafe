@@ -28,25 +28,31 @@
                 <div class="header-left">
                     <div class="logo">
                         <img src="~/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
-                        <label>Добро пожаловать в акции</label>
                     </div>
-
+                    <nav class="header-nav">
+                        <a href="/about">О нас</a>
+                        <a href="/faq">FAQ</a>
+                    </nav>
                 </div>
                 <div class="header-actions">
                     <a href="/cafe/cart" class="cart-icon" title="Корзина">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count"></span>
+                        <span class="cart-count">0</span>
                     </a>
-                    <div id="profile-actions">
-                    </div>
+                    <div id="profile-actions"></div>
                 </div>
             </div>
         </div>
     </header>
         <div class="main-content">
             <div class="container">
-            
-                <h1>Доступные акции</h1>
+                <div class="history-header">
+                    <button class="btn-back" onclick="goToPage('/user/me')">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <h1 class="history-title">Доступные акции</h1>
+                </div>
+               
                 @if(Model is null || !Model.Any())
                 {
                     <div id="none-offer">
@@ -105,9 +111,7 @@
                    
                     </div>
                 }
-                <div class="bottom">
-                    <button id="exit" onclick="goToPage('/user/me')"> Назад </button>
-                </div>
+                
             </div>
         </div>
         <script src="~/JS/header.js"></script>

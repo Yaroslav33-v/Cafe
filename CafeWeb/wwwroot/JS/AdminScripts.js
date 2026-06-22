@@ -14,3 +14,14 @@ function getRandomPromocode() {
 
     return randPromo;
 }
+async function getUserData() {
+    try {
+        const response = await fetch('/me');
+        const data = await response.json();
+
+        return data;
+
+    } catch (error) {
+        console.error('Ошибка получения данных пользователя: ', error);
+    }
+}
