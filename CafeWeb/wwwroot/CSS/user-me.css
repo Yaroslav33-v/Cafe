@@ -211,7 +211,7 @@ label {
     justify-content: center;
 }
 
-#exit, button#cancel-btn {
+button#cancel-btn {
     background: transparent;
     color: #CD853F;
     border: 2px solid #CD853F;
@@ -220,10 +220,23 @@ label {
     transition: all 0.3s;
 }
 
-    #exit:hover, button#cancel-btn:hover {
+    button#cancel-btn:hover {
         background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
         color: white;
     }
+
+button.exit {
+    background: transparent;
+    color: #CD853F;
+    border: 2px solid #CD853F;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+button.exit:hover {
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
+    color: white;
+}
 
 #hello-label {
     font-weight: 600;
