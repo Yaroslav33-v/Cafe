@@ -61,11 +61,6 @@
                             }
                         </div>
                         <div class="order-footer">
-                            <div class="order-actions">
-                                <button class="btn-details" onclick="goToPage('/cafe/myorder?orderId=@order.Id')">
-                                    <i class="fas fa-info-circle"></i> Подробнее
-                                </button>
-                            </div>
                             <div class="order-total">
                                 <span>Итого:</span>
                                 <span class="total-amount">@order.CartItems.Sum(i => i.Total).ToString("N2") ₽</span>
@@ -75,5 +70,6 @@
                 }
             </div>
         </main>
+        <script src="~/JS/goToPage.js"></script>
     </body>
 </html>
