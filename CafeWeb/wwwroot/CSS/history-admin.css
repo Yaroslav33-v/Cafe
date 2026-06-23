@@ -82,6 +82,24 @@
     text-align: center;
     margin-right: 95px;
 }
+
+.empty-history {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-icon {
+    font-size: 64px;
+    color: #DEB887;
+    margin-bottom: 20px;
+}
+
+.empty-title {
+    font-size: 24px;
+    color: #8B4513;
+    margin-bottom: 10px;
+}
+
 .orders-list {
     display: flex;
     flex-direction: column;
