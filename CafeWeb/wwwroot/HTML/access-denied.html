@@ -28,14 +28,52 @@
         </div>
 
         <div class="under">
-            
-            <button class="btn" onclick="goToPage('/cafe/index')">На главную</button>
-            
+
+            <button class="btn">На главную</button>
 
         </div>
     </div>
-
     <script src="../JS/goToPage.js"></script>
-    <script src="../JS/AdminScripts.js"></script>
+    <script>
+        async function getUserData() {
+            try {
+                const response = await fetch('/me');
+                if (!response.ok) {
+                    throw new Error(`HTTP error status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                return null; 
+            }
+        }
+
+        async function initializePage() {
+            try {
+                const user = await getUserData();
+                let url;
+
+                if (user && user.role === 'admin') {
+                    url = '/admin/index';
+                }
+                else {
+                    url = '/cafe/index'
+                }
+
+                // Назначаем обработчик
+                const button = document.querySelector('.btn');
+                if (button) {
+                    button.onclick = function () {
+                        goToPage(url);
+                    };
+                } 
+            } catch (error) {
+                console.error('Ошибка инициализации:', error);
+            }
+        }
+
+        initializePage();
+    </script>
+
 </body>
 </html>

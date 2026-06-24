@@ -53,10 +53,6 @@
                         <button onclick="goToPage('/user/favourite?userId=@ViewBag.Id')"> Избранное </button>
                         <button class="exit" onclick="goToPage('/cafe/index')"> На главную </button>
                         <button class="exit" onclick="goToPage('/user/signin')"> Выйти </button>
-                        @if(ViewBag.Role == "admin")
-                        {
-                            <button onclick="goToPage('/admin/index')">В админские угодья</button>
-                        }
                     </div>
                     
                 </div>

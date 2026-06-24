@@ -50,8 +50,9 @@ namespace CafeWeb.Controllers
 
         public async Task<IActionResult> History()
         {
-            var orders = await _adminService.GetAllOrders();
-            return View(orders);            
+            List<Order> orders = await _adminService.GetAllOrders();
+
+            return View(orders);
         }
 
         [HttpPost]
