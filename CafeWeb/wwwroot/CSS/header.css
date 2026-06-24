@@ -5,12 +5,6 @@
     position: relative;
 }
 
-label {
-    color: #8B4513;
-    font-size: 19px;
-    font-weight: 600;
-}
-
 .header-top {
     width: 100%;
     background: linear-gradient(135deg, #F5E6D3 0%, #FFF8F0 50%, #FAEBD7 100%);
@@ -24,18 +18,22 @@ label {
 }
 
 .header-content {
-    max-width: 1400px;
+    max-width: 1000px;
     width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    position: relative;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
 }
 
     .logo img {
@@ -48,18 +46,16 @@ label {
 .header-left {
     display: flex;
     align-items: center;
-    gap: 30px;
-    margin-left: 0;
+    gap: 60px;
+    margin-left: 160px;
 }
 
-.header-actions {
+.header-nav {
     display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-right: 180px;
+    gap: 25px;
 }
 
-    .header-actions a {
+    .header-nav a {
         text-decoration: none;
         color: #8B4513;
         font-size: 18px;
@@ -68,10 +64,41 @@ label {
         padding: 5px 10px;
     }
 
-        .header-actions a:hover {
+        .header-nav a:hover {
             color: #A0522D;
             border-bottom: 2px solid #A0522D;
         }
+
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-icon {
+    position: relative;
+    color: #8B4513;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 24px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4757;
+    color: white;
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
 
 .login-btn {
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 100%);
@@ -163,37 +190,15 @@ label {
         color: #e74c3c;
     }
 
-.header-actions {
+.user-icon {
     display: flex;
     align-items: center;
-    gap: 20px;
-}
-
-
-.cart-icon {
-    position: relative;
-    color: #8B4513;
+    gap: 8px;
     text-decoration: none;
-    transition: color 0.3s ease;
-    font-size: 24px;
+    color: #8B4513;
+    font-weight: bold;
 }
 
-    .cart-icon:hover {
-        color: #A0522D;
-    }
-
-.cart-count {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #ff4757;
-    color: white;
-    font-size: 11px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
+.username {
+    font-size: 16px;
 }
