@@ -98,6 +98,9 @@
         }
     });
 
+    window.goTo = goTo;
+    window.currentIndex = currentIndex;
+
     // Инициализация
     goTo(0);
 });
