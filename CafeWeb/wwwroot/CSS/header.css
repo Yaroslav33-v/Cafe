@@ -18,12 +18,12 @@
 }
 
 .header-content {
-    max-width: 1000px;
+    max-width: 1200px;
     width: 100%;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between; 
     padding: 0 20px;
     position: relative;
 }
@@ -41,18 +41,21 @@
         width: 150px;
         height: 150px;
         object-fit: contain;
+        cursor: pointer;
     }
 
 .header-left {
     display: flex;
     align-items: center;
-    gap: 60px;
-    margin-left: 160px;
+    flex: 1; /* ← занимает всё доступное пространство */
+    justify-content: flex-start;
 }
 
 .header-nav {
     display: flex;
     gap: 25px;
+    justify-content: center;
+    flex: 1;
 }
 
     .header-nav a {
@@ -73,16 +76,42 @@
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
+    flex: 1; /* ← занимает всё доступное пространство */
+    justify-content: flex-end;
 }
+
+.btn-backk {
+    background: transparent;
+    border: 2px solid #A0522D;
+    color: #A0522D;
+    padding: 6px 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+    .btn-backk:hover {
+        background: #A0522D;
+        color: white;
+    }
 
 .cart-icon {
     position: relative;
     color: #8B4513;
     text-decoration: none;
-    transition: color 0.3s ease;
     font-size: 24px;
+    transition: color 0.3s ease;
 }
+    .cart-icon:hover {
+        color: #A0522D;
+    }
 
 .cart-count {
     position: absolute;
@@ -191,12 +220,12 @@
     }
 
 .user-icon {
+    color: #8B4513;
+    text-decoration: none;
+    font-weight: bold;
     display: flex;
     align-items: center;
     gap: 8px;
-    text-decoration: none;
-    color: #8B4513;
-    font-weight: bold;
 }
 
 .username {
