@@ -7,34 +7,41 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Акции</title>
-        <link href="~/CSS/offers.css" rel="stylesheet" />
-        <link href="~/CSS/header.css" rel="stylesheet" />
-        <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        
-    </head>
-    <body>
-        <noscript>
-            <!-- Отображается только если у пользователя выключен js в браузере -->
-            <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
-                Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
-            </div>
-        </noscript>
+<head>
+    <title>Акции</title>
+    <link href="~/CSS/offers.css" rel="stylesheet" />
+    <link href="~/CSS/header.css" rel="stylesheet" />
+    <link href="~/CSS/footer.css" rel="stylesheet" />
+    <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+    <noscript>
+        <!-- Отображается только если у пользователя выключен js в браузере -->
+        <div style="background-color: #f44336; color: white; padding: 20px; text-align: center;">
+            Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
+        </div>
+    </noscript>
     <header>
         <div class="header-top">
             <div class="header-content">
                 <div class="header-left">
                     <div class="logo">
-                        <img src="~/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
+                        <img src="/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
                     </div>
-                    <nav class="header-nav">
-                        <a href="/about">О нас</a>
-                        <a href="/faq">FAQ</a>
-                    </nav>
                 </div>
+
+                <nav class="header-nav">
+                    <a href="/">Главная</a>
+                    <a href="/about">О нас</a>
+                    <a href="/user/OrderHistory">История заказов</a>
+                </nav>
+
                 <div class="header-actions">
+                    <button class="btn-backk" onclick="goBackSafe('/cafe/index')">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
                     <a href="/cafe/cart" class="cart-icon" title="Корзина">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count">0</span>
@@ -44,79 +51,117 @@
             </div>
         </div>
     </header>
-        <div class="main-content">
-            <div class="container">
-                <div class="history-header">
-                    <button class="btn-back" onclick="goToPage('/user/me')">
-                        <i class="fas fa-arrow-left"></i> Назад
-                    </button>
-                    <h1 class="history-title">Доступные акции</h1>
+    <div class="main-content">
+        <div class="container">
+            <div class="history-header">
+                <button class="btn-back" onclick="goToPage('/user/me')">
+                    <i class="fas fa-arrow-left"></i> Назад в профиль
+                </button>
+                <h1 class="history-title">Доступные акции</h1>
+            </div>
+
+            @if (Model is null || !Model.Any())
+            {
+                <div id="none-offer">
+                    <p class="mes">В данный момент нет доступных акций</p>
+                    <p class="mes">Но ты можешь найти что-нибудь интресное в меню!</p>
+                    <button class="btn-go" onclick="goToPage('/cafe/index')">Посмотреть меню</button>
                 </div>
-               
-                @if(Model is null || !Model.Any())
-                {
-                    <div id="none-offer">
-                        <p class="mes">В данный момент нет доступных акций</p>
-                        <p class="mes">Но ты можешь найти что-нибудь интресное в меню!</p>
-                        <button class="btn-go" onclick="goToPage('/cafe/index')">Посмотреть меню</button>
-                    </div>
-                }
-                else foreach(var offer in Model)
+            }
+            else foreach (var offer in Model)
                 {
                     <div class="main-menu">
-                  
+
                         <div class="offer-card">
                             <div class="offer-info">
-                            
+
                                 <h3>Акция @offer.Offer.Name</h3>
                                 <p>@offer.Offer.Description</p>
-                            
-                            
-                                    @if(offer.Foods is not null && offer.Foods.Any())
-                                    {
-                                        <p>В акцию входят следующие товары: </p>
-                                        <ul>
-                                            @foreach (var food in offer.Foods)
-                                            {
-                                                <li data-food-id="@food.Id">@food.Name</li>
-                                            }
-                                        </ul>
-                                        <div class="offer-price">
-                                            <p>Цена: <span>@offer.Foods.Sum(f => f.Price * (1 - offer.Offer.Discount)).ToString("N2")</span></p>
-                                        </div>
-                                        <button onclick="addToCart('@offer.Offer.Name', @offer.Offer.Id, @JsonSerializer.Serialize(offer.Foods.Select(f => f.Id)), @offer.Offer.Discount)">Добавить в корзину</button>
-                                    }
-                                    else
-                                    {
-                                        <div class="discount-badge">
-                                           <p>
-                                               Акция со скидкой
-                                                <span>@(offer.Offer.Discount * 100)%</span>
-                                            </p>
-                                        </div>
-                                        <p>Акция распространяется на все товары, но только при соблюдении условий!</p>
-                                        <div class="offer-date"> 
-                                    
-                                            <p>
-                                         
-                                                Действует с
-                                                <span>@offer.Offer.StartsAt.ToString("dd-MM-yyyy")</span> 
-                                                до <span>@offer.Offer.EndsAt.ToString("dd-MM-yyyy")</span>
-                                            </p>
-                                        </div>
-                                    }
-                            
+
+
+                                @if (offer.Foods is not null && offer.Foods.Any())
+                                {
+                                    <p>В акцию входят следующие товары: </p>
+                                    <ul>
+                                        @foreach (var food in offer.Foods)
+                                        {
+                                            <li data-food-id="@food.Id">@food.Name</li>
+                                        }
+                                    </ul>
+                                    <div class="offer-price">
+                                        <p>Цена: <span>@offer.Foods.Sum(f => f.Price * (1 - offer.Offer.Discount)).ToString("N2")</span></p>
+                                    </div>
+                                    <button onclick="addToCart('@offer.Offer.Name', @offer.Offer.Id, @JsonSerializer.Serialize(offer.Foods.Select(f => f.Id)), @offer.Offer.Discount)">Добавить в корзину</button>
+                                }
+                                else
+                                {
+                                    <div class="discount-badge">
+                                        <p>
+                                            Акция со скидкой
+                                            <span>@(offer.Offer.Discount * 100)%</span>
+                                        </p>
+                                    </div>
+                                    <p>Акция распространяется на все товары, но только при соблюдении условий!</p>
+                                    <div class="offer-date">
+
+                                        <p>
+
+                                            Действует с
+                                            <span>@offer.Offer.StartsAt.ToString("dd-MM-yyyy")</span>
+                                            до <span>@offer.Offer.EndsAt.ToString("dd-MM-yyyy")</span>
+                                        </p>
+                                    </div>
+                                }
+
                             </div>
                         </div>
-                   
+
                     </div>
                 }
-                
+
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container-foot">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Подробнее о нашем кафе</h4>
+                    <ul>
+                        <li><i class="fas fa-building"></i><a href="/about#about">О нас</a></li>
+                        <li><i class="fas fa-history"></i><a href="/about#story">Наша история</a></li>
+                        <li><i class="fas fa-gem"></i><a href="/about#cinus">Наши ценности</a></li>
+                        <li><i class="fas fa-chart-bar"></i><a href="/about#stats">Наша статистика</a></li>
+                        <li><i class="fa-solid fa-pizza-slice"></i><a href="/about#meny">Меню</a></li>
+
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты и FAQ</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
+                        <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
+                        <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
+                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
+                        <li><i class="fas fa-question"></i><a href="/faq"> FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Мы в соцсетях</h4>
+                    <ul>
+                        <li><a href="https://vk.com/club236358484"><i class="fab fa-vk"></i> ВКонтакте</a></li>
+                        <li><a href="https://t.me/FourTvorojka"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Четыре творожка. Все права защищены.</p>
             </div>
         </div>
-        <script src="~/JS/header.js"></script>
-        <script src="~/JS/showNotification.js"></script>
-        <script src="~/JS/addOfferToCart.js"></script>
-        <script src="~/JS/goToPage.js"></script>
-    </body>
+    </footer>
+    <script src="~/JS/header.js"></script>
+    <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/addOfferToCart.js"></script>
+    <script src="~/JS/goToPage.js"></script>
+    <script src="~/JS/backButton.js"></script>
+</body>
 </html>

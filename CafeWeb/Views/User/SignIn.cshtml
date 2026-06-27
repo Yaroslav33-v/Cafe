@@ -6,6 +6,8 @@
 <head>
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link href="~/CSS/Sign.css" rel="stylesheet" />
+    <link href="~/CSS/footer.css" rel="stylesheet" />
+    <link href="~/CSS/header.css" rel="stylesheet" />
     <title> Войти </title>
 </head>
 <body>
@@ -15,28 +17,94 @@
             Для полноценной работы сайта включите JavaScript в настройках вашего браузера.
         </div>
     </noscript>
-<div class="out-form">
-    <form method="post" action="/user/signin">
-    
-        <div class="in-form">
-            <img id="logo" src="~/IMG/logo-cafe.png" width="155" height="155" onclick="goToPage('/cafe/index')">
-            <label> Введите логин: </label>
-            <input id="username" type="text" name="Login" maxlength="25" required />
-            <p>@ViewBag.Problem</p>
-            <label>Введите пароль: </label>
-            <input id="password-input" type="password" name="Password" maxlength="20" required />
-            <label>
-                <input type="checkbox" id="show-password"> Показать пароль
-            </label>
+    <header>
+        <div class="header-top">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo">
+                        <img src="/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
+                    </div>
+                </div>
 
-            <input name="returnUrl" value="@returnUrl" hidden/>
-            <div class="under-sing">
-                <button type="submit">Войти</button>
-                <p>Нет аккаунта? <a href="/user/signup"> Создать </a></p>
+                <nav class="header-nav">
+                    <a href="/">Главная</a>
+                    <a href="/about">О нас</a>
+                    <a href="/user/OrderHistory">История заказов</a>
+                </nav>
+
+                <div class="header-actions">
+                    <button class="btn-backk" onclick="goBackSafe('/cafe/index')">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <a href="/cafe/cart" class="cart-icon" title="Корзина">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                    <div id="profile-actions"></div>
+                </div>
             </div>
         </div>
-    </form>
-</div>
+    </header>
+    <div class="out-form">
+        <form method="post" action="/user/signin">
+
+            <div class="in-form">
+                <label> Введите логин: </label>
+                <input id="username" type="text" name="Login" maxlength="25" required />
+                <p>@ViewBag.Problem</p>
+                <label>Введите пароль: </label>
+                <input id="password-input" type="password" name="Password" maxlength="20" required />
+                <label>
+                    <input type="checkbox" id="show-password"> Показать пароль
+                </label>
+
+                <input name="returnUrl" value="@returnUrl" hidden />
+                <div class="under-sing">
+                    <button class="but-sub" type="submit">Войти</button>
+                    <p>Нет аккаунта? <a href="/user/signup"> Создать </a></p>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer class="footer">
+        <div class="container-foot">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <h4>Подробнее о нашем кафе</h4>
+                    <ul>
+                        <li><i class="fas fa-building"></i><a href="/about#about">О нас</a></li>
+                        <li><i class="fas fa-history"></i><a href="/about#story">Наша история</a></li>
+                        <li><i class="fas fa-gem"></i><a href="/about#cinus">Наши ценности</a></li>
+                        <li><i class="fas fa-chart-bar"></i><a href="/about#stats">Наша статистика</a></li>
+                        <li><i class="fa-solid fa-pizza-slice"></i><a href="/about#meny">Меню</a></li>
+
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Контакты и FAQ</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
+                        <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
+                        <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
+                        <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
+                        <li><i class="fas fa-question"></i><a href="/faq"> FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Мы в соцсетях</h4>
+                    <ul>
+                        <li><a href="https://vk.com/club236358484"><i class="fab fa-vk"></i> ВКонтакте</a></li>
+                        <li><a href="https://t.me/FourTvorojka"><i class="fab fa-telegram"></i> Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Четыре творожка. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
     <script src="~/JS/ShowPassword.js"></script>
     <script src="~/JS/goToPage.js"></script>
+    <script src="~/JS/header.js"></script>
+    <script src="~/JS/backButton.js"></script>
 </body>

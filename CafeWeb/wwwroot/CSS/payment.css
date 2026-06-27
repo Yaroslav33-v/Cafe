@@ -1,10 +1,9 @@
 ﻿body {
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #A0522D 0%, #CD853F 90%, #DEB887 100%);
+    background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-x: hidden;
 }
     body::-webkit-scrollbar {
         width: 10px;
@@ -25,9 +24,9 @@
         }
 .out-form {
     width: 100%;
-    max-width: 500px;
-    height:700px;
+    max-width: 500px;    
     padding: 20px;
+    margin: 0 auto;
 }
 
 form {
