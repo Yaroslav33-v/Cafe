@@ -1,14 +1,16 @@
 ﻿@using System.Text.Json
-@model List<CafeWeb.Models.Category> 
+@model List<CafeWeb.Models.Category>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>Кафе "4 Творожка"</title>
     <link href="~/CSS/main.css" rel="stylesheet" />
+    <link href="~/CSS/footer.css" rel="stylesheet" />
+    <link href="~/CSS/header.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
- 
+
 </head>
 <body>
     <noscript>
@@ -22,23 +24,26 @@
             <div class="header-content">
                 <div class="header-left">
                     <div class="logo">
-                        <img src="~/IMG/logo-cafe.png" alt="Logo" />
+                        <img src="/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
                     </div>
-                    <nav class="header-nav">
-                        <a href="/about">О нас</a>
-                        <a href="/faq">FAQ</a>
-                    </nav>
                 </div>
+
+                <nav class="header-nav">
+                    <a href="/">Главная</a>
+                    <a href="/about">О нас</a>
+                    <a href="/user/OrderHistory">История заказов</a>
+                </nav>
+
                 <div class="header-actions">
+                    <button class="btn-backk" onclick="goBackSafe('/cafe/index')">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
                     <a href="/cafe/cart" class="cart-icon" title="Корзина">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count"></span>
+                        <span class="cart-count">0</span>
                     </a>
-                    <div id="profile-actions">
-
-                    </div>
+                    <div id="profile-actions"></div>
                 </div>
-                
             </div>
         </div>
         <div class="search-wrapper">
@@ -47,10 +52,10 @@
             </div>
         </div>
     </header>
-    
+
     <main class="main-content">
         <aside>
-            
+
             <nav>
                 <ul>
                     @foreach (var category in Model)
@@ -61,16 +66,16 @@
             </nav>
         </aside>
         <div class="container">
-            @if(Model != null && Model.Any())
+            @if (Model != null && Model.Any())
             {
                 <div class="main-menu">
-                    @foreach(var category in Model)
+                    @foreach (var category in Model)
                     {
                         <div id="@category.Name.Replace(" ", "-")" class="menu-category" data-category-name="@category.Name">
 
                             <h1>@category.Name</h1>
                             <div class="category-items">
-                                @foreach(var food in category.Foods)
+                                @foreach (var food in category.Foods)
                                 {
                                     <div class="card" data-card-id="@food.Id">
                                         <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
@@ -81,7 +86,7 @@
                                             <span class="card-title">@food.Name</span>
                                             <p class="card-title"><span>@food.Price</span> р</p>
                                         </div>
-                                
+
                                         <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
                                         <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
                                     </div>
@@ -97,16 +102,23 @@
         <div class="container-foot">
             <div class="footer-content">
                 <div class="footer-col">
-                    <h4>Четыре творожка</h4>
-                    <p>Кафе честной еды. Готовим с душой с 2020 года. От сырников до бургеров — каждый найдёт своё.</p>
+                    <h4>Подробнее о нашем кафе</h4>
+                    <ul class="footer-nav">
+                        <li><i class="fas fa-building"></i><a href="#" data-section="0" data-section-id="about">О нас</a></li>
+                        <li><i class="fas fa-history"></i><a href="#" data-section="1" data-section-id="history">Наша история</a></li>
+                        <li><i class="fas fa-gem"></i><a href="#" data-section="2" data-section-id="cinus">Наши ценности</a></li>
+                        <li><i class="fas fa-chart-bar"></i><a href="#" data-section="3" data-section-id="stats">Наша статистика</a></li>
+                        <li><i class="fa-solid fa-pizza-slice"></i><a href="#" data-section="4" data-section-id="menu">Меню</a></li>
+                    </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Контакты</h4>
+                    <h4>Контакты и FAQ</h4>
                     <ul>
                         <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
                         <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
                         <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
                         <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
+                        <li><i class="fas fa-question"></i><a href="/faq"> FAQ</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -119,19 +131,18 @@
             </div>
             <div class="footer-bottom">
                 <p>© 2026 Четыре творожка. Все права защищены.</p>
-                <img id="admin-relocation" src="~/IMG/crybady.jpg" />
             </div>
         </div>
     </footer>
-    <dialog id="food-modal" >
+    <dialog id="food-modal">
         <div id="food-info">
-            
+
             <h1 id="modal-food-name"></h1>
             <img id="modal-food-img-front" width="300" height="200" />
             <img id="modal-food-img-back" width="300" height="200" />
 
             <div>
-          
+
                 <p> Вес: <span id="modal-food-weight"></span> г.</p>
                 <p id="modal-food-desc"></p>
                 <p>Ингредиенты: <span id="modal-food-ingredients"></span></p>
@@ -152,5 +163,7 @@
     <script src="~/JS/Search.js"></script>
     <script src="~/JS/cookieConsent.js"></script>
     <script src="~/JS/nav.js"></script>
+    <script src="~/JS/backButton.js"></script>
+    <script src="~/JS/footerNav.js"></script>
 </body>
 </html>

@@ -1,14 +1,11 @@
-﻿* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+﻿
 
 body {
-    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     min-height: 100vh;
-    padding: 50px 20px;
+    overflow-x: hidden;
 }
 
     body::-webkit-scrollbar {
@@ -33,8 +30,9 @@ h1 {
     text-align: center;
     color: #2d3a4a;
     margin-bottom: 30px;
-    justify-content:center;
+    justify-content: center;
 }
+
 .faq-wrapper {
     max-width: 1000px;
     margin: 0 auto;
@@ -43,7 +41,7 @@ h1 {
     border-radius: 40px;
     padding: 40px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-    margin-top: 140px;
+    margin-top: 14px;
 }
 
 .faq-tabs {
@@ -53,7 +51,8 @@ h1 {
     border-bottom: 2px solid #eef2f6;
     padding-bottom: 20px;
 }
-.tab-btn{
+
+.tab-btn {
     background: linear-gradient(45deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     color: white;
     border: none;
@@ -88,9 +87,10 @@ button:disabled {
     display: none;
     animation: fadeIn 0.5s ease;
 }
-.tab-content.active {
+
+    .tab-content.active {
         display: block;
-}
+    }
 
 
 .faq-list-modern {
@@ -164,6 +164,7 @@ button:disabled {
     font-size: 0.8em;
     margin-left: 15px;
 }
+
 #logo {
     display: block;
     margin: 0 auto;
@@ -178,27 +179,9 @@ button:disabled {
     top: -120px;
     left: 50%;
     transform: translateX(-50%);
-  
     z-index: 10;
 }
-.exit {
-    margin-top:5%;
-    background: none;
-    border: 1px solid #d4a373;
-    color: #8B4513;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: all 0.3s;
-}
 
-    .exit:hover {
-        background: #d4a373;
-        color: #fff;
-    }
 @keyframes fadeIn {
     from {
         opacity: 0;

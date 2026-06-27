@@ -1,16 +1,16 @@
 ﻿body {
+    margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow-x: hidden;
 }
 
 .out-form {
     width: 100%;
     max-width: 500px;
     padding: 20px;
+    margin: 0 auto;
 }
 
 form {
@@ -51,7 +51,7 @@ label {
 
 
 
-button{
+.but-sub {
     background: linear-gradient(135deg, #A0522D 0%, #CD853F 80%, #DEB887 100%);
     color: white;
     border: none;
@@ -68,15 +68,15 @@ button{
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-}
-button:active {
+    .but-sub:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+    .but-sub:active {
         transform: translateY(0);
     }
 
-button:disabled {
+    .but-sub:disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
@@ -111,17 +111,7 @@ button:disabled {
     margin: 10px 0;
 }
 
-#logo {
-    display: block;
-    margin: 0 auto 5px;
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    border-radius: 50%;
-    background: white;
-    padding: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
+
 
 @keyframes shake {
     0%, 100% {

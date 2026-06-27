@@ -38,6 +38,8 @@
 <head>
     <title>Корзина - Кафе "4 Творожка"</title>
     <link href="~/CSS/cart.css" rel="stylesheet" />
+    <link href="~/CSS/footer.css" rel="stylesheet" />
+    <link href="~/CSS/header.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -53,17 +55,23 @@
             <div class="header-content">
                 <div class="header-left">
                     <div class="logo">
-                        <img src="~/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
+                        <img src="/IMG/logo-cafe.png" alt="Logo" onclick="goToPage('/cafe/index')" />
                     </div>
-                    <nav class="header-nav">
-                        <a href="/about">О нас</a>
-                        <a href="/faq">FAQ</a>
-                    </nav>
                 </div>
+
+                <nav class="header-nav">
+                    <a href="/">Главная</a>
+                    <a href="/about">О нас</a>
+                    <a href="/user/OrderHistory">История заказов</a>
+                </nav>
+
                 <div class="header-actions">
+                    <button class="btn-backk" onclick="goBackSafe('/cafe/index')">
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
                     <a href="/cafe/cart" class="cart-icon" title="Корзина">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count">@Model.TotalItems</span>
+                        <span class="cart-count">0</span>
                     </a>
                     <div id="profile-actions"></div>
                 </div>
@@ -169,16 +177,23 @@
         <div class="container-foot">
             <div class="footer-content">
                 <div class="footer-col">
-                    <h4>Четыре творожка</h4>
-                    <p>Кафе честной еды. Готовим с душой с 2020 года. От сырников до бургеров — каждый найдёт своё.</p>
+                    <h4>Подробнее о нашем кафе</h4>
+                    <ul class="footer-nav">
+                        <li><i class="fas fa-building"></i><a href="#" data-section="0" data-section-id="about">О нас</a></li>
+                        <li><i class="fas fa-history"></i><a href="#" data-section="1" data-section-id="history">Наша история</a></li>
+                        <li><i class="fas fa-gem"></i><a href="#" data-section="2" data-section-id="cinus">Наши ценности</a></li>
+                        <li><i class="fas fa-chart-bar"></i><a href="#" data-section="3" data-section-id="stats">Наша статистика</a></li>
+                        <li><i class="fa-solid fa-pizza-slice"></i><a href="#" data-section="4" data-section-id="menu">Меню</a></li>
+                    </ul>
                 </div>
                 <div class="footer-col">
-                    <h4>Контакты</h4>
+                    <h4>Контакты и FAQ</h4>
                     <ul>
                         <li><i class="fas fa-map-marker-alt"></i> ул. Асаткина, 32</li>
                         <li><i class="fas fa-phone"></i> +7 (904) 033-08-49</li>
                         <li><i class="fas fa-clock"></i> Ежедневно с 9:00 до 23:00</li>
                         <li><i class="fas fa-envelope"></i> hello4tvorojka@mail.ru</li>
+                        <li><i class="fas fa-question"></i><a href="/faq"> FAQ</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -191,7 +206,6 @@
             </div>
             <div class="footer-bottom">
                 <p>© 2026 Четыре творожка. Все права защищены.</p>
-                <img id="admin-relocation" src="~/IMG/crybady.jpg" />
             </div>
         </div>
     </footer>
@@ -201,6 +215,8 @@
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
     <script src="~/JS/cart.js"></script>
+    <script src="~/JS/backButton.js"></script>
+    <script src="~/JS/footerNav.js"></script>
 
     <script>
         // Функция для обновления интерфейса корзины после изменения

@@ -146,16 +146,6 @@ async function updateFavourite(foodId, buttonElement) {
 
 // Над этим тоже рекомендую подумать, потому что без перезагрузки страницы, у него начинаются проблемы
 document.addEventListener('DOMContentLoaded', async () => {
-    // Добавляем действие для тайной кнопки
-    const adminTeleportation = document.getElementById('admin-relocation');
-    adminTeleportation.addEventListener('click', async () => {
-        let data = await getUserData();
-
-        if (data.role === "admin") {
-            document.location.href = "/admin/index";
-        }
-    });
-
     // Обновляем корзину
     await updateCartCounter();
 
