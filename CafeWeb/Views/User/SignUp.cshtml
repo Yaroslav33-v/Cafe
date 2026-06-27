@@ -6,9 +6,11 @@
         .available {
             color: green;
         }
+
         .taken {
             color: red;
         }
+
         .checking {
             color: gray;
         }
@@ -56,14 +58,14 @@
         </div>
     </header>
     <div class="out-form">
-        
-         
-   
+
+
+
         <form method="post" action="/user/signup">
             <div class="in-form">
                 <label>Введите логин: </label>
-                <input id="username"  type="text" name="Login" maxlength="25" required />
-                <span id="status"></span> 
+                <input id="username" type="text" name="Login" maxlength="25" required />
+                <span id="status"></span>
                 <p id="error">@ViewBag.Problem</p>
                 <label>Введите пароль: </label>
                 <input id="password-input" type="password" name="Password" maxlength="20" required />
@@ -71,7 +73,7 @@
                     <input type="checkbox" id="show-password"> Показать пароль
                 </label>
                 <div class="under-sing">
-                    <input name="referer" value="@ViewBag.Referer" hidden/>
+                    <input name="referer" value="@ViewBag.Referer" hidden />
                     <button class="but-sub" type="submit">Создать</button>
                 </div>
             </div>
@@ -118,4 +120,5 @@
     <script src="~/JS/ShowPassword.js"></script>
     <script src="~/JS/UserScripts.js"></script>
     <script src="~/JS/header.js"></script>
+    <script src="~/JS/backButton.js"></script>
 </body>

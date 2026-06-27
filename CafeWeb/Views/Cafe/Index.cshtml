@@ -1,5 +1,5 @@
 ﻿@using System.Text.Json
-@model List<CafeWeb.Models.Category> 
+@model List<CafeWeb.Models.Category>
 
 <!DOCTYPE html>
 <html>
@@ -10,7 +10,7 @@
     <link href="~/CSS/header.css" rel="stylesheet" />
     <link rel="icon" href="~/IMG/logo-cafe.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
- 
+
 </head>
 <body>
     <noscript>
@@ -52,10 +52,10 @@
             </div>
         </div>
     </header>
-    
+
     <main class="main-content">
         <aside>
-            
+
             <nav>
                 <ul>
                     @foreach (var category in Model)
@@ -66,16 +66,16 @@
             </nav>
         </aside>
         <div class="container">
-            @if(Model != null && Model.Any())
+            @if (Model != null && Model.Any())
             {
                 <div class="main-menu">
-                    @foreach(var category in Model)
+                    @foreach (var category in Model)
                     {
                         <div id="@category.Name.Replace(" ", "-")" class="menu-category" data-category-name="@category.Name">
 
                             <h1>@category.Name</h1>
                             <div class="category-items">
-                                @foreach(var food in category.Foods)
+                                @foreach (var food in category.Foods)
                                 {
                                     <div class="card" data-card-id="@food.Id">
                                         <div onclick="openFoodModal(@JsonSerializer.Serialize(food), this)">
@@ -86,7 +86,7 @@
                                             <span class="card-title">@food.Name</span>
                                             <p class="card-title"><span>@food.Price</span> р</p>
                                         </div>
-                                
+
                                         <button class="addCart" type="button" onclick="addToCart(@food.Id)">Добавить в корзину</button>
                                         <button class="modal-food-fav-btn" type="button" onclick="updateFavourite(@food.Id, this)"> </button>
                                     </div>
@@ -135,15 +135,15 @@
             </div>
         </div>
     </footer>
-    <dialog id="food-modal" >
+    <dialog id="food-modal">
         <div id="food-info">
-            
+
             <h1 id="modal-food-name"></h1>
             <img id="modal-food-img-front" width="300" height="200" />
             <img id="modal-food-img-back" width="300" height="200" />
 
             <div>
-          
+
                 <p> Вес: <span id="modal-food-weight"></span> г.</p>
                 <p id="modal-food-desc"></p>
                 <p>Ингредиенты: <span id="modal-food-ingredients"></span></p>
@@ -164,5 +164,6 @@
     <script src="~/JS/Search.js"></script>
     <script src="~/JS/cookieConsent.js"></script>
     <script src="~/JS/nav.js"></script>
+    <script src="~/JS/backButton.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-﻿    @model List<CafeWeb.Models.Order>
+﻿@model List<CafeWeb.Models.Order>
 
 <!DOCTYPE html>
 <html>
@@ -75,7 +75,7 @@
                     {
                         <div class="order-card">
                             <div class="order-header">
-                                <div class="order-number">                                    
+                                <div class="order-number">
                                     ЗАКАЗ № @order.Number.ToUpper()
                                 </div>
                                 <div class="order-status @(order.Status == "Готов" ? "status-ready" : "status-progress")">
@@ -165,5 +165,6 @@
     <script src="~/JS/header.js"></script>
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/showNotification.js"></script>
+    <script src="~/JS/backButton.js"></script>
 </body>
 </html>

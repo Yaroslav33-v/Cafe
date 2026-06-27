@@ -45,27 +45,27 @@
             </div>
         </div>
     </header>
-<div class="out-form">
-    <form method="post" action="/user/signin">
-    
-        <div class="in-form">
-            <label> Введите логин: </label>
-            <input id="username" type="text" name="Login" maxlength="25" required />
-            <p>@ViewBag.Problem</p>
-            <label>Введите пароль: </label>
-            <input id="password-input" type="password" name="Password" maxlength="20" required />
-            <label>
-                <input type="checkbox" id="show-password"> Показать пароль
-            </label>
+    <div class="out-form">
+        <form method="post" action="/user/signin">
 
-            <input name="returnUrl" value="@returnUrl" hidden/>
-            <div class="under-sing">
-                <button class="but-sub" type="submit">Войти</button>
-                <p>Нет аккаунта? <a href="/user/signup"> Создать </a></p>
+            <div class="in-form">
+                <label> Введите логин: </label>
+                <input id="username" type="text" name="Login" maxlength="25" required />
+                <p>@ViewBag.Problem</p>
+                <label>Введите пароль: </label>
+                <input id="password-input" type="password" name="Password" maxlength="20" required />
+                <label>
+                    <input type="checkbox" id="show-password"> Показать пароль
+                </label>
+
+                <input name="returnUrl" value="@returnUrl" hidden />
+                <div class="under-sing">
+                    <button class="but-sub" type="submit">Войти</button>
+                    <p>Нет аккаунта? <a href="/user/signup"> Создать </a></p>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
     <footer class="footer">
         <div class="container-foot">
             <div class="footer-content">
@@ -106,5 +106,5 @@
     <script src="~/JS/ShowPassword.js"></script>
     <script src="~/JS/goToPage.js"></script>
     <script src="~/JS/header.js"></script>
-
+    <script src="~/JS/backButton.js"></script>
 </body>
