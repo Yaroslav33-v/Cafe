@@ -4,6 +4,8 @@
     const sections = document.querySelectorAll('.horizontal-section');
     const total = sections.length;
     const dots = document.querySelectorAll('.dot');
+    const navLinks = document.querySelectorAll('.sticky-nav-link');
+    const footerLinks = document.querySelectorAll('.footer-nav a');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     let isAnimating = false;
@@ -19,8 +21,14 @@
 
         container.style.transform = `translateX(-${currentIndex * 100}%)`;
 
+        // Точки
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === currentIndex);
+        });
+
+        // Навигация сверху
+        navLinks.forEach((link, i) => {
+            link.classList.toggle('active', i === currentIndex);
         });
 
         if (prevBtn) {
@@ -43,6 +51,25 @@
         if (currentIndex > 0) goTo(currentIndex - 1);
     }
 
+    // Клик по навигации сверху
+    navLinks.forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            goTo(index);
+        });
+    });
+
+    // Клик по навигации в футере
+    footerLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const index = parseInt(link.getAttribute('data-index'));
+            if (!isNaN(index)) {
+                goTo(index);
+            }
+        });
+    });
+
     // Кружки
     if (prevBtn) prevBtn.addEventListener('click', prev);
     if (nextBtn) nextBtn.addEventListener('click', next);
@@ -58,7 +85,7 @@
         if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prev();
     });
 
-    // Свайп на мобильных
+    // Свайп
     let touchStartX = 0;
     document.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
